@@ -1,4 +1,10 @@
-option(PL_DOT_VIEWER "Build the Dot Viewer plugin" ON)
+# Graphviz is not available for the Windows build
+if(WIN32)
+    set(PL_DOT_VIEWER_DEFAULT OFF)
+else()
+    set(PL_DOT_VIEWER_DEFAULT ON)
+endif()
+option(PL_DOT_VIEWER "Build the Dot Viewer plugin" ${PL_DOT_VIEWER_DEFAULT})
 
 if(PL_DOT_VIEWER OR BUILD_ALL_PLUGINS)
 
