@@ -15,6 +15,20 @@ target_compile_options(hal
                        INTERFACE ${COMPILE_OPTIONS_INTERFACE})
 target_compile_definitions(hal PUBLIC SPDLOG_TRACE_ON)
 target_link_libraries(hal hal::core)
+
+if(WIN32)
+    # hal-gui.exe is the same program as a windowed application (no console window) that always opens the GUI
+    add_executable(hal-gui WIN32 ${SRC})
+    set_target_properties(hal-gui PROPERTIES OUTPUT_NAME "hal-gui" ENABLE_EXPORTS 1)
+    target_compile_options(hal-gui
+                           PUBLIC ${COMPILE_OPTIONS_PUBLIC}
+                           PRIVATE ${COMPILE_OPTIONS_PRIVATE}
+                           INTERFACE ${COMPILE_OPTIONS_INTERFACE})
+    target_compile_definitions(hal-gui PUBLIC SPDLOG_TRACE_ON PRIVATE HAL_GUI_LAUNCHER)
+    # keep main() as the entry point although the subsystem is Windows
+    target_link_options(hal-gui PRIVATE /ENTRY:mainCRTStartup)
+    target_link_libraries(hal-gui hal::core dbghelp)
+endif()
 if(WIN32)
     target_link_libraries(hal dbghelp)
 endif()

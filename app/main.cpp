@@ -21,6 +21,7 @@
 #include <exception>
 #include <iostream>
 #include <string>
+#include <vector>
 
 #define SUCCESS 0
 #define ERROR 1
@@ -118,6 +119,18 @@ static void report_unhandled_exception()
 int main(int argc, const char* argv[])
 {
     std::set_terminate(report_unhandled_exception);
+
+#ifdef HAL_GUI_LAUNCHER
+    // the windowed launcher always starts the graphical interface, whatever it is asked to open
+    std::vector<const char*> launcher_args(argv, argv + argc);
+    bool wants_gui = false;
+    for (int i = 1; i < argc; ++i)
+        wants_gui = wants_gui || std::string(argv[i]) == "--gui" || std::string(argv[i]) == "-g";
+    if (!wants_gui)
+        launcher_args.push_back("--gui");
+    argc = static_cast<int>(launcher_args.size());
+    argv = launcher_args.data();
+#endif
 
     /* initialize and parse generic cli options */
     ProgramOptions cli_options("cli options");
