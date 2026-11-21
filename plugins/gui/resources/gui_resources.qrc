@@ -97,6 +97,8 @@
         <file alias="gate_cursor">icons/gate_cursor.png</file>
         <file alias="kill_cursor">icons/kill_cursor.png</file>
         <file alias="minus">icons/minus.svg</file>
+        <file alias="tab-close-dark">icons/tab-close-dark.svg</file>
+        <file alias="tab-close-light">icons/tab-close-light.svg</file>
         <file alias="spinner">icons/spinner.svg</file>
         <file alias="add_waveform_net">icons/add_waveform_net.svg</file>
         <file alias="add_waveform">icons/add_waveform_net.png</file>

@@ -37,8 +37,8 @@ namespace hal
         mClearIconLabel->setPixmap(gui_utility::getStyledSvgIcon(mClearIconStyle, mClearIcon).pixmap(QSize(10, 10)));
 
         //Placeholder icons get better ones
-        mDownButton->setIcon(QIcon(":/icons/arrow-down"));
-        mUpButton->setIcon(QIcon(":/icons/arrow-up"));
+        mDownButton->setIcon(gui_utility::getStyledSvgIcon("", ":/icons/arrow-down"));
+        mUpButton->setIcon(gui_utility::getStyledSvgIcon("", ":/icons/arrow-up"));
         mSearchOptionsButton->setIcon(gui_utility::getStyledSvgIcon(mOptionDialogIconStyle,mOptionDialogIcon));
 
         mSearchIconLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
@@ -48,7 +48,7 @@ namespace hal
         mLayout->addWidget(mLineEdit);
 
         mClearButton->setIcon(gui_utility::getStyledSvgIcon(mClearIconStyle, mClearIcon));
-        mClearButton->setIconSize(QSize(10, 10));
+        mClearButton->setIconSize(QSize(12, 12));
         mClearButton->setFixedWidth(32);
         mClearButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
         mClearButton->setToolTip("Clear");

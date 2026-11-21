@@ -26,6 +26,9 @@
 #pragma once
 
 #include <QIconEngine>
+#include <memory>
+
+class QSvgRenderer;
 
 namespace hal
 {
@@ -42,9 +45,10 @@ namespace hal
          * Constructor.
          *
          * @param dataEnabled - The svg data to create the enabled QIcon from
-         * @param dataDisabled - The svg data to create the disabled QIcon from
+         * @param dataDisabled - The svg data to create the disabled QIcon from, empty to reuse the enabled data
+         * @param dataActive - The svg data shown while the icon is hovered or selected, empty to reuse the enabled data
          */
-        explicit SvgIconEngine(const QByteArray& dataEnabled, const QByteArray& dataDisabled);
+        explicit SvgIconEngine(const QByteArray& dataEnabled, const QByteArray& dataDisabled, const QByteArray& dataActive = QByteArray());
 
         /**
          * Uses the given painter to paint the icon into the rectangle rect. Mode and state are unused.
@@ -76,5 +80,11 @@ namespace hal
     private:
         QByteArray mEnabledData;
         QByteArray mDisabledData;
+        QByteArray mActiveData;
+
+        // parsing an SVG is expensive, the renderers are created once and shared between copies of the engine
+        std::shared_ptr<QSvgRenderer> mEnabled;
+        std::shared_ptr<QSvgRenderer> mDisabled;
+        std::shared_ptr<QSvgRenderer> mActive;
     };
 }

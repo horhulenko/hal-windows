@@ -1,5 +1,6 @@
 #include "gui/gui_utils/graphics.h"
 
+#include "gui/style/theme.h"
 #include "gui/svg_icon_engine/svg_icon_engine.h"
 
 #include <QFile>
@@ -73,28 +74,28 @@ namespace hal
                 return QIcon();
             }
 
+            const style::Theme& theme = style::Theme::current();
+
+            // icons come black, without a style they get the neutral icon color of the theme
+            const QString enabledStyle = from_to_colors_enabled.isEmpty() ? "all->" + theme.color("icon").name() : from_to_colors_enabled;
+            const QString disabledStyle = from_to_colors_disabled.isEmpty() ? "all->" + theme.color("text-disabled").name() : from_to_colors_disabled;
+
             QString svgDataDisabled(svgDataEnabled);
-
-            if (!from_to_colors_enabled.isEmpty())
+            if (!applyColorStyle(svgDataEnabled, enabledStyle))
             {
-                if (!applyColorStyle(svgDataEnabled,from_to_colors_enabled))
-                {
-                    //TODO: print error
-                    return QIcon();
-                }
+                //TODO: print error
+                return QIcon();
             }
-
-            if (from_to_colors_disabled.isEmpty())
-            {
+            if (!applyColorStyle(svgDataDisabled, disabledStyle))
                 svgDataDisabled = QString();
-            }
-            else
-            {
-                if (!applyColorStyle(svgDataDisabled,from_to_colors_disabled))
-                    svgDataDisabled = QString();
-            }
 
-            return QIcon(new SvgIconEngine(svgDataEnabled.toUtf8(),svgDataDisabled.toUtf8()));
+            // while hovered, neutral icons switch to the text color, colored (semantic) icons keep their color
+            QString svgDataActive(svgDataEnabled);
+            const QColor tint = QColor(QRegularExpression("#[0-9a-fA-F]{6}").match(svgDataEnabled).captured());
+            if (tint.isValid() && tint.saturation() < 64)
+                changeAllSvgColors(svgDataActive, theme.color("text"));
+
+            return QIcon(new SvgIconEngine(svgDataEnabled.toUtf8(), svgDataDisabled.toUtf8(), svgDataActive.toUtf8()));
         }
     }    // namespace gui_utility
 }
