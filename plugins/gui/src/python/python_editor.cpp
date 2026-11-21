@@ -352,7 +352,7 @@ namespace hal
     {
         PythonCodeEditor* editor = dynamic_cast<PythonCodeEditor*>(mTabWidget->widget(index));
         QString relFilename        = editor->getRelFilename();
-        if (editor->document()->isModified())
+        if (editor->isModified())
         {
             QMessageBox::StandardButton ret = askSaveTab(index);
 
@@ -452,7 +452,7 @@ namespace hal
 
         if (!mSearchbar->isHidden())
             currentEditor->search(mSearchbar->getCurrentText());
-        else if (!currentEditor->extraSelections().isEmpty())
+        else if (currentEditor->hasSearchHighlights())
             currentEditor->search("");
 
         if (currentEditor->isBaseFileModified() || (gPythonContext->pythonThread()))
@@ -547,7 +547,7 @@ namespace hal
                 {
                     mTabWidget->setCurrentIndex(i);
 
-                    if (editor->document()->isModified())
+                    if (editor->isModified())
                     {
                         if (QMessageBox::question(editor, "Script has unsaved changes", "Do you want to reload the file from disk? Unsaved changes are lost.", QMessageBox::Yes | QMessageBox::No)
                             == QMessageBox::Yes)
@@ -584,7 +584,7 @@ namespace hal
 
         if (!info.fileName().startsWith(".unnamed_tab"))
         {
-            tab->document()->setModified(false);
+            tab->setModified(false);
             tab->setFilename(fileName);
             mTabWidget->setTabText(mTabWidget->indexOf(tab), info.fileName());
             mNewFileCounter--;
@@ -705,7 +705,7 @@ namespace hal
 
         if (!isAutosave)
         {
-            currentEditor->document()->setModified(false);
+            currentEditor->setModified(false);
             gFileStatusManager->fileSaved(currentEditor->getUuid());
         }
 
@@ -770,7 +770,7 @@ namespace hal
             mFileWatcher->removePath(absFilename);
             mPathEditorMap.remove(absFilename);
         }
-        if (editor->document()->isModified())
+        if (editor->isModified())
         {
             gFileStatusManager->fileSaved(editor->getUuid());
         }
@@ -789,7 +789,7 @@ namespace hal
                 continue;
 
             PythonCodeEditor* editor = dynamic_cast<PythonCodeEditor*>(mTabWidget->widget(t));
-            if (editor->document()->isModified())
+            if (editor->isModified())
             {
                 QString fileName = mTabWidget->tabText(t);
                 fileName.chop(1);    // removes asterisk
@@ -882,17 +882,15 @@ namespace hal
         editor->setHighlightCurrentLineEnabled(mSettingHighlight->value().toBool());
         editor->setLineNumberEnabled(mSettingLineNumbers->value().toBool());
 
-        connect(mSettingFontSize, &SettingsItemSpinbox::intChanged, editor, &CodeEditor::setFontSize);
-        connect(mSettingMinimap, &SettingsItemCheckbox::boolChanged, editor, &CodeEditor::setMinimapEnabled);
-        connect(mSettingLineWrap, &SettingsItemCheckbox::boolChanged, editor, &CodeEditor::setLineWrapEnabled);
-        connect(mSettingHighlight, &SettingsItemCheckbox::boolChanged, editor, &CodeEditor::setHighlightCurrentLineEnabled);
-        connect(mSettingLineNumbers, &SettingsItemCheckbox::boolChanged, editor, &CodeEditor::setLineNumberEnabled);
+        connect(mSettingFontSize, &SettingsItemSpinbox::intChanged, editor, &MonacoEditor::setFontSize);
+        connect(mSettingMinimap, &SettingsItemCheckbox::boolChanged, editor, &MonacoEditor::setMinimapEnabled);
+        connect(mSettingLineWrap, &SettingsItemCheckbox::boolChanged, editor, &MonacoEditor::setLineWrapEnabled);
+        connect(mSettingHighlight, &SettingsItemCheckbox::boolChanged, editor, &MonacoEditor::setHighlightCurrentLineEnabled);
+        connect(mSettingLineNumbers, &SettingsItemCheckbox::boolChanged, editor, &MonacoEditor::setLineNumberEnabled);
 
-        new PythonSyntaxHighlighter(editor->document());
-        new PythonSyntaxHighlighter(editor->minimap()->document());
         mTabWidget->addTab(editor, QString("Unnamed Script ").append(QString::number(++mNewFileCounter)));
         mTabWidget->setCurrentIndex(mTabWidget->count() - 1);
-        editor->document()->setModified(false);
+        editor->setModified(false);
         connect(editor, &PythonCodeEditor::keyPressed, this, &PythonEditor::handleKeyPressed);
         connect(editor, &PythonCodeEditor::textChanged, this, &PythonEditor::handleTextChanged);
     }
@@ -1296,7 +1294,7 @@ namespace hal
 
             mTabToSnapshotPath.insert(editor, snapshot_file_path);
 
-            if (editor->document()->isModified())
+            if (editor->isModified())
             {
                 // The snapshot is only created if there are modifications
                 this->writeSnapshotFile(QFileInfo(snapshot_file_path), editor->getAbsFilename(), editor->toPlainText());
@@ -1376,7 +1374,7 @@ namespace hal
         // Set the snapshot content
         tab->setPlainText(snapshot_content);
         // Mark the tab as modified
-        tab->document()->setModified(true);
+        tab->setModified(true);
         QString tab_name = mTabWidget->tabText(idx);
         if (!tab_name.endsWith("*"))
         {

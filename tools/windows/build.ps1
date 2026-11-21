@@ -27,12 +27,13 @@ cmd /c "`"$vcvars`" >nul 2>&1 && set" | ForEach-Object {
 
 function ToCMake($p) { $p -replace '\\', '/' }
 
-# Expected layout of the dependency folder: boost, rapidjson, z3, zlib (see README section "Windows")
+# Expected layout of the dependency folder: boost, rapidjson, z3, zlib and webview2 (the unpacked NuGet package Microsoft.Web.WebView2)
 cmake -S . -B $Build -G Ninja -DCMAKE_BUILD_TYPE=Release `
     "-DCMAKE_PREFIX_PATH=$(ToCMake $Qt);$(ToCMake $Deps)/zlib" `
     "-DBOOST_ROOT=$(ToCMake $Deps)/boost" `
     "-DRAPIDJSON_ROOT=$(ToCMake $Deps)/rapidjson" `
     "-DZ3_ROOT=$(ToCMake $Deps)/z3" `
+    "-DWEBVIEW2_ROOT=$(ToCMake $Deps)/webview2" `
     "-DPython3_ROOT_DIR=$(ToCMake $Python)" -DPython3_FIND_STRATEGY=LOCATION @args
 if ($LASTEXITCODE) { throw 'configure failed' }
 

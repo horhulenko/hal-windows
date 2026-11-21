@@ -49,6 +49,14 @@ if(PL_GUI OR BUILD_ALL_PLUGINS)
         set(Missing_package "TRUE")
     endif(Qt6Svg_FOUND)
 
+    # The code editor is the Monaco editor (the editor component of VS Code) running inside Microsoft WebView2.
+    # WEBVIEW2_ROOT is the unpacked NuGet package Microsoft.Web.WebView2
+    find_path(WEBVIEW2_INCLUDE_DIR WebView2.h HINTS ${WEBVIEW2_ROOT} $ENV{WEBVIEW2_ROOT} PATH_SUFFIXES build/native/include)
+    find_library(WEBVIEW2_LOADER_LIB WebView2LoaderStatic HINTS ${WEBVIEW2_ROOT} $ENV{WEBVIEW2_ROOT} PATH_SUFFIXES build/native/x64)
+    if(NOT WEBVIEW2_INCLUDE_DIR OR NOT WEBVIEW2_LOADER_LIB)
+        message(FATAL_ERROR "WebView2 SDK not found, set WEBVIEW2_ROOT to the unpacked NuGet package Microsoft.Web.WebView2")
+    endif()
+
     set(INCROOT ${CMAKE_CURRENT_SOURCE_DIR}/include)
     set(SRCROOT ${CMAKE_CURRENT_SOURCE_DIR}/src)
     set(UIROOT ${CMAKE_CURRENT_SOURCE_DIR}/ui)
@@ -134,8 +142,15 @@ if(PL_GUI OR BUILD_ALL_PLUGINS)
                            PRIVATE ${COMPILE_OPTIONS_PRIVATE}
                            INTERFACE ${COMPILE_OPTIONS_INTERFACE})
     target_compile_definitions(gui PUBLIC QT_NO_KEYWORDS)
-    target_link_libraries(gui PUBLIC hal::core hal::netlist PRIVATE ${Python3_LIBRARIES} pybind11::embed Qt6::Widgets Qt6::Concurrent Qt6::Svg QuaZip::QuaZip)
+    target_link_libraries(gui PUBLIC hal::core hal::netlist PRIVATE ${Python3_LIBRARIES} pybind11::embed Qt6::Widgets Qt6::Concurrent Qt6::Svg QuaZip::QuaZip ${WEBVIEW2_LOADER_LIB} version advapi32 ole32 shlwapi)
+    target_include_directories(gui PRIVATE ${WEBVIEW2_INCLUDE_DIR})
     add_dependencies(gui update_internal_gate_library_definitions)
+
+    # Monaco is read from share/hal/monaco at runtime
+    add_custom_command(TARGET gui POST_BUILD
+                       COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/deps/monaco ${CMAKE_BINARY_DIR}/share/hal/monaco
+                       COMMENT "Copy Monaco editor")
+    install(DIRECTORY ${CMAKE_SOURCE_DIR}/deps/monaco/ DESTINATION ${SHARE_INSTALL_DIRECTORY}/monaco)
     get_property(GLDIR GLOBAL PROPERTY GATE_LIBS_DEFINITIONS)
     file(WRITE "${RSRCROOT}/path/gate_library_definitions.txt" "${GLDIR}")
     hal_plugin_documentation(gui SPHINX_DOC_INDEX_FILE ${CMAKE_CURRENT_SOURCE_DIR}/documentation/gui.rst)
