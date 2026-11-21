@@ -22,10 +22,21 @@ if(PL_GATE_LIBRARIES OR BUILD_ALL_PLUGINS)
     endforeach()
 
 
+    if(WIN32)
+        # cmd.exe does not expand wildcards, so hand over the explicit file lists
+        set(COPY_GATE_LIBS ${SOURCE_GATE_LIBS})
+        list(FILTER COPY_GATE_LIBS EXCLUDE REGEX "helper_libs$")
+        set(COPY_GATE_LIBS_COMMAND COMMAND ${CMAKE_COMMAND} -E copy ${COPY_GATE_LIBS} ${CMAKE_BINARY_DIR}/share/hal/gate_libraries/)
+        set(COPY_HELPER_LIBS_COMMAND COMMAND ${CMAKE_COMMAND} -E copy ${SOURCE_HELPER_GATE_LIBS} ${CMAKE_BINARY_DIR}/share/hal/gate_libraries/)
+    else()
+        set(COPY_GATE_LIBS_COMMAND COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/definitions/* ${CMAKE_BINARY_DIR}/share/hal/gate_libraries/)
+        set(COPY_HELPER_LIBS_COMMAND COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/definitions/helper_libs/* ${CMAKE_BINARY_DIR}/share/hal/gate_libraries/)
+    endif()
+
     add_custom_target(update_internal_gate_library_definitions ALL
                       BYPRODUCTS ${DESTINATION_GATE_LIBS} ${DESTINATION_HELPER_GATE_LIBS}
-                      COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/definitions/* ${CMAKE_BINARY_DIR}/share/hal/gate_libraries/
-                      COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/definitions/helper_libs/* ${CMAKE_BINARY_DIR}/share/hal/gate_libraries/
+                      ${COPY_GATE_LIBS_COMMAND}
+                      ${COPY_HELPER_LIBS_COMMAND}
                       DEPENDS ${SOURCE_GATE_LIBS}  ${SOURCE_HELPER_GATE_LIBS}
                       WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                       COMMENT "Update gate library definitions")
