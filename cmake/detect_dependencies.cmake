@@ -166,10 +166,16 @@ endif()
 # ###############################
 # ####   Boost (headers only)
 # ###############################
-if (POLICY CMP0167)
-    cmake_policy(SET CMP0167 NEW)
+if(WIN32 AND BOOST_ROOT)
+    # HAL only uses Boost headers, a plain unpacked Boost tree (no CMake package files) is enough
+    set(Boost_INCLUDE_DIRS "${BOOST_ROOT}")
+    set(Boost_FOUND TRUE)
+else()
+    if (POLICY CMP0167)
+        cmake_policy(SET CMP0167 NEW)
+    endif()
+    find_package(Boost REQUIRED)
 endif()
-find_package(Boost REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
 
 # ###############################

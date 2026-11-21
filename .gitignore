@@ -155,3 +155,4 @@ hal_pass
 # Windows build output
 /dist/
 /hal_project_*/
+/build-ci/
