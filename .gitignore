@@ -151,3 +151,7 @@ hal_pass
 
 # Windows native build
 /build-win/
+
+# Windows build output
+/dist/
+/hal_project_*/
