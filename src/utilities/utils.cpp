@@ -150,10 +150,11 @@ namespace hal
                 get_base_directory() / "lib/x86_64-linux-gnu",
                 get_base_directory() / "lib64/",
                 get_base_directory() / "lib/",
-#ifdef _WIN32
-                get_base_directory() / "bin/",    // plugins and DLLs live next to the executable in a Windows build/install tree
-#endif
             };
+#ifdef _WIN32
+            // plugins and DLLs live next to the executable in a Windows build/install tree, lib/ only holds import libraries
+            path_hints.insert(path_hints.begin(), get_base_directory() / "bin/");
+#endif
 
             for (const auto& path : path_hints)
             {
