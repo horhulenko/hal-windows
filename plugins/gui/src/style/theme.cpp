@@ -20,13 +20,17 @@ namespace hal
             QMap<QString, QString> commonTokens()
             {
                 return {
-                    {"radius-control", "4px"},    // controls inside a page: buttons, inputs, list rows
-                    {"radius-overlay", "8px"},    // menus, dialogs, popups
-                    {"control-height", "28px"},
+                    {"radius-control", "6px"},    // controls inside a page: buttons, inputs, list rows
+                    {"radius-overlay", "10px"},   // cards, dialogs, popups
+                    {"control-height", "32px"},
                     {"font-ui", "\"Segoe UI Variable Text\", \"Segoe UI\", sans-serif"},
                     {"font-mono", "\"Iosevka\", \"Cascadia Mono\", Consolas, monospace"},
-                    {"font-size", "13px"},
-                    {"font-size-small", "12px"},
+                    // Type scale, every piece of text uses one of these roles
+                    {"font-size", "14px"},            // body
+                    {"font-size-small", "13px"},      // panel titles, table headers, secondary text
+                    {"font-size-caption", "12px"},    // captions, paths, hints
+                    {"font-size-title", "18px"},
+                    {"font-size-display", "28px"},
                 };
             }
 
@@ -34,27 +38,29 @@ namespace hal
             {
                 QMap<QString, QString> t = commonTokens();
                 // Surfaces: a tinted dark gray, never pure black. Lighter means closer to the user.
-                t["surface-canvas"]  = "#0E1115";    // wells: editors, inputs, graph canvas
-                t["surface-base"]    = "#14181D";    // window background
-                t["surface-raised"]  = "#1A1F25";    // panels, docks, toolbars
-                t["surface-overlay"] = "#222830";    // menus, popups, dialogs, tooltips
+                t["surface-canvas"]  = "#0B0E12";    // wells: editors, inputs, graph canvas
+                t["surface-base"]    = "#12161B";    // window background
+                t["surface-raised"]  = "#1A2028";    // panels, docks, toolbars
+                t["surface-overlay"] = "#242B35";    // menus, popups, dialogs, tooltips
                 // States are translucent steps, so they work on every surface
                 t["state-hover"]    = "rgba(255, 255, 255, 0.06)";
                 t["state-pressed"]  = "rgba(255, 255, 255, 0.10)";
-                t["state-selected"] = "rgba(76, 154, 255, 0.24)";
-                t["border-subtle"]  = "#242B33";
-                t["border"]         = "#2F3741";
-                t["border-strong"]  = "#444F5C";
+                t["state-selected"] = "rgba(90, 163, 255, 0.26)";
+                t["border-subtle"]  = "#252D37";
+                t["border"]         = "#333C48";
+                t["border-strong"]  = "#4D5967";
                 // Text hierarchy: 14:1, 7.5:1 and a disabled level on the base surface
-                t["text"]          = "#E6EAF0";
-                t["text-muted"]    = "#A4ADBA";
-                t["text-disabled"] = "#6B7480";
+                t["text"]          = "#EEF2F7";
+                t["text-muted"]    = "#B6BFCC";
+                t["text-disabled"] = "#7D8897";
+                t["icon"]          = "#AEB8C6";
+                t["image-tab-close"] = "url(:/icons/tab-close-dark)";
                 t["text-on-accent"] = "#07101C";
                 // One accent, lighter and a bit less saturated than on light surfaces
-                t["accent"]         = "#4C9AFF";
-                t["accent-hover"]   = "#6BAEFF";
-                t["accent-pressed"] = "#3A86E8";
-                t["selection"]      = "#1E3A5F";
+                t["accent"]         = "#5AA3FF";
+                t["accent-hover"]   = "#7BB6FF";
+                t["accent-pressed"] = "#3F8DF2";
+                t["selection"]      = "#21456F";
                 t["success"]        = "#4CC38A";
                 t["warning"]        = "#E5B454";
                 t["danger"]         = "#F2706B";
@@ -84,7 +90,9 @@ namespace hal
                 t["border-strong"]  = "#AEB7C3";
                 t["text"]          = "#1B2330";
                 t["text-muted"]    = "#566172";
-                t["text-disabled"] = "#9AA3AF";
+                t["text-disabled"] = "#8A94A3";
+                t["icon"]          = "#4A5566";
+                t["image-tab-close"] = "url(:/icons/tab-close-light)";
                 t["text-on-accent"] = "#FFFFFF";
                 t["accent"]         = "#1F6FE0";
                 t["accent-hover"]   = "#3A83EA";

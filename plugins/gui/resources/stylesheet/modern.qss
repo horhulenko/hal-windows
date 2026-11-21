@@ -36,7 +36,8 @@ QToolTip
     background-color : @surface-overlay@;
     color            : @text@;
     border           : 1px solid @border@;
-    padding          : 4px 8px;
+    padding          : 5px 10px;
+    font-size        : @font-size-small@;
 }
 
 /* ---------- Menus ---------- */
@@ -51,7 +52,7 @@ QMenuBar
 QMenuBar::item
 {
     background-color : transparent;
-    padding          : 5px 10px;
+    padding          : 6px 12px;
     border-radius    : @radius-control@;
 }
 
@@ -74,7 +75,7 @@ QMenu
 
 QMenu::item
 {
-    padding       : 6px 28px 6px 12px;
+    padding       : 7px 32px 7px 14px;
     border-radius : @radius-control@;
     margin        : 1px 0px;
 }
@@ -103,7 +104,7 @@ QPushButton
     background-color : @fill-control@;
     border           : 1px solid @border@;
     border-radius    : @radius-control@;
-    padding          : 3px 14px;
+    padding          : 5px 16px;
     min-height       : 20px;
 }
 
@@ -164,7 +165,7 @@ QToolButton
     background-color : transparent;
     border           : 1px solid transparent;
     border-radius    : @radius-control@;
-    padding          : 4px;
+    padding          : 6px;
     margin           : 0px;
 }
 
@@ -220,7 +221,7 @@ QComboBox
     background-color           : @surface-canvas@;
     border                     : 1px solid @border@;
     border-radius              : @radius-control@;
-    padding                    : 3px 8px;
+    padding                    : 5px 10px;
     min-height                 : 20px;
     selection-background-color : @selection@;
     selection-color            : @text@;
@@ -305,7 +306,7 @@ QTabBar::tab
 {
     background-color : transparent;
     color            : @text-muted@;
-    padding          : 6px 14px;
+    padding          : 8px 16px;
     border           : none;
     border-bottom    : 2px solid transparent;
 }
@@ -320,6 +321,20 @@ QTabBar::tab:selected
 {
     color         : @text@;
     border-bottom : 2px solid @accent@;
+}
+
+QTabBar::close-button
+{
+    image         : @image-tab-close@;
+    subcontrol-position : right;
+    border-radius : 4px;
+    margin        : 0px 0px 0px 6px;
+    padding       : 2px;
+}
+
+QTabBar::close-button:hover
+{
+    background-color : @state-pressed@;
 }
 
 /* ---------- Item views ---------- */
@@ -337,7 +352,7 @@ QAbstractItemView
 
 QAbstractItemView::item
 {
-    padding : 3px 4px;
+    padding : 4px 6px;
 }
 
 QAbstractItemView::item:hover
@@ -363,8 +378,9 @@ QHeaderView::section
     border           : none;
     border-bottom    : 1px solid @border-subtle@;
     border-right     : 1px solid @border-subtle@;
-    padding          : 4px 8px;
+    padding          : 6px 10px;
     font-weight      : 600;
+    font-size        : @font-size-small@;
 }
 
 QTableView
@@ -452,83 +468,15 @@ QSplitter::handle:hover
 }
 
 
-/* Component rules converted from the legacy dark stylesheet. Colors are tokens, see theme.cpp. */
-
-hal--Toolbar
-{
-    background: @surface-canvas@;
-    spacing: 1px;
-    min-height: 24px;
-    max-height: 24px;
-    border: 0px solid @border-subtle@;
-}
-
-hal--Searchbar
-{
-    background-color: @surface-raised@;
-    min-height: 30px;
-    max-height: 30px;
-    border-width: 6px;
-    border-style: solid;
-    border-color: @border-subtle@;
-    qproperty-searchIcon: ":/icons/search";
-    qproperty-searchIconStyle: "all -> @text@";
-    qproperty-clearIcon: ":/icons/cross";
-    qproperty-clearIconStyle: "all -> @text@";
-    qproperty-optionDialogIcon: ":/icons/settings";
-    qproperty-optionDialogIconStyle: "all -> @text@";
-}
-
-hal--Searchbar QLabel
-{
-    font: bold "Segoe UI";
-    color: @text-muted@;
-    background-color: @surface-base@;
-    padding-left: 4px;
-    padding-right: 4px;
-}
-
-hal--Searchbar QLabel:hover
-{
-    color: @text@;
-    font-weight: bold;
-}
-
-hal--Searchbar QPushButton
-{
-    font-weight: normal;
-    background-color: @surface-base@;
-    border: none;
-    padding: none;
-    min-width: 25;
-    max-width: 25;
-}
-
-hal--Searchbar QLineEdit
-{
-    color: @text@;
-    font-style: normal;
-    background-color: @surface-base@;
-    border: none;
-}
-
-hal--Searchbar QLineEdit[text=""]
-{
-    font-style: italic;
-}
-
-hal--Searchbar QToolButton
-{
-    background-color: @surface-base@;
-    border: none;
-}
+/* =====================================================================================================================
+ * Component rules of the individual widgets
+ * ===================================================================================================================== */
 
 hal--SettingsWidget
 {
     background-color: @surface-raised@;
     padding: 10px;
     margin-bottom: 20px;
-    font: 14px bold "Segoe UI";
     border-left: 5px solid @border@;
 }
 
@@ -574,7 +522,6 @@ hal--SettingsWidget #name-label
 {
     min-height: 42px;
     max-height: 42px;
-    font: 14px bold "Segoe UI";
 }
 
 hal--SettingsWidget QToolButton
@@ -589,7 +536,6 @@ hal--SettingsWidget QToolButton:disabled
 
 hal--SettingsWidget hal--label_button
 {
-    font: bold "Segoe UI";
     border: 1px solid @border-strong@;
     padding-top: 4px;
     padding-bottom: 4px;
@@ -635,13 +581,6 @@ hal--MainSettingsWidget #Searchbar-container
 {
     min-height: 80px;
     max-height: 80px;
-}
-
-hal--MainSettingsWidget #Searchbar-container hal--Searchbar
-{
-    min-width: 400px;
-    max-width: 400px;
-    border: 1px solid @border@;
 }
 
 hal--MainSettingsWidget hal--SettingsDisplay
@@ -698,12 +637,12 @@ hal--MainSettingsWidget hal--ExpandingListButton
     background-color: @surface-canvas@;
     color: @text@;
     border-right: 5px solid @border-subtle@;
-    qproperty-iconStyle: "all -> @text-muted@";
+    qproperty-iconStyle: "all->@icon@";
 }
 
 hal--MainSettingsWidget hal--ExpandingListButton[hover=true]
 {
-    qproperty-iconStyle: "all -> @text@";
+    qproperty-iconStyle: "all->@icon@";
 }
 
 hal--MainSettingsWidget hal--ExpandingListButton[hover=true] *
@@ -715,7 +654,7 @@ hal--MainSettingsWidget hal--ExpandingListButton[hover=true] *
 hal--MainSettingsWidget hal--ExpandingListButton[selected=true]
 {
     background-color: @surface-base@;
-    qproperty-iconStyle: "all -> @text-muted@";
+    qproperty-iconStyle: "all->@icon@";
 }
 
 hal--MainSettingsWidget hal--ExpandingListButton[type="child"]
@@ -730,7 +669,6 @@ hal--MainSettingsWidget hal--ExpandingListButton[type="child"][selected=true]
 
 hal--MainSettingsWidget hal--ExpandingListButton *
 {
-    font: 14px bold "Segoe UI";
     background-color: transparent;
 }
 
@@ -768,55 +706,8 @@ hal--MainSettingsWidget hal--ExpandingListButton[selected=true] #right-border
     background-color: @success@;
 }
 
-hal--ContentLayoutArea #left-dock-bar
-{
-    min-width: 19px;
-    max-width: 19px;
-    border-right: 1px solid @border-subtle@;
-}
-
-hal--ContentLayoutArea #right-dock-bar
-{
-    min-width: 19px;
-    max-width: 19px;
-    border-left: 1px solid @border-subtle@;
-}
-
-hal--ContentLayoutArea #bottom-dock-bar
-{
-    min-height: 19px;
-    max-height: 19px;
-    border-top: 1px solid @border-subtle@;
-}
-
-hal--ContentLayoutArea #left-spacer
-{
-    min-width: 19px;
-    max-width: 19px;
-    min-height: 19px;
-    max-height: 19px;
-}
-
-hal--ContentLayoutArea #right-spacer
-{
-    min-width: 19px;
-    max-width: 19px;
-    min-height: 19px;
-    max-height: 19px;
-}
-
-hal--TabWidget hal--DockBar
-{
-    background: @surface-canvas@;
-    min-height: 24px;
-    max-height: 24px;
-}
-
 hal--CodeEditor
 {
-    font-style: normal;
-    font-size: @font-size@;
-    font-weight: normal;
     qproperty-lineNumberFont: "Iosevka";
     qproperty-lineNumberColor: @text-disabled@;
     qproperty-currentLineBackground: @surface-raised@;
@@ -831,91 +722,8 @@ hal--CodeEditor hal--LineNumberArea
     qproperty-rightOffset: 15;
 }
 
-hal--LabeledFrame
-{
-    background: @surface-base@;
-    border: 1px solid @border-subtle@;
-    margin-top: 30px;
-    margin-bottom: 30px;
-    margin-left: 30px;
-    margin-right: 30px;
-}
-
-hal--WelcomeScreen
-{
-    background: qlineargradient(spread:pad,
-    x1         : 0,
-    y1         : 0,
-    x2         : 1,
-    y2         : 1,
-    stop       : 0 @surface-base@,
-    stop       : 1 @surface-base@);
-}
-
-hal--WelcomeScreen hal--LabeledFrame
-{
-    min-width: 200px;
-    max-width: 400px;
-    min-height: 200px;
-    max-height: 800px;
-}
-
-hal--LabeledFrame #header
-{
-    background: @surface-canvas@;
-}
-
-hal--LabeledFrame #left-spacer
-{
-    background: @surface-base@;
-    min-width: 50px;
-    max-width: 50px;
-    min-height: 4px;
-    max-height: 4px;
-    margin-top: 3px;
-    margin-left: 6px;
-}
-
-hal--LabeledFrame #label
-{
-    background: @surface-canvas@;
-    padding-top: 21px;
-    padding-bottom: 21px;
-    padding-left: 10px;
-    padding-right: 10px;
-    font-weight: 700;
-    font-size: 20px;
-    color: @text-disabled@;
-}
-
-#recent-files-frame #label
-{
-    qproperty-text: "RECENT <font color='@text-muted@'>PROJECTS</font>";
-}
-
-#open-file-frame #label
-{
-    qproperty-text: "OPEN <font color='@text-muted@'>PROJECT</font>";
-}
-
-#get-in-touch-frame #label
-{
-    qproperty-text: "GET IN <font color='@text-muted@'>TOUCH</font>";
-}
-
-hal--LabeledFrame #right-spacer
-{
-    background: @surface-base@;
-    min-height: 4px;
-    max-height: 4px;
-    margin-top: 3px;
-    margin-right: 6px;
-}
-
 hal--GateDetailsWidget QPushButton, hal--NetDetailsWidget QPushButton, hal--ModuleDetailsWidget QPushButton
 {
-    font: bold "Segoe UI";
-    font-size: @font-size-small@;
     background: @surface-base@;
     border-color: @border-strong@;
     border-width: 1px;
@@ -925,8 +733,6 @@ hal--GateDetailsWidget QPushButton, hal--NetDetailsWidget QPushButton, hal--Modu
 
 hal--GateDetailsWidget QPushButton:disabled, hal--NetDetailsWidget QPushButton:disabled, hal--ModuleDetailsWidget QPushButton:disabled
 {
-    font: bold "Segoe UI";
-    font-size: @font-size-small@;
     background: @surface-base@;
     border-color: @border-strong@;
     border-width: 1px;
@@ -944,121 +750,6 @@ hal--GateDetailsWidget QLabel
     color: @text-muted@;
 }
 
-hal--RecentFilesWidget
-{
-    background: @surface-base@;
-    margin-top: 15px;
-    margin-bottom: 15px;
-}
-
-hal--RecentFileItem
-{
-    background: @surface-base@;
-    padding-top: 6px;
-    padding-bottom: 6px;
-    padding-left: 10px;
-    padding-right: 10px;
-    qproperty-iconStyle: "all->@accent@";
-}
-
-hal--RecentFileItem[isProject=true]
-{
-    qproperty-iconPath: ":/icons/folder";
-}
-
-hal--RecentFileItem[isProject=false]
-{
-    qproperty-iconPath: ":/icons/detach";
-}
-
-hal--RecentFileItem *
-{
-    background: @surface-base@;
-    color: @text-muted@;
-    font-weight: 400;
-    font-size: @font-size@;
-}
-
-hal--RecentFileItem #icon-label
-{
-    margin-right: 10px;
-}
-
-hal--RecentFileItem #path-label
-{
-    color: @text-disabled@;
-}
-
-hal--RecentFileItem[hover=true]
-{
-    background: @surface-base@;
-}
-
-hal--RecentFileItem[hover=true] *
-{
-    background: @surface-base@;
-}
-
-hal--RecentFileItem[hover=true] #path-label
-{
-    color: @text-disabled@;
-}
-
-hal--RecentFileItem QToolButton:hover
-{
-    background: @surface-base@;
-    color: @text@;
-}
-
-hal--RecentFileItem[missing=true]
-{
-    qproperty-iconStyle: "all->@text-muted@";
-}
-
-hal--RecentFileItem[missing=true] #name-label
-{
-    color: @text-disabled@;
-}
-
-hal--RecentFileItem[missing=true] #path-label
-{
-    color: @danger@;
-}
-
-hal--OpenFileWidget
-{
-    background: @surface-base@;
-    qproperty-iconPath: ":/icons/drop";
-    qproperty-iconStyle: "all->@text-disabled@";
-}
-
-hal--OpenFileWidget[drag_active=true]
-{
-    qproperty-iconStyle: "all->@text-disabled@";
-}
-
-hal--OpenFileWidget QLabel
-{
-    background: @surface-base@;
-}
-
-hal--OpenFileWidget #text-label
-{
-    background: @surface-base@;
-    font-weight: 400;
-    font-size: @font-size@;
-    color: @text-muted@;
-    margin-top: 21px;
-    margin-bottom: 21px;
-    margin-left: 10px;
-    margin-right: 10px;
-}
-
-hal--OpenFileWidget #icon-label
-{
-    margin-top: 220px;
-}
-
 hal--GateLibraryLabel
 {
     background: @surface-canvas@;
@@ -1074,14 +765,11 @@ hal--GateLibraryLabel[isValue="true"]
 {
     background: @surface-canvas@;
     color: @text@;
-    font-size: @font-size@;
-    font-style: "Heavy";
-    font-weight: 700;
 }
 
 hal--GateLibrarySelection
 {
-    qproperty-saveIconStyle: "all->@accent@";
+    qproperty-saveIconStyle: "all->@icon@";
     qproperty-saveIconPath: ":/icons/folder-down";
 }
 
@@ -1098,20 +786,20 @@ hal--GateLibrarySelection QLabel#warningMsg
 hal--GatelibraryContentWidget
 {
     qproperty-disabledIconStyle: "all->@text-disabled@";
-    qproperty-enabledIconStyle: "all->@text@";
+    qproperty-enabledIconStyle: "all->@icon@";
     qproperty-addTypeIconPath: ":/icons/plus";
     qproperty-editTypeIconPath: ":/icons/pen";
     qproperty-searchIconPath: ":/icons/search";
-    qproperty-searchIconStyle: "all->@text@";
-    qproperty-searchActiveIconStyle: "all->@success@";
-    qproperty-deleteIconStyle: "all->@text@";
+    qproperty-searchIconStyle: "all->@icon@";
+    qproperty-searchActiveIconStyle: "all->@accent@";
+    qproperty-deleteIconStyle: "all->@icon@";
     qproperty-deleteIconPath: ":/icons/trashcan";
 }
 
 hal--GeneralInfoWizardPage
 {
     qproperty-disabledIconStyle: "all->@text-disabled@";
-    qproperty-enabledIconStyle: "all->@text@";
+    qproperty-enabledIconStyle: "all->@icon@";
     qproperty-leftArrowIconPath: ":/icons/arrow-left";
     qproperty-rightArrowIconPath: ":/icons/arrow-right";
 }
@@ -1139,7 +827,7 @@ hal--PinTreeView::item:focus
 
 hal--ImportNetlistDialog
 {
-    qproperty-saveIconStyle: "all->@accent@";
+    qproperty-saveIconStyle: "all->@icon@";
     qproperty-saveIconPath: ":/icons/folder-down";
 }
 
@@ -1151,7 +839,7 @@ hal--ImportNetlistDialog QWidget:disabled
 
 hal--NewProjectDialog
 {
-    qproperty-saveIconStyle: "all->@accent@";
+    qproperty-saveIconStyle: "all->@icon@";
     qproperty-saveIconPath: ":/icons/folder-down";
 }
 
@@ -1159,62 +847,6 @@ hal--NewProjectDialog QWidget:disabled
 {
     color: @text-disabled@;
     background: @surface-raised@;
-}
-
-hal--GetInTouchWidget
-{
-    background: @surface-base@;
-    margin-top: 15px;
-    margin-bottom: 15px;
-}
-
-hal--GetInTouchItem
-{
-    background: @surface-base@;
-    padding-top: 6px;
-    padding-bottom: 6px;
-    padding-left: 10px;
-    padding-right: 10px;
-    qproperty-iconPath: ":/icons/folder";
-    qproperty-iconStyle: "all->@text@";
-}
-
-hal--GetInTouchItem *
-{
-    background: @surface-base@;
-    color: @text-muted@;
-    font-weight: 400;
-    font-size: @font-size@;
-}
-
-hal--GetInTouchItem #icon-label
-{
-    margin-right: 10px;
-}
-
-hal--GetInTouchItem #description-label
-{
-    color: @text-disabled@;
-}
-
-hal--GetInTouchItem[hover=true]
-{
-    background: @surface-base@;
-}
-
-hal--GetInTouchItem[hover=true] *
-{
-    background: @surface-base@;
-}
-
-hal--ContentWidget *
-{
-    background: @surface-raised@;
-}
-
-hal--DropMarker
-{
-    background: @surface-base@;
 }
 
 hal--PythonEditor
@@ -1226,16 +858,14 @@ hal--PythonEditor
     y2         : 1,
     stop       : 0 @surface-base@,
     stop       : 1 @surface-base@);
-    qproperty-searchActiveIconStyle: "all->@success@";
-    qproperty-searchIconStyle: "all->@text@";
+    qproperty-searchActiveIconStyle: "all->@accent@";
+    qproperty-searchIconStyle: "all->@icon@";
     qproperty-searchIconPath: ":/icons/search";
 }
 
 hal--PythonEditor hal--CodeEditor
 {
     font-family: @font-mono@;
-    font-size: @font-size@;
-    font-style: "Heavy";
     color: @text-muted@;
     background: @surface-raised@;
     qproperty-lineNumberFont: "Iosevka";
@@ -1252,9 +882,6 @@ hal--PythonEditor hal--CodeEditor hal--LineNumberArea
 
 hal--CodeEditorMinimap
 {
-    font-style: normal;
-    font-size: 3px;
-    font-weight: normal;
     background: @surface-overlay@;
     color: @text-muted@;
 }
@@ -1272,28 +899,9 @@ hal--CodeEditorMinimap QScrollBar::handle:vertical
     border-radius: 0px;
 }
 
-hal--GetInTouchItem#about_item
-{
-    qproperty-iconStyle: "all->@warning@";
-    qproperty-iconPath: ":/icons/info";
-}
-
-hal--GetInTouchItem#documentation_item
-{
-    qproperty-iconStyle: "all->@warning@";
-    qproperty-iconPath: ":/icons/info";
-}
-
-hal--GetInTouchItem#ticket_item
-{
-    qproperty-iconStyle: "all->@warning@";
-    qproperty-iconPath: ":/icons/github";
-}
-
 hal--PythonConsole
 {
     font-family: @font-mono@;
-    font-size: @font-size@;
     color: @text-muted@;
 }
 
@@ -1306,15 +914,15 @@ hal--PythonEditor
 {
     background: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 @surface-base@, stop:1 @surface-base@);
     qproperty-disabledIconStyle: "all->@text-disabled@";
-    qproperty-openIconStyle: "all->@accent@";
+    qproperty-openIconStyle: "all->@icon@";
     qproperty-openIconPath: ":/icons/folder";
-    qproperty-saveIconStyle: "all->@accent@";
+    qproperty-saveIconStyle: "all->@icon@";
     qproperty-saveIconPath: ":/icons/folder-down";
-    qproperty-saveAsIconStyle: "all->@accent@";
+    qproperty-saveAsIconStyle: "all->@icon@";
     qproperty-saveAsIconPath: ":/icons/save-as";
     qproperty-runIconStyle: "all->@success@";
     qproperty-runIconPath: ":/icons/run";
-    qproperty-toggleMinimapIconStyle: "all->@warning@";
+    qproperty-toggleMinimapIconStyle: "all->@icon@";
     qproperty-toggleMinimapIconPath: ":/icons/placeholder";
     qproperty-newFileIconStyle: "";
     qproperty-newFileIconPath: ":/icons/new-file";
@@ -1323,57 +931,57 @@ hal--PythonEditor
 hal--GroupingManagerWidget
 {
     qproperty-disabledIconStyle: "all->@text-disabled@";
-    qproperty-newGroupingIconStyle: "all->@text@";
+    qproperty-newGroupingIconStyle: "all->@icon@";
     qproperty-newGroupingIconPath: ":/icons/plus";
-    qproperty-renameGroupingIconStyle: "all->@text@";
+    qproperty-renameGroupingIconStyle: "all->@icon@";
     qproperty-renameGroupingIconPath: ":/icons/pen";
-    qproperty-deleteIconStyle: "all->@text@";
+    qproperty-deleteIconStyle: "all->@icon@";
     qproperty-deleteIconPath: ":/icons/trashcan";
-    qproperty-colorSelectIconStyle: "all->@text@";
+    qproperty-colorSelectIconStyle: "all->@icon@";
     qproperty-colorSelectIconPath: ":/icons/color_select";
-    qproperty-toSelectionIconStyle: "all->@text@";
+    qproperty-toSelectionIconStyle: "all->@icon@";
     qproperty-toSelectionIconPath: ":/icons/to_selection";
-    qproperty-searchActiveIconStyle: "all->@success@";
-    qproperty-searchIconStyle: "all->@text@";
+    qproperty-searchActiveIconStyle: "all->@accent@";
+    qproperty-searchIconStyle: "all->@icon@";
     qproperty-searchIconPath: ":/icons/search";
-    qproperty-tableIconStyle: "all->@text@";
+    qproperty-tableIconStyle: "all->@icon@";
     qproperty-tableIconPath: ":/icons/list";
 }
 
 hal--ContextManagerWidget
 {
     qproperty-disabledIconStyle: "all->@text-disabled@";
-    qproperty-newViewIconStyle: "all->@text@";
+    qproperty-newViewIconStyle: "all->@icon@";
     qproperty-newViewIconPath: ":/icons/plus";
     qproperty-newDirIconPath: ":/icons/plusdir";
-    qproperty-renameIconStyle: "all->@text@";
+    qproperty-renameIconStyle: "all->@icon@";
     qproperty-renameIconPath: ":/icons/pen";
-    qproperty-duplicateIconStyle: "all->@text@";
+    qproperty-duplicateIconStyle: "all->@icon@";
     qproperty-duplicateIconPath: ":/icons/content";
-    qproperty-deleteIconStyle: "all->@text@";
+    qproperty-deleteIconStyle: "all->@icon@";
     qproperty-deleteIconPath: ":/icons/trashcan";
-    qproperty-openIconStyle: "all->@text@";
+    qproperty-openIconStyle: "all->@icon@";
     qproperty-openIconPath: ":/icons/open-alt";
-    qproperty-searchIconStyle: "all->@text@";
-    qproperty-searchActiveIconStyle: "all->@success@";
+    qproperty-searchIconStyle: "all->@icon@";
+    qproperty-searchActiveIconStyle: "all->@accent@";
     qproperty-searchIconPath: ":/icons/search";
 }
 
 hal--SelectionDetailsWidget
 {
     qproperty-disabledIconStyle: "all->@text-disabled@";
-    qproperty-searchActiveIconStyle: "all->@success@";
-    qproperty-searchIconStyle: "all->@text@";
+    qproperty-searchActiveIconStyle: "all->@accent@";
+    qproperty-searchIconStyle: "all->@icon@";
     qproperty-searchIconPath: ":/icons/search";
-    qproperty-toGroupingIconStyle: "all->@text@";
+    qproperty-toGroupingIconStyle: "all->@icon@";
     qproperty-toGroupingIconPath: ":/icons/to_grouping";
-    qproperty-toModuleIconStyle: "all->@text@";
+    qproperty-toModuleIconStyle: "all->@icon@";
     qproperty-toModuleIconPath: ":/icons/to_module";
 }
 
 hal--LoggerWidget
 {
-    qproperty-searchIconStyle: "all->@text@";
+    qproperty-searchIconStyle: "all->@icon@";
     qproperty-searchIconPath: ":/icons/search";
 }
 
@@ -1391,38 +999,16 @@ hal--Toolbar hal--ChannelSelector QListView
     max-width: 16em;
 }
 
-hal--Toolbar QPushButton
-{
-    border: none;
-    background-color: @surface-base@;
-}
-
-hal--Toolbar QPushButton:hover
-{
-    background-color: @surface-raised@;
-}
-
-hal--Toolbar QPushButton:checked
-{
-    background-color: @state-pressed@;
-    color: @text@;
-}
-
-hal--Toolbar QPushButton:checked:hover
-{
-    background-color: @surface-overlay@;
-}
-
 hal--ModuleWidget
 {
     qproperty-disabledIconStyle: "all->@text-disabled@";
-    qproperty-activeIconStyle: "all->@text@";
+    qproperty-activeIconStyle: "all->@icon@";
     qproperty-showNetsIconPath: ":/icons/ne_net";
     qproperty-hideNetsIconPath: ":/icons/ne_no_net";
     qproperty-showGatesIconPath: ":/icons/ne_gate";
     qproperty-hideGatesIconPath: ":/icons/ne_no_gate";
-    qproperty-searchActiveIconStyle: "all->@success@";
-    qproperty-searchIconStyle: "all->@text@";
+    qproperty-searchActiveIconStyle: "all->@accent@";
+    qproperty-searchIconStyle: "all->@icon@";
     qproperty-searchIconPath: ":/icons/search";
     qproperty-renameIconPath: ":/icons/pen";
     qproperty-deleteIconPath: ":/icons/trashcan";
@@ -1434,18 +1020,18 @@ hal--MainWindow
 {
     qproperty-halIconStyle: "";
     qproperty-halIconPath: ":/icons/hal";
-    qproperty-openFileIconStyle: "all->@text-muted@";
+    qproperty-openFileIconStyle: "all->@icon@";
     qproperty-openFileIconPath: ":/icons/detach";
-    qproperty-quitIconStyle: "all->@text-muted@";
+    qproperty-quitIconStyle: "all->@icon@";
     qproperty-quitIconPath: ":/icons/switch";
-    qproperty-settingsIconStyle: "all->@text-muted@";
+    qproperty-settingsIconStyle: "all->@icon@";
     qproperty-settingsIconPath: ":/icons/settings";
-    qproperty-pluginsIconStyle: "all->@text-muted@";
+    qproperty-pluginsIconStyle: "all->@icon@";
     qproperty-pluginsIconPath: ":/icons/plugin";
-    qproperty-undoIconStyle: "all->@text@";
+    qproperty-undoIconStyle: "all->@icon@";
     qproperty-undoIconPath: ":/icons/undo2";
     qproperty-disabledIconStyle: "all->@text-disabled@";
-    qproperty-neGateIconStyle: "all->@text-muted@";
+    qproperty-neGateIconStyle: "all->@icon@";
     qproperty-neGateIconPath: ":/icons/ne_gate";
 }
 
@@ -1453,13 +1039,13 @@ hal--FileActions
 {
     qproperty-newFileIconStyle: "";
     qproperty-newFileIconPath: ":/icons/new-file";
-    qproperty-openProjIconStyle: "all->@accent@";
+    qproperty-openProjIconStyle: "all->@icon@";
     qproperty-openProjIconPath: ":/icons/folder";
-    qproperty-closeIconStyle: "all->@text-muted@";
+    qproperty-closeIconStyle: "all->@icon@";
     qproperty-closeIconPath: ":/icons/cross";
     qproperty-saveIconPath: ":/icons/folder-down";
     qproperty-saveAsIconPath: ":/icons/save-as";
-    qproperty-enabledIconStyle: "all->@accent@";
+    qproperty-enabledIconStyle: "all->@icon@";
     qproperty-disabledIconStyle: "all->@text-disabled@";
 }
 
@@ -1540,17 +1126,8 @@ hal--GraphicsQssAdapter
     qproperty-nodeTextColor: @text@;
 }
 
-hal--DockButton
-{
-    qproperty-textColor: @text@;
-    qproperty-checkedColor: @text-muted@;
-    qproperty-hoverColor: @text-disabled@;
-}
-
 hal--DetailsFrameWidget QPushButton
 {
-    font: bold "Segoe UI";
-    font-size: @font-size-small@;
     background: @surface-base@;
     border-color: @border-strong@;
     border-width: 1px;
@@ -1560,8 +1137,6 @@ hal--DetailsFrameWidget QPushButton
 
 hal--DetailsFrameWidget QPushButton:checked
 {
-    font: bold "Segoe UI";
-    font-size: @font-size-small@;
     background: @surface-base@;
     border-color: @border-strong@;
     border-width: 1px;
@@ -1577,16 +1152,11 @@ hal--DetailsFrameWidget QPushButton:hover
 hal--GatelibraryManagementDialog
 {
     qproperty-loadIconPath: ":/icons/plus";
-    qproperty-loadIconStyle: "all->@success@";
+    qproperty-loadIconStyle: "all->@icon@";
     qproperty-reloadIconPath: ":/icons/spinner";
-    qproperty-reloadIconStyle: "all->@text@";
+    qproperty-reloadIconStyle: "all->@icon@";
     qproperty-removeIconPath: ":/icons/minus";
-    qproperty-removeIconStyle: "all->@danger@";
-}
-
-hal--GatelibraryManagementDialog hal--Searchbar
-{
-    border: 1px solid @border@;
+    qproperty-removeIconStyle: "all->@icon@";
 }
 
 hal--GatelibraryManagementDialog QTableView
@@ -1604,9 +1174,6 @@ hal--BooleanFunctionEdit
     background: @surface-canvas@;
     color: @text@;
     font-family: @font-mono@;
-    font-size: @font-size@;
-    font-style: "Heavy";
-    font-weight: 700;
 }
 
 hal--BooleanFunctionEdit[state="Empty"]
@@ -1624,11 +1191,11 @@ hal--BooleanFunctionEdit[state="Invalid"]
 hal--GuiPluginManager
 {
     qproperty-loadIconPath: ":/icons/insert-plugin";
-    qproperty-loadIconStyle: "all->@success@";
+    qproperty-loadIconStyle: "all->@icon@";
     qproperty-unloadIconPath: ":/icons/cross";
-    qproperty-unloadIconStyle: "all->@danger@";
+    qproperty-unloadIconStyle: "all->@icon@";
     qproperty-cliIconPath: ":/icons/cli-options";
-    qproperty-cliIconStyle: "all->@text@";
+    qproperty-cliIconStyle: "all->@icon@";
     qproperty-guiIconEnabledPath: ":/icons/enable-gui-contributions";
     qproperty-guiIconDisabledPath: ":/icons/disable-gui-contributions";
     qproperty-guiIconEnabledStyle: "all->@accent@";
@@ -1641,17 +1208,17 @@ hal--GuiPluginManager
 hal--CommentWidget
 {
     qproperty-newCommentIconPath: ":/icons/plus";
-    qproperty-newCommentIconStyle: "all->@text@";
+    qproperty-newCommentIconStyle: "all->@icon@";
     qproperty-searchIconPath: ":/icons/search";
-    qproperty-searchIconStyle: "all->@text@";
+    qproperty-searchIconStyle: "all->@icon@";
 }
 
 hal--CommentItem
 {
     qproperty-modifyCommentIconPath: ":/icons/pen";
-    qproperty-modifyCommentIconStyle: "all->@text@";
+    qproperty-modifyCommentIconStyle: "all->@icon@";
     qproperty-deleteCommentIconPath: ":/icons/trashcan";
-    qproperty-deleteCommentIconStyle: "all->@text@";
+    qproperty-deleteCommentIconStyle: "all->@icon@";
 }
 
 hal--CommentDialog
@@ -1712,7 +1279,6 @@ hal--PageInputData QTableView::item:selected:!active
 
 hal--LogicEvaluatorDialog
 {
-    font-size: @font-size@;
     color: @text-muted@;
     background: @state-pressed@;
 }
@@ -1750,7 +1316,6 @@ hal--LogicEvaluatorValue
 hal--LogicEvaluatorValue QSpinBox
 {
     color: @text@;
-    font-style: normal;
     background-color: @surface-base@;
     border: none;
 }
@@ -1776,7 +1341,6 @@ hal--LogicEvaluatorValue QSpinBox::down-button
 hal--LogicEvaluatorValue QLabel
 {
     color: @text@;
-    font-style: normal;
     background-color: @surface-base@;
     border: none;
 }
@@ -1784,7 +1348,6 @@ hal--LogicEvaluatorValue QLabel
 hal--LogicEvaluatorPingroup > QLabel
 {
     color: @text@;
-    font-style: bold;
     border: none;
     background-color: none;
     max-height: 28;
@@ -1792,7 +1355,6 @@ hal--LogicEvaluatorPingroup > QLabel
 
 hal--LogicEvaluatorPingroup QCheckBox
 {
-    font: bold "Segoe UI";
     color: @text@;
     background: @surface-canvas@;
     padding-top: 4px;
@@ -1828,4 +1390,373 @@ hal--LogicEvaluatorSelectGates
     qproperty-selForeground: @warning@;
     qproperty-selBackground: @surface-base@;
     min-width: 400px;
+}
+
+
+/* =====================================================================================================================
+ * App shell: dock rails, panel headers, search field
+ * ===================================================================================================================== */
+
+/* Vertical dock rails hold square icon buttons, the bottom bar icon and label */
+hal--ContentLayoutArea #left-dock-bar
+{
+    min-width        : 40px;
+    max-width        : 40px;
+    background-color : @surface-base@;
+    border-right     : 1px solid @border-subtle@;
+}
+
+hal--ContentLayoutArea #right-dock-bar
+{
+    min-width        : 40px;
+    max-width        : 40px;
+    background-color : @surface-base@;
+    border-left      : 1px solid @border-subtle@;
+}
+
+hal--ContentLayoutArea #bottom-dock-bar
+{
+    min-height       : 32px;
+    max-height       : 32px;
+    background-color : @surface-base@;
+    border-top       : 1px solid @border-subtle@;
+}
+
+hal--ContentLayoutArea #left-spacer,
+hal--ContentLayoutArea #right-spacer
+{
+    min-width        : 40px;
+    max-width        : 40px;
+    min-height       : 32px;
+    max-height       : 32px;
+    background-color : @surface-base@;
+}
+
+hal--DockButton
+{
+    qproperty-textColor    : @text-muted@;
+    qproperty-checkedColor : @accent@;
+    qproperty-hoverColor   : @state-hover@;
+}
+
+hal--TabWidget hal--DockBar
+{
+    background-color : @surface-base@;
+    min-height       : 32px;
+    max-height       : 32px;
+}
+
+hal--DropMarker
+{
+    background-color : @state-selected@;
+}
+
+/* Panel header: title on the left, actions on the right, one hairline below */
+hal--Toolbar
+{
+    background-color : @surface-raised@;
+    spacing          : 2px;
+    min-height       : 36px;
+    max-height       : 36px;
+    border           : none;
+    border-bottom    : 1px solid @border-subtle@;
+    padding          : 0px 6px;
+}
+
+#panel-title
+{
+    font-size   : @font-size-small@;
+    font-weight : 600;
+    color       : @text@;
+    padding     : 0px 8px 0px 6px;
+}
+
+hal--Toolbar QPushButton
+{
+    background-color : transparent;
+    border           : 1px solid transparent;
+    padding          : 3px 10px;
+}
+
+hal--Toolbar QPushButton:hover
+{
+    background-color : @state-hover@;
+}
+
+hal--Toolbar QPushButton:checked
+{
+    background-color : @state-selected@;
+    color            : @text@;
+}
+
+hal--ContentWidget
+{
+    background-color : @surface-raised@;
+}
+
+/* Search field that sits below a panel header */
+hal--Searchbar
+{
+    background-color : @surface-canvas@;
+    border           : none;
+    border-bottom    : 1px solid @border-subtle@;
+    min-height       : 36px;
+    max-height       : 36px;
+    qproperty-searchIcon            : ":/icons/search";
+    qproperty-searchIconStyle       : "";
+    qproperty-clearIcon             : ":/icons/cross";
+    qproperty-clearIconStyle        : "";
+    qproperty-optionDialogIcon      : ":/icons/settings";
+    qproperty-optionDialogIconStyle : "";
+}
+
+hal--Searchbar QLabel
+{
+    color            : @text-muted@;
+    background-color : transparent;
+    padding          : 0px 6px;
+}
+
+hal--Searchbar QLineEdit
+{
+    background-color : transparent;
+    border           : none;
+    padding          : 0px 4px;
+}
+
+hal--Searchbar QPushButton,
+hal--Searchbar QToolButton
+{
+    background-color : transparent;
+    border           : none;
+    padding          : 4px;
+    min-width        : 24px;
+    max-width        : 24px;
+}
+
+hal--MainSettingsWidget #Searchbar-container hal--Searchbar
+{
+    min-width     : 400px;
+    max-width     : 400px;
+    border        : 1px solid @border@;
+    border-radius : @radius-control@;
+}
+
+hal--GatelibraryManagementDialog hal--Searchbar
+{
+    border        : 1px solid @border@;
+    border-radius : @radius-control@;
+}
+
+/* =====================================================================================================================
+ * Start page: hero, cards, rows
+ * ===================================================================================================================== */
+
+hal--WelcomeScreen
+{
+    background-color : @surface-base@;
+}
+
+#welcome-title
+{
+    font-size   : @font-size-display@;
+    font-weight : 600;
+    color       : @text@;
+}
+
+#welcome-subtitle
+{
+    font-size : @font-size@;
+    color     : @text-muted@;
+}
+
+hal--LabeledFrame
+{
+    background-color : @surface-raised@;
+    border           : 1px solid @border-subtle@;
+    border-radius    : @radius-overlay@;
+    margin           : 0px;
+}
+
+hal--LabeledFrame #header
+{
+    background-color : transparent;
+    border           : none;
+    border-bottom    : 1px solid @border-subtle@;
+    min-height       : 48px;
+    max-height       : 48px;
+}
+
+hal--LabeledFrame #label
+{
+    background-color : transparent;
+    font-size        : @font-size-small@;
+    font-weight      : 600;
+    color            : @text-muted@;
+    padding          : 0px 20px;
+}
+
+hal--LabeledFrame #right-spacer
+{
+    background-color : transparent;
+}
+
+#recent-files-frame #label
+{
+    qproperty-text : "Recent projects";
+}
+
+#open-file-frame #label
+{
+    qproperty-text : "Open or create";
+}
+
+#get-in-touch-frame #label
+{
+    qproperty-text : "Help";
+}
+
+#recent-files-frame
+{
+    min-height : 360px;
+}
+
+#open-file-frame
+{
+    min-height : 240px;
+}
+
+hal--RecentFilesWidget,
+hal--GetInTouchWidget
+{
+    background-color : transparent;
+    margin           : 8px 8px 12px 8px;
+}
+
+hal--RecentFileItem,
+hal--GetInTouchItem
+{
+    background-color : transparent;
+    border-radius    : @radius-control@;
+    padding          : 8px 12px;
+    qproperty-iconStyle : "";
+}
+
+hal--RecentFileItem *,
+hal--GetInTouchItem *
+{
+    background-color : transparent;
+    color            : @text-muted@;
+    font-size        : @font-size@;
+}
+
+hal--RecentFileItem[hover=true],
+hal--GetInTouchItem[hover=true]
+{
+    background-color : @state-hover@;
+}
+
+hal--RecentFileItem #icon-label,
+hal--GetInTouchItem #icon-label
+{
+    margin-right : 12px;
+}
+
+hal--RecentFileItem #name-label
+{
+    color       : @text@;
+    font-weight : 600;
+}
+
+hal--RecentFileItem #path-label,
+hal--GetInTouchItem #description-label
+{
+    color     : @text-muted@;
+    font-size : @font-size-caption@;
+}
+
+hal--GetInTouchItem #title-label
+{
+    color       : @text@;
+    font-weight : 600;
+}
+
+hal--RecentFileItem[isProject=true]
+{
+    qproperty-iconPath : ":/icons/folder";
+}
+
+hal--RecentFileItem[isProject=false]
+{
+    qproperty-iconPath : ":/icons/detach";
+}
+
+hal--RecentFileItem[missing=true] #name-label
+{
+    color : @text-disabled@;
+}
+
+hal--RecentFileItem[missing=true] #path-label
+{
+    color : @danger@;
+}
+
+hal--RecentFileItem QToolButton
+{
+    color   : @text-muted@;
+    padding : 2px 8px;
+}
+
+hal--RecentFileItem QToolButton:hover
+{
+    background-color : @state-pressed@;
+    color            : @text@;
+}
+
+hal--OpenFileWidget
+{
+    background-color : transparent;
+    qproperty-iconPath  : ":/icons/drop";
+    qproperty-iconStyle : "";
+    margin              : 16px;
+    border              : 1px dashed @border-strong@;
+    border-radius       : @radius-control@;
+}
+
+hal--OpenFileWidget[drag_active=true]
+{
+    border-color     : @accent@;
+    background-color : @state-selected@;
+}
+
+hal--OpenFileWidget QLabel
+{
+    background-color : transparent;
+}
+
+hal--OpenFileWidget #text-label
+{
+    color     : @text-muted@;
+    font-size : @font-size@;
+    margin    : 20px 24px;
+}
+
+hal--OpenFileWidget #icon-label
+{
+    margin-top : 0px;
+}
+
+hal--GetInTouchItem#about_item
+{
+    qproperty-iconPath : ":/icons/info";
+}
+
+hal--GetInTouchItem#documentation_item
+{
+    qproperty-iconPath : ":/icons/info";
+}
+
+hal--GetInTouchItem#ticket_item
+{
+    qproperty-iconPath : ":/icons/github";
 }
