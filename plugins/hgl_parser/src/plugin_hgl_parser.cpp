@@ -7,6 +7,7 @@ namespace hal
 {
     extern std::unique_ptr<BasePluginInterface> create_plugin_instance()
     {
+        HAL_EXPORT_PLUGIN_FACTORY
         return std::make_unique<HGLParserPlugin>();
     }
 

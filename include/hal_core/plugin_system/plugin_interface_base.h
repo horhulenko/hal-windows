@@ -40,6 +40,13 @@ namespace hal
  * Automatically declares a factory function when including this header.
  * Has to be implemented in the plugin.
  */
+#ifdef _MSC_VER
+    // MSVC rejects extern "C" functions returning C++ classes. The factory keeps C++ linkage and is exported under the
+    // plain name 'create_plugin_instance' by the linker directive that every plugin places inside its definition.
+    class BasePluginInterface;
+    std::unique_ptr<BasePluginInterface> create_plugin_instance();
+#define HAL_EXPORT_PLUGIN_FACTORY __pragma(comment(linker, "/export:create_plugin_instance=" __FUNCDNAME__))
+#else
 #ifdef COMPILER_CLANG
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wreturn-type-c-linkage"
@@ -48,6 +55,8 @@ namespace hal
     extern "C" PLUGIN_API std::unique_ptr<BasePluginInterface> create_plugin_instance();
 #ifdef COMPILER_CLANG
 #pragma clang diagnostic pop
+#endif
+#define HAL_EXPORT_PLUGIN_FACTORY
 #endif
 
     /**
