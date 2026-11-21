@@ -148,3 +148,6 @@ changelog
 hal_pass
 
 .claude/
+
+# Windows native build
+/build-win/

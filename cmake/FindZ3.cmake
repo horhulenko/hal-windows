@@ -3,11 +3,17 @@
 #  Z3_FOUND - System has Z3
 #  Z3_INCLUDE_DIRS - The Z3 include directories
 #  Z3_LIBRARIES - The libraries needed to use Z3
-
+#
+# Hint: Z3_ROOT (directory containing include/ and bin/ or lib/), also read from the environment.
 
 find_path (Z3_INCLUDE_DIRS z3++.h
-  PATHS ${CMAKE_EXTRA_INCLUDES} PATH_SUFFIXES z3/ z3/include NO_DEFAULT_PATH
+  HINTS ${Z3_ROOT} $ENV{Z3_ROOT} PATH_SUFFIXES include NO_DEFAULT_PATH
   )
+if(NOT Z3_INCLUDE_DIRS)
+    find_path (Z3_INCLUDE_DIRS z3++.h
+      PATHS ${CMAKE_EXTRA_INCLUDES} PATH_SUFFIXES z3/ z3/include NO_DEFAULT_PATH
+      )
+endif(NOT Z3_INCLUDE_DIRS)
 if(NOT Z3_INCLUDE_DIRS)
     find_path (Z3_INCLUDE_DIRS z3++.h
       PATHS /usr/local/include /usr/include /include /opt/homebrew/include /sw/include /usr/lib /usr/lib64 /usr/lib/x86_64-linux-gnu/ ${CMAKE_EXTRA_INCLUDES} PATH_SUFFIXES z3/ z3/include
@@ -17,11 +23,16 @@ endif(NOT Z3_INCLUDE_DIRS)
 ## -----------------------------------------------------------------------------
 ## Check for the library
 
-find_library (Z3_LIBRARIES NAMES z3
-  PATHS ${CMAKE_EXTRA_LIBRARIES} PATH_SUFFIXES z3/ NO_DEFAULT_PATH
+find_library (Z3_LIBRARIES NAMES z3 libz3
+  HINTS ${Z3_ROOT} $ENV{Z3_ROOT} PATH_SUFFIXES bin lib NO_DEFAULT_PATH
   )
 if(NOT Z3_LIBRARIES)
-    find_library (Z3_LIBRARIES NAMES z3
+    find_library (Z3_LIBRARIES NAMES z3 libz3
+      PATHS ${CMAKE_EXTRA_LIBRARIES} PATH_SUFFIXES z3/ NO_DEFAULT_PATH
+      )
+endif(NOT Z3_LIBRARIES)
+if(NOT Z3_LIBRARIES)
+    find_library (Z3_LIBRARIES NAMES z3 libz3
       PATHS /usr/local/lib /usr/lib /lib /sw/lib /opt/homebrew/lib ${CMAKE_EXTRA_LIBRARIES} PATH_SUFFIXES z3/
       )
 endif(NOT Z3_LIBRARIES)

@@ -2,7 +2,11 @@
 # ####   PkgConfig
 # ###############################
 
-find_package(PkgConfig REQUIRED)
+if(WIN32)
+    find_package(PkgConfig)
+else()
+    find_package(PkgConfig REQUIRED)
+endif()
 
 if(PkgConfig_FOUND)
     message(VERBOSE "PKG_CONFIG_EXECUTABLE: ${PKG_CONFIG_EXECUTABLE}")
@@ -27,7 +31,9 @@ find_package(Sanitizers REQUIRED)
 # ###############################
 # ####   Bitwuzla
 # ###############################
-pkg_check_modules(BITWUZLA bitwuzla)
+if(PkgConfig_FOUND)
+    pkg_check_modules(BITWUZLA bitwuzla)
+endif()
 
 if(BITWUZLA_FOUND)
     message(STATUS "Found BITWUZLA")
