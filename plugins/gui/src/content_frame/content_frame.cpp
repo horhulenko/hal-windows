@@ -25,20 +25,20 @@ namespace hal
         mHorizontalLayout->setSpacing(0);
 
         mLeftToolbar->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
-        mLeftToolbar->setIconSize(QSize(18, 18));
+        mLeftToolbar->setIconSize(QSize(16, 16));
         mRightToolbar->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        mRightToolbar->setIconSize(QSize(18, 18));
+        mRightToolbar->setIconSize(QSize(16, 16));
 
         QAction* action = new QAction(this);
 
-        mDetachIconStyle = "all->#969696";
+        mDetachIconStyle = "";    // neutral icon color of the theme
         mDetachIconPath  = ":/icons/detach";
 
         if (attached)
         {
             mNameLabel->setText(widget->name());
+            mNameLabel->setObjectName("panel-title");
             mLeftToolbar->addWidget(mNameLabel);
-            mLeftToolbar->addSeparator();
             action->setText("Detach");
             action->setIcon(gui_utility::getStyledSvgIcon(mDetachIconStyle, mDetachIconPath));
             connect(action, &QAction::triggered, this, &ContentFrame::detachWidget);

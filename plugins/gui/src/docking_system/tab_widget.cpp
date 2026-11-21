@@ -36,9 +36,9 @@ namespace hal
         //    mToolbar->setFixedHeight(24);    // use settings
 
         mLeftToolbar->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
-        mLeftToolbar->setIconSize(QSize(18, 18));
+        mLeftToolbar->setIconSize(QSize(16, 16));
         mRightToolbar->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        mRightToolbar->setIconSize(QSize(18, 18));
+        mRightToolbar->setIconSize(QSize(16, 16));
 
         //    m_content_toolbar->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
         //    m_container_toolbar->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);

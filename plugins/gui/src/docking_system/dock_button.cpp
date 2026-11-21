@@ -12,15 +12,16 @@ namespace hal
     DockButton::DockButton(ContentWidget* widget, button_orientation orientation, QObject* eventFilter, QWidget* parent) : QToolButton(parent), mWidget(widget), mOrientation(orientation)
     {
         setText(mWidget->name());
+        setToolTip(mWidget->name());
         setCheckable(true);
-        setStyleSheet("QToolButton { font-family : \"Iosevka\";padding: 0; margin: 0; }");
         setIcon(mWidget->icon());
         installEventFilter(eventFilter);
 
-        mIconSize       = 14;
-        mWidthPadding   = 16;
+        // vertical rails show only the icon (square button), the bottom bar shows icon and label
+        mIconSize       = orientation == button_orientation::horizontal ? 16 : 20;
+        mWidthPadding   = 20;
         mHeightPadding  = 0;
-        mRelativeHeight = 18;
+        mRelativeHeight = 32;
         adjustSize();
 
         connect(this, &DockButton::clicked, this, &DockButton::handleClicked);
@@ -29,35 +30,54 @@ namespace hal
     void DockButton::paintEvent(QPaintEvent* event)
     {
         Q_UNUSED(event)
-        auto font = property("font").value<QFont>();
         QPainter painter(this);
-        painter.setFont(font);
-        painter.setPen(mTextColor);
+        painter.setRenderHint(QPainter::Antialiasing);
+
+        const bool active = isChecked();
+        const QRect bounds(0, 0, mWidth, mHeight);
+
+        // hover and open state fill the whole button, the open state also gets an accent edge on the side that faces the window border
         if (underMouse())
+            painter.fillRect(bounds, mHoverColor);
+        if (active)
         {
-            painter.fillRect(0, 0, mWidth, mHeight, mHoverColor);
-        }
-        else if (isChecked())
-        {
-            painter.fillRect(0, 0, mWidth, mHeight, mCheckedColor);
+            painter.fillRect(bounds, mHoverColor);
+            const int edge = 2;
+            QRect marker;
+            switch (mOrientation)
+            {
+                case button_orientation::horizontal:
+                    marker = QRect(0, mHeight - edge, mWidth, edge);
+                    break;
+                case button_orientation::vertical_up:
+                    marker = QRect(0, 0, edge, mHeight);
+                    break;
+                case button_orientation::vertical_down:
+                    marker = QRect(mWidth - edge, 0, edge, mHeight);
+                    break;
+            }
+            painter.fillRect(marker, mCheckedColor);
         }
 
-        switch (mOrientation)
+        const QIcon::Mode mode = (active || underMouse()) ? QIcon::Active : QIcon::Normal;
+
+        if (mOrientation == button_orientation::horizontal)
         {
-            case button_orientation::horizontal:
-                painter.translate(0, -1);
-                break;
-            case button_orientation::vertical_up:
-                painter.translate(-1, mHeight);
-                painter.rotate(270);
-                break;
-            case button_orientation::vertical_down:
-                painter.translate(mWidth + 1, 0);
-                painter.rotate(90);
-                break;
+            const int top = (mHeight - mIconSize) / 2;
+            icon().paint(&painter, QRect(mWidthPadding / 2, top, mIconSize, mIconSize), Qt::AlignCenter, mode);
+            painter.setPen(active || underMouse() ? palette().color(QPalette::WindowText) : mTextColor);
+            painter.drawText(QRect(mWidthPadding / 2 + mIconSize + 8, 0, mWidth - mIconSize - 8 - mWidthPadding, mHeight), Qt::AlignVCenter | Qt::AlignLeft, text());
         }
-        icon().paint(&painter, 0, (mRelativeHeight / 2) - (mIconSize / 2), mIconSize, (mRelativeHeight / 2) - (mIconSize / 2) + mIconSize);
-        painter.drawText(QRectF(QRect(mIconSize, 0, mRelativeWidth, mRelativeHeight)), Qt::AlignVCenter, text());
+        else if (!icon().isNull())
+        {
+            icon().paint(&painter, QRect((mWidth - mIconSize) / 2, (mHeight - mIconSize) / 2, mIconSize, mIconSize), Qt::AlignCenter, mode);
+        }
+        else
+        {
+            // no icon: the first letters of the name
+            painter.setPen(active || underMouse() ? palette().color(QPalette::WindowText) : mTextColor);
+            painter.drawText(bounds, Qt::AlignCenter, text().left(2));
+        }
     }
 
     QColor DockButton::textColor()
@@ -92,21 +112,19 @@ namespace hal
 
     void DockButton::adjustSize()
     {
-        auto font = property("font").value<QFont>();
-        //, QFont::PreferAntialias);
-        QFontMetrics fm(font);
-        int textwidth    = fm.horizontalAdvance(text());
-        mRelativeWidth = mIconSize + textwidth + mWidthPadding;
-
         if (mOrientation == button_orientation::horizontal)
         {
-            mWidth  = mRelativeWidth;
-            mHeight = mRelativeHeight;
+            QFontMetrics fm(font());
+            mRelativeWidth = mWidthPadding + mIconSize + 8 + fm.horizontalAdvance(text());
+            mWidth         = mRelativeWidth;
+            mHeight        = mRelativeHeight;
         }
         else
         {
-            mWidth  = mRelativeHeight;
-            mHeight = mRelativeWidth;
+            // square, as wide as the rail
+            mRelativeWidth = mRelativeHeight;
+            mWidth         = mRelativeHeight;
+            mHeight        = mRelativeHeight;
         }
 
         setFixedHeight(mHeight);

@@ -23,7 +23,9 @@ namespace hal
         mHeaderLayout->setContentsMargins(0, 0, 0, 0);
         mHeaderLayout->setSpacing(0);
 
+        // the title is left aligned, the left spacer stays hidden
         mLeftSpacer->setObjectName("left-spacer");
+        mLeftSpacer->hide();
         mLeftSpacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
         mHeaderLayout->addWidget(mLeftSpacer);
 
