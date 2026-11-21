@@ -18,6 +18,7 @@
 
 #include <filesystem>
 #include <fstream>
+#include <exception>
 #include <iostream>
 #include <string>
 
@@ -61,8 +62,30 @@ void initialize_cli_options(ProgramOptions& cli_options)
     cli_options.add(generic_options);
 }
 
+static void report_unhandled_exception()
+{
+    if (auto ex = std::current_exception())
+    {
+        try
+        {
+            std::rethrow_exception(ex);
+        }
+        catch (const std::exception& e)
+        {
+            std::cerr << "hal: terminating due to unhandled exception: " << e.what() << std::endl;
+        }
+        catch (...)
+        {
+            std::cerr << "hal: terminating due to unhandled exception of unknown type" << std::endl;
+        }
+    }
+    std::abort();
+}
+
 int main(int argc, const char* argv[])
 {
+    std::set_terminate(report_unhandled_exception);
+
     /* initialize and parse generic cli options */
     ProgramOptions cli_options("cli options");
     initialize_cli_options(cli_options);

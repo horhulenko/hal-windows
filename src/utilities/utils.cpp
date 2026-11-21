@@ -33,6 +33,26 @@ namespace hal
             return (bool)ifile;
         }
 
+        namespace
+        {
+            std::filesystem::path env_path(const char* name)
+            {
+                const char* value = std::getenv(name);
+                return value ? std::filesystem::path(value) : std::filesystem::path();
+            }
+
+            std::filesystem::path home_directory()
+            {
+#ifdef _WIN32
+                if (auto p = env_path("USERPROFILE"); !p.empty())
+                    return p;
+#endif
+                if (auto p = env_path("HOME"); !p.empty())
+                    return p;
+                return std::filesystem::temp_directory_path();
+            }
+        }    // namespace
+
         bool folder_exists_and_is_accessible(const std::filesystem::path& folder)
         {
 #ifdef _WIN32
@@ -102,7 +122,11 @@ namespace hal
             auto bin_dir = get_binary_directory();
             while (std::filesystem::exists(bin_dir))
             {
+#ifdef _WIN32
+                if (std::filesystem::exists(bin_dir / "hal.exe", ec))
+#else
                 if (std::filesystem::exists(bin_dir / "hal", ec))
+#endif
                 {
                     return bin_dir.parent_path();
                 }
@@ -126,6 +150,9 @@ namespace hal
                 get_base_directory() / "lib/x86_64-linux-gnu",
                 get_base_directory() / "lib64/",
                 get_base_directory() / "lib/",
+#ifdef _WIN32
+                get_base_directory() / "bin/",    // plugins and DLLs live next to the executable in a Windows build/install tree
+#endif
             };
 
             for (const auto& path : path_hints)
@@ -150,7 +177,12 @@ namespace hal
 
         std::filesystem::path get_user_share_directory()
         {
-            std::filesystem::path dir = std::filesystem::path(getenv("HOME")) / ".local/share/hal";
+#ifdef _WIN32
+            auto local_app_data = env_path("LOCALAPPDATA");
+            std::filesystem::path dir = (local_app_data.empty() ? home_directory() / "AppData/Local" : local_app_data) / "hal";
+#else
+            std::filesystem::path dir = home_directory() / ".local/share/hal";
+#endif
             std::filesystem::create_directories(dir);
             return dir;
         }
@@ -165,7 +197,12 @@ namespace hal
 
         std::filesystem::path get_user_config_directory()
         {
-            std::filesystem::path dir = std::filesystem::path(getenv("HOME")) / ".config/hal";
+#ifdef _WIN32
+            auto app_data = env_path("APPDATA");
+            std::filesystem::path dir = (app_data.empty() ? home_directory() / "AppData/Roaming" : app_data) / "hal";
+#else
+            std::filesystem::path dir = home_directory() / ".config/hal";
+#endif
             std::filesystem::create_directories(dir);
             return dir;
         }
@@ -193,7 +230,7 @@ namespace hal
                 get_library_directory() / "hal_plugins/",
                 get_library_directory() / "plugins/",
                 get_user_share_directory() / "plugins/",
-                std::filesystem::path(getenv("HOME")) / "plugins/",
+                home_directory() / "plugins/",
             };
             return path_hints;
         }

@@ -7,6 +7,9 @@
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/null_sink.h>
 #include <spdlog/sinks/stdout_sinks.h>
+#ifdef _WIN32
+#include <spdlog/sinks/wincolor_sink.h>
+#endif
 
 namespace hal
 {
@@ -31,7 +34,12 @@ namespace hal
 
         auto gui_sink = LogManager::create_gui_sink();
 
-        spdlog::sinks_init_list stdout_init_list = {std::make_shared<spdlog::sinks::ansicolor_stdout_sink_mt>(), gui_sink->spdlog_sink};
+#ifdef _WIN32
+        std::shared_ptr<spdlog::sinks::sink> console_sink = std::make_shared<spdlog::sinks::wincolor_stdout_sink_mt>();
+#else
+        std::shared_ptr<spdlog::sinks::sink> console_sink = std::make_shared<spdlog::sinks::ansicolor_stdout_sink_mt>();
+#endif
+        spdlog::sinks_init_list stdout_init_list = {console_sink, gui_sink->spdlog_sink};
 
         m_logger = {
             // initialize null channel
@@ -52,7 +60,6 @@ namespace hal
 
     LogManager::~LogManager()
     {
-        std::cerr << "~LogManager" << std::endl;
         for (const auto& it : m_logger)
             it.second->flush();
         spdlog::drop_all();
@@ -226,9 +233,14 @@ namespace hal
         else
         {
 #ifdef _WIN32
-            // todo: to be implemented for windows
-            sink->spdlog_sink = nullptr;
-            log_error("stdout", "create_stdout_sink() has to be implemented for Windows.");
+            auto stdout_sink = std::make_shared<spdlog::sinks::wincolor_stdout_sink_mt>();
+            stdout_sink->set_color(spdlog::level::trace, FOREGROUND_GREEN);
+            stdout_sink->set_color(spdlog::level::debug, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+            stdout_sink->set_color(spdlog::level::info, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+            stdout_sink->set_color(spdlog::level::warn, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+            stdout_sink->set_color(spdlog::level::err, FOREGROUND_RED | FOREGROUND_INTENSITY);
+            stdout_sink->set_color(spdlog::level::critical, FOREGROUND_RED | FOREGROUND_INTENSITY | BACKGROUND_RED);
+            sink->spdlog_sink = stdout_sink;
 #else
             auto stdout_sink = std::make_shared<spdlog::sinks::ansicolor_stdout_sink_mt>();
             stdout_sink->set_color(spdlog::level::trace, stdout_sink->green);
