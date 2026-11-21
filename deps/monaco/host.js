@@ -27,7 +27,7 @@
     function defineTheme(colors) {
         colors = colors || {};
         monaco.editor.defineTheme('hal', {
-            base: 'vs-dark',
+            base: colors.light ? 'vs' : 'vs-dark',
             inherit: true,
             rules: [],
             colors: {
@@ -37,11 +37,18 @@
                 'editorLineNumber.foreground': colors.lineNumber || '#858585',
                 'editorLineNumber.activeForeground': colors.lineNumberActive || '#c6c6c6',
                 'editor.selectionBackground': colors.selection || '#264f78',
+                'editor.inactiveSelectionBackground': colors.selection || '#264f78',
+                'editorWidget.background': colors.widget || colors.background || '#252526',
+                'editorSuggestWidget.background': colors.widget || colors.background || '#252526',
+                'editorSuggestWidget.selectedBackground': colors.lineHighlight || '#2a2d2e',
+                'editorIndentGuide.background1': colors.guide || '#404040',
+                'scrollbarSlider.background': colors.scrollbar || '#79797966',
                 'editorCursor.foreground': colors.cursor || '#aeafad',
                 'minimap.background': colors.background || '#1e1e1e'
             }
         });
         monaco.editor.setTheme('hal');
+        document.documentElement.style.background = colors.background || '#1e1e1e';
     }
 
     window.halEditor = {

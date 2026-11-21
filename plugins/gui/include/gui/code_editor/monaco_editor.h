@@ -161,6 +161,7 @@ namespace hal
         void handleModifiedChanged(bool modified);
         void runScript(const QString& script);
         void applyOptions();
+        void applyTheme();
         void updateBounds();
         static QString toJson(const QString& text);
 

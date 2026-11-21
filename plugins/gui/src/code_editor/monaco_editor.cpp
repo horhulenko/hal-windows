@@ -1,5 +1,6 @@
 #include "gui/code_editor/monaco_editor.h"
 
+#include "gui/style/theme.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/utilities/utils.h"
 
@@ -125,7 +126,10 @@ namespace hal
 
             ComPtr<ICoreWebView2Controller2> controller2;
             if (SUCCEEDED(controller.As(&controller2)))
-                controller2->put_DefaultBackgroundColor(COREWEBVIEW2_COLOR{255, 30, 30, 30});
+            {
+                const QColor background = style::Theme::current().color("surface-canvas");
+                controller2->put_DefaultBackgroundColor(COREWEBVIEW2_COLOR{255, static_cast<BYTE>(background.red()), static_cast<BYTE>(background.green()), static_cast<BYTE>(background.blue())});
+            }
 
             // Serve the Monaco files from a virtual host: web workers, which Monaco needs, do not start from file:// pages
             ComPtr<ICoreWebView2_3> webview3;
@@ -281,11 +285,30 @@ namespace hal
     void MonacoEditor::handleReady()
     {
         mReady = true;
+        applyTheme();
         runScript(QString("halEditor.setLanguage(%1);").arg(toJson(mLanguage)));
         applyOptions();
         runScript(QString("halEditor.setText(%1);").arg(toJson(mText)));
         if (mModified)
             runScript("halEditor.markModified();");
+    }
+
+    void MonacoEditor::applyTheme()
+    {
+        // the editor uses the colors of the GUI theme
+        const style::Theme& theme = style::Theme::current();
+        QJsonObject colors;
+        colors["light"]           = theme.mode() == style::Theme::Mode::Light;
+        colors["background"]      = theme.color("surface-canvas").name();
+        colors["foreground"]      = theme.color("text").name();
+        colors["lineHighlight"]   = theme.color("surface-raised").name();
+        colors["lineNumber"]      = theme.color("text-disabled").name();
+        colors["lineNumberActive"] = theme.color("text-muted").name();
+        colors["selection"]       = theme.color("selection").name();
+        colors["cursor"]          = theme.color("accent").name();
+        colors["widget"]          = theme.color("surface-overlay").name();
+        colors["guide"]           = theme.color("border-subtle").name();
+        runScript(QString("halEditor.setTheme(%1);").arg(QString::fromUtf8(QJsonDocument(colors).toJson(QJsonDocument::Compact))));
     }
 
     void MonacoEditor::applyOptions()
