@@ -5,6 +5,10 @@
 #include "gui/graph_widget/graph_graphics_view.h"
 #include "gui/settings/settings_items/settings_item_dropdown.h"
 #include "gui/settings/settings_items/settings_item_keybind.h"
+#include "gui/input_dialog/input_dialog.h"
+#include "gui/validator/empty_string_validator.h"
+#include "gui/validator/unique_string_validator.h"
+#include "gui/user_action/action_rename_object.h"
 #include "gui/user_action/action_fold_module.h"
 #include "gui/user_action/action_unfold_module.h"
 #include "gui/user_action/action_remove_items_from_object.h"
@@ -12,6 +16,8 @@
 #include "gui/gui_globals.h"
 
 #include <QTabWidget>
+#include <QTabBar>
+#include <QMouseEvent>
 #include <QVBoxLayout>
 #include <QShortcut>
 #include <QKeySequence>
@@ -112,6 +118,8 @@ namespace hal
         mTabWidget->setTabsClosable(true);
         mTabWidget->setMovable(true);
         mTabWidget->setContextMenuPolicy(Qt::CustomContextMenu);
+
+        mTabWidget->tabBar()->installEventFilter(this);
 
         connect(mTabWidget, &QTabWidget::customContextMenuRequested, this, &GraphTabWidget::handleCustomContextMenuRequested);
         connect(mTabWidget, &QTabWidget::tabCloseRequested, this, &GraphTabWidget::handleTabCloseRequested);
@@ -337,6 +345,57 @@ namespace hal
         return -1;
     }
 
+    bool GraphTabWidget::eventFilter(QObject* watched, QEvent* event)
+    {
+        if (watched == mTabWidget->tabBar() && event->type() == QEvent::MouseButtonDblClick)
+        {
+            auto* mouseEvent = static_cast<QMouseEvent*>(event);
+            if (mouseEvent->button() == Qt::LeftButton)
+            {
+                int index = mTabWidget->tabBar()->tabAt(mouseEvent->pos());
+                if (index != -1)
+                {
+                    renameTab(index);
+                    return true;
+                }
+            }
+        }
+        return ContentWidget::eventFilter(watched, event);
+    }
+
+    void GraphTabWidget::renameTab(int index)
+    {
+        auto* graphWidget = dynamic_cast<GraphWidget*>(mTabWidget->widget(index));
+        if (!graphWidget)
+            return;
+
+        GraphContext* context = graphWidget->getContext();
+        if (!context)
+            return;
+
+        QStringList usedNames;
+        for (const auto& other : gGraphContextManager->getContexts())
+            if (other != context)
+                usedNames.append(other->name());
+
+        UniqueStringValidator uniqueValidator(usedNames);
+        EmptyStringValidator emptyValidator;
+
+        InputDialog ipd;
+        ipd.setWindowTitle("Rename View");
+        ipd.setInfoText("Please select a new unique name for the view.");
+        ipd.setInputText(context->name());
+        ipd.addValidator(&uniqueValidator);
+        ipd.addValidator(&emptyValidator);
+
+        if (ipd.exec() != QDialog::Accepted || ipd.textValue() == context->name())
+            return;
+
+        ActionRenameObject* act = new ActionRenameObject(ipd.textValue());
+        act->setObject(UserActionObject(context->id(), UserActionObjectType::ContextView));
+        act->exec();
+    }
+
     void GraphTabWidget::handleCustomContextMenuRequested(const QPoint &pos)
     {
         int index = mTabWidget->tabBar()->tabAt(pos);
@@ -345,6 +404,12 @@ namespace hal
             return;
 
         QMenu contextMenu("Context menu", this);
+
+        contextMenu.addAction("Rename", [this, index](){
+            renameTab(index);
+        });
+
+        contextMenu.addSeparator();
 
         contextMenu.addAction("Close", [this, index](){
             handleTabCloseRequested(index);

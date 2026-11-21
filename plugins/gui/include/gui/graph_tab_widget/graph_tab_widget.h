@@ -211,6 +211,16 @@ namespace hal
          */
         void handleCloseAllTabs();
 
+        /**
+         * Asks the user for a new name and renames the view shown in the given tab.
+         *
+         * @param index - Index of the tab within the QTabWidget.
+         */
+        void renameTab(int index);
+
+    protected:
+        bool eventFilter(QObject* watched, QEvent* event) override;
+
     private Q_SLOTS:
         void handleZoomInShortcut();
         void handleZoomOutShortcut();
