@@ -27,6 +27,8 @@
 
 #include "hal_core/defines.h"
 
+#include <string>
+
 namespace hal
 {
     /**

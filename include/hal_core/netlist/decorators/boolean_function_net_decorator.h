@@ -95,7 +95,7 @@ namespace hal
         static Result<u32> get_net_id_from(const std::string& var_name);
 
     private:
-        static const std::string VAR_NET_PREFIX;
+        static NETLIST_DATA_API const std::string VAR_NET_PREFIX;
         const Net& m_net;
     };
 }    // namespace hal

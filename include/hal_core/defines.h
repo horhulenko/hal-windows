@@ -29,6 +29,8 @@
 
 #include <inttypes.h>
 #include <stdexcept>
+#include "hal_core/utilities/compat_builtins.h"
+#include <string>
 #include <stdlib.h>
 
 using i8  = int8_t;
@@ -48,6 +50,13 @@ namespace hal
 
 #define UNUSED(expr) (void)expr
 
+#ifdef _MSC_VER
+#include <BaseTsd.h>
+using ssize_t = SSIZE_T;
+#else
+#include <sys/types.h>
+#endif
+
 #ifdef _WIN32
 #include "hal_core/arch/arch_win.h"
 #elif __APPLE__ && __MACH__
@@ -55,6 +64,14 @@ namespace hal
 
 #elif __linux__
 #include "hal_core/arch/arch_linux.h"
+#endif
+
+#ifndef UTILITIES_DATA_API
+#define UTILITIES_DATA_API
+#endif
+
+#ifndef NETLIST_DATA_API
+#define NETLIST_DATA_API
 #endif
 
 #if defined(_MSC_VER)

@@ -164,6 +164,15 @@ endif()
 
 
 # ###############################
+# ####   Boost (headers only)
+# ###############################
+if (POLICY CMP0167)
+    cmake_policy(SET CMP0167 NEW)
+endif()
+find_package(Boost REQUIRED)
+include_directories(${Boost_INCLUDE_DIRS})
+
+# ###############################
 # ####   Python support
 # ###############################
 

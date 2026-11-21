@@ -48,7 +48,7 @@ namespace hal
     {
     public:
         /// constant to specify that a parameter is required and does not have a default value.
-        static const std::string A_REQUIRED_PARAMETER;
+        static UTILITIES_DATA_API const std::string A_REQUIRED_PARAMETER;
 
         /**
          * Constructor, optionally takes a name for grouping in get_options_string()

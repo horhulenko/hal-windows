@@ -107,6 +107,6 @@ namespace hal
         /**
          * Name of autosave subdirectory
          */
-        static const std::string s_shadow_dir;
+        static UTILITIES_DATA_API const std::string s_shadow_dir;
     };
 }    // namespace hal

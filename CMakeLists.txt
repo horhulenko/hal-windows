@@ -131,6 +131,17 @@ set(PROJECT_DESCRIPTION "hal - Hardware Analyzer")
 set(PROJECT_PPA "ppa:sebastian-wallat/hal")
 set(PROJECT_PPA_USER "sebastian-wallat")
 
+if(WIN32)
+    # HAL does not annotate its C++ API with export macros on Windows
+    set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+    set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+endif()
+
+if(MSVC)
+    add_compile_options(/utf-8 /permissive- /EHsc /bigobj /Zc:__cplusplus /wd4251 /wd4275 /wd4996)
+    add_compile_definitions(NOMINMAX NOGDI _USE_MATH_DEFINES _CRT_SECURE_NO_WARNINGS WIN32_LEAN_AND_MEAN)
+endif()
+
 # Use C11 and C++17 as minimum standard
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED on)

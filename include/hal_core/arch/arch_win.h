@@ -25,23 +25,27 @@
 
 #pragma once
 
-#define CORE_API IMPORT
+// Symbols of the HAL DLLs are exported through CMake (WINDOWS_EXPORT_ALL_SYMBOLS), so the API macros stay empty.
+// Marking header-defined templates as dllimport is invalid on MSVC.
+#define CORE_API
 
-#define NETLIST_API IMPORT
+#define NETLIST_API
 
-#define PLUGIN_API IMPORT
+#define PLUGIN_API
+
+// Static data members and variables are not covered by WINDOWS_EXPORT_ALL_SYMBOLS and need explicit annotation.
+#ifdef utilities_EXPORTS
+#define UTILITIES_DATA_API __declspec(dllexport)
+#else
+#define UTILITIES_DATA_API __declspec(dllimport)
+#endif
+
+#ifdef netlist_EXPORTS
+#define NETLIST_DATA_API __declspec(dllexport)
+#else
+#define NETLIST_DATA_API __declspec(dllimport)
+#endif
 
 #define LIBRARY_FILE_EXTENSION "dll"
 
 #define ALTERNATE_LIBRARY_FILE_EXTENSION ""
-
-#ifdef BUILDING_CORE
-#undef CORE_API
-#define CORE_API EXPORT
-#elif API_NETLIST
-#undef NETLIST_API
-#define NETLIST_API EXPORT
-#elif PLUGIN
-#undef PLUGIN_API
-#define PLUGIN_API EXPORT
-#endif

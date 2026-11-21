@@ -6,6 +6,9 @@ add_subdirectory(python_bindings)
 
 add_library(core SHARED ${CMAKE_BINARY_DIR}/hal_version.h)
 set_target_properties(core PROPERTIES LINKER_LANGUAGE CXX)
+if(WIN32)
+    target_sources(core PRIVATE core_anchor.cpp)
+endif()
 set_target_properties(core PROPERTIES OUTPUT_NAME "hal_core")
 add_library(hal::core ALIAS core)
 

@@ -214,6 +214,6 @@ namespace hal
         /**
          * File name of project info file (mandatory for all hal projects)
          */
-        static const std::string s_project_file;
+        static NETLIST_DATA_API const std::string s_project_file;
     };
 }    // namespace hal
