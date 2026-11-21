@@ -1,4 +1,5 @@
 #include "gui/welcome_screen/open_file_widget.h"
+#include "gui/toast/toast.h"
 
 #include "gui/export/import_project_dialog.h"
 #include "gui/file_manager/file_manager.h"
@@ -8,8 +9,10 @@
 
 #include <QDebug>
 #include <QDragEnterEvent>
+#include <QHBoxLayout>
 #include <QLabel>
 #include <QMimeData>
+#include <QPushButton>
 #include <QStyle>
 #include <QVBoxLayout>
 
@@ -19,19 +22,50 @@ namespace hal
     {
         setAcceptDrops(true);
 
-        mTextLabel->setObjectName("text-label");
-        mTextLabel->setText("Open an existing project or create a new one by dropping a project folder or netlist file here.");
-        mTextLabel->setWordWrap(true);
-
+        // A drop zone in the middle of a card: icon, headline, hint and the three ways to start
         mIconLabel->setObjectName("icon-label");
-        mIconLabel->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
-        mIconLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        mIconLabel->setAlignment(Qt::AlignCenter);
+
+        mTextLabel->setObjectName("text-label");
+        mTextLabel->setText("Drop a project folder, netlist or ZIP archive here");
+        mTextLabel->setWordWrap(true);
+        mTextLabel->setAlignment(Qt::AlignCenter);
+
+        auto* hint = new QLabel("or choose how to start");
+        hint->setObjectName("hint-label");
+        hint->setAlignment(Qt::AlignCenter);
+
+        auto* open = new QPushButton("Open project…");
+        open->setProperty("primary", true);
+        open->setCursor(Qt::PointingHandCursor);
+        connect(open, &QPushButton::clicked, this, &OpenFileWidget::openProjectRequested);
+
+        auto* import = new QPushButton("Import netlist…");
+        import->setCursor(Qt::PointingHandCursor);
+        connect(import, &QPushButton::clicked, this, &OpenFileWidget::importNetlistRequested);
+
+        auto* create = new QPushButton("New project");
+        create->setCursor(Qt::PointingHandCursor);
+        connect(create, &QPushButton::clicked, this, &OpenFileWidget::newProjectRequested);
+
+        auto* buttons = new QHBoxLayout();
+        buttons->setSpacing(8);
+        buttons->addStretch();
+        buttons->addWidget(open);
+        buttons->addWidget(import);
+        buttons->addWidget(create);
+        buttons->addStretch();
 
         setLayout(mLayout);
-        mLayout->setContentsMargins(0, 0, 0, 0);
-        mLayout->setSpacing(0);
-        mLayout->addWidget(mTextLabel);
+        mLayout->setContentsMargins(24, 24, 24, 24);
+        mLayout->setSpacing(12);
+        mLayout->addStretch();
         mLayout->addWidget(mIconLabel);
+        mLayout->addWidget(mTextLabel);
+        mLayout->addWidget(hint);
+        mLayout->addSpacing(8);
+        mLayout->addLayout(buttons);
+        mLayout->addStretch();
     }
 
     void OpenFileWidget::dragEnterEvent(QDragEnterEvent* event)
@@ -81,8 +115,7 @@ namespace hal
                         act->exec();
                     }
                     else
-                        QMessageBox::warning(this,
-                                             "Import Project Failed",
+                        toast::warning("Import Project Failed",
                                              "Failed to extract a HAL project from selected archive file.\n"
                                              "You might want to uncompress the archive manually and try to fetchGateLibrary the project.");
                 }
@@ -97,6 +130,7 @@ namespace hal
                     break;
                 case FileManager::OtherDirectory:
                     log_warning("gui", "directory {} is not a hal project.", file.toStdString());
+                    toast::warning("Not a HAL project", file + "\n" + FileManager::directoryStatusText(stat));
                     break;
                 case FileManager::IsFile:
                     FileManager::get_instance()->importFile(file);
@@ -150,6 +184,6 @@ namespace hal
         s->polish(this);
 
         if (!mIconPath.isEmpty())
-            mIconLabel->setPixmap(gui_utility::getStyledSvgIcon(mIconStyle, mIconPath).pixmap(QSize(120, 120)));
+            mIconLabel->setPixmap(gui_utility::getStyledSvgIcon(mIconStyle, mIconPath).pixmap(QSize(40, 40)));
     }
 }    // namespace hal

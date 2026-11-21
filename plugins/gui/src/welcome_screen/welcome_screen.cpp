@@ -70,6 +70,10 @@ namespace hal
         body->addLayout(side, 4);
         columnLayout->addLayout(body);
 
+        connect(mOpenFileWidget, &OpenFileWidget::newProjectRequested, this, &WelcomeScreen::newProjectRequested);
+        connect(mOpenFileWidget, &OpenFileWidget::openProjectRequested, this, &WelcomeScreen::openProjectRequested);
+        connect(mOpenFileWidget, &OpenFileWidget::importNetlistRequested, this, &WelcomeScreen::importNetlistRequested);
+
         setLayout(mLayout);
         mLayout->addWidget(column);
 

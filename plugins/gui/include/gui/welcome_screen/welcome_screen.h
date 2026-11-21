@@ -46,6 +46,13 @@ namespace hal
     {
         Q_OBJECT
 
+    
+    Q_SIGNALS:
+        /// Forwarded from the open or create card.
+        void newProjectRequested();
+        void openProjectRequested();
+        void importNetlistRequested();
+
     public:
         /**
          * Constructor.

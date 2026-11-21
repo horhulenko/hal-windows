@@ -54,6 +54,18 @@ namespace hal
          */
         explicit OpenFileWidget(QWidget* parent = nullptr);
 
+    Q_SIGNALS:
+        /// The user asked to create a new empty project.
+        void newProjectRequested();
+
+        /// The user asked to open an existing project folder.
+        void openProjectRequested();
+
+        /// The user asked to import a netlist into a new project.
+        void importNetlistRequested();
+
+    public:
+
         /**
          * Handles the event that a user drags a file into the widget.
          *

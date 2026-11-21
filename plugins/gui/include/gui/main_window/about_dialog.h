@@ -26,18 +26,17 @@
 #pragma once
 
 #include <QDialog>
-#include <QLabel>
-#include <QLayout>
-#include <QPlainTextEdit>
+
+class QPlainTextEdit;
+class QPushButton;
 
 namespace hal
 {
     /**
      * @ingroup gui
-     * @brief A dialog that displays the Qt version and our open source license
+     * @brief The About window: version, build and platform details, links and the open source licenses.
      *
-     * The AboutDialog is a QDialog that can be opened via Help->About.
-     * It shows the Qt version used for compilation and displays our open source license in a QPlainTextEdit.
+     * Opened via Help->About. It does not block the main window, the licenses are folded away until they are asked for.
      */
     class AboutDialog : public QDialog
     {
@@ -45,15 +44,20 @@ namespace hal
 
     public:
         /**
-         * Constructor. Initializes the Dialog.
+         * Constructor.
          *
          * @param parent - The parent widget.
          */
         explicit AboutDialog(QWidget* parent = nullptr);
 
-    private:
-        QVBoxLayout* mLayout;
-        QPlainTextEdit* mTextedit;
-    };
-}
+    private Q_SLOTS:
+        void toggleLicenses();
+        void copyDetails();
 
+    private:
+        QString detailsText() const;
+
+        QPlainTextEdit* mLicenses;
+        QPushButton* mLicensesButton;
+    };
+}    // namespace hal
