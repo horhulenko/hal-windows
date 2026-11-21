@@ -883,6 +883,8 @@ namespace hal
         editor->setLineNumberEnabled(mSettingLineNumbers->value().toBool());
 
         connect(mSettingFontSize, &SettingsItemSpinbox::intChanged, editor, &MonacoEditor::setFontSize);
+        // zooming inside an editor (Ctrl+Plus/Minus/Wheel) updates the setting, which resizes the other tabs as well
+        connect(editor, &MonacoEditor::fontSizeChanged, mSettingFontSize, [this](int size) { mSettingFontSize->setValue(size); });
         connect(mSettingMinimap, &SettingsItemCheckbox::boolChanged, editor, &MonacoEditor::setMinimapEnabled);
         connect(mSettingLineWrap, &SettingsItemCheckbox::boolChanged, editor, &MonacoEditor::setLineWrapEnabled);
         connect(mSettingHighlight, &SettingsItemCheckbox::boolChanged, editor, &MonacoEditor::setHighlightCurrentLineEnabled);

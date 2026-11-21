@@ -140,6 +140,9 @@ namespace hal
         /// Emitted when the user pressed Ctrl+Enter inside the editor.
         void runRequested();
 
+        /// Emitted when the user zoomed the text with Ctrl+Plus, Ctrl+Minus, Ctrl+0 or Ctrl+mouse wheel.
+        void fontSizeChanged(int size);
+
         /// Emitted when the editor asks for code completion, answer with setCompletions().
         void completionRequested(int requestId, const QString& textBeforeCursor);
 

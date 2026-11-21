@@ -263,6 +263,15 @@ namespace hal
             Q_EMIT saveRequested();
         else if (type == "runRequested")
             Q_EMIT runRequested();
+        else if (type == "fontSizeChanged")
+        {
+            const int size = args.at(0).toInt();
+            if (size != mFontSize)
+            {
+                mFontSize = size;
+                Q_EMIT fontSizeChanged(size);
+            }
+        }
         else if (type == "keyPressed")
             Q_EMIT keyPressed(nullptr);
         else if (type == "completionRequested")

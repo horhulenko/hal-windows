@@ -127,6 +127,30 @@
             post('contentChanged', editor.getValue(), isModified());
         });
         editor.onKeyDown(function () { post('keyPressed'); });
+
+        // font zoom: Ctrl +, Ctrl -, Ctrl 0 and Ctrl + mouse wheel (built in), the size is reported back so HAL can store it
+        var MIN_FONT_SIZE = 6, MAX_FONT_SIZE = 48, DEFAULT_FONT_SIZE = 11;
+        function setFontSize(size) {
+            size = Math.max(MIN_FONT_SIZE, Math.min(MAX_FONT_SIZE, size));
+            editor.updateOptions({ fontSize: size });
+        }
+        function zoom(delta) { setFontSize(editor.getOption(monaco.editor.EditorOption.fontSize) + delta); }
+        var ctrl = monaco.KeyMod.CtrlCmd, shift = monaco.KeyMod.Shift, K = monaco.KeyCode;
+        [ctrl | K.Equal, ctrl | shift | K.Equal, ctrl | K.NumpadAdd].forEach(function (k) { editor.addCommand(k, function () { zoom(1); }); });
+        [ctrl | K.Minus, ctrl | K.NumpadSubtract].forEach(function (k) { editor.addCommand(k, function () { zoom(-1); }); });
+        [ctrl | K.Digit0, ctrl | K.Numpad0].forEach(function (k) { editor.addCommand(k, function () { setFontSize(DEFAULT_FONT_SIZE); }); });
+        editor.getDomNode().addEventListener('wheel', function (e) {
+            if (e.ctrlKey) {
+                e.preventDefault();
+                e.stopPropagation();
+                zoom(e.deltaY < 0 ? 1 : -1);
+            }
+        }, { passive: false, capture: true });
+        editor.onDidChangeConfiguration(function (e) {
+            if (e.hasChanged(monaco.editor.EditorOption.fontSize)) {
+                post('fontSizeChanged', editor.getOption(monaco.editor.EditorOption.fontSize));
+            }
+        });
         editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, function () { post('saveRequested'); });
         editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, function () { post('runRequested'); });
 
