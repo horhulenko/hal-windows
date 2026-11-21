@@ -17,7 +17,11 @@
 namespace hal
 {
     // needed for module color
+    #ifdef _MSC_VER
+    extern __declspec(dllimport) NetlistRelay* gNetlistRelay;
+#else
     extern NetlistRelay* gNetlistRelay;
+#endif
 
     GexfWriter::GexfWriter() : mEdgeId(0)
     {
@@ -37,7 +41,7 @@ namespace hal
         {
             return ERR("could not write netlist to GEXF file '" + file_path.string() + "': file path is empty");
         }
-        QString filename = QString::fromStdString(file_path);
+        QString filename = QString::fromStdU16String((file_path).u16string());
 
         if (!filename.endsWith(".gexf"))
         {

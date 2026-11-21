@@ -28,7 +28,7 @@ namespace hal
     QVariant DataTableModel::data(const QModelIndex &index, int role) const
     {
         DataTableEntry entry = mDataEntries[index.row()];
-        RowStyle style = mEntryToRowStyle[QPair(entry.category, entry.key)];
+        RowStyle style = mEntryToRowStyle[std::make_pair(entry.category, entry.key)];
 
         if(role == Qt::DisplayRole && index.column() < columnCount())
         {

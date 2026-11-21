@@ -19,7 +19,7 @@ namespace hal
     ExportProjectDialog::ExportProjectDialog(QWidget *parent)
         : QFileDialog(parent), mStatus(NoExport)
     {
-        QFileInfo pinfo(QString::fromStdString(ProjectManager::instance()->get_project_directory().get_default_filename()));
+        QFileInfo pinfo(QString::fromStdU16String((ProjectManager::instance()->get_project_directory().get_default_filename()).u16string()));
         mProjectName = pinfo.baseName().simplified();
         mProjectName.replace(" ","");
         setDefaultSuffix(".zip");

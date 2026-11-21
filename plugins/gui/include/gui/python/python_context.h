@@ -86,7 +86,11 @@ namespace hal
      * This class provides an interface for using pybind11. It can call a python interpreter to run python expressions and
      * scripts. Moreover it provides a function to get auto-completion candidates that are available in the context.
      */
+#ifdef _MSC_VER
+    class PythonContext : public QObject
+#else
     class __attribute__((visibility("default"))) PythonContext : public QObject
+#endif
     {
         Q_OBJECT
     public:

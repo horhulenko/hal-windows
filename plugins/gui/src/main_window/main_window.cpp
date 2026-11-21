@@ -854,7 +854,7 @@ namespace hal
             }
         }
 
-        QString qNetlistPath = QString::fromStdString(pm->get_project_directory().get_default_filename(".hal"));
+        QString qNetlistPath = QString::fromStdU16String((pm->get_project_directory().get_default_filename(".hal")).u16string());
 
         if (!pm->serialize_project(gNetlist))
         {

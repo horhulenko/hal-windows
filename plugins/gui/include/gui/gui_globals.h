@@ -25,6 +25,17 @@
 
 #pragma once
 
+// Global variables of the GUI DLL have to be exported explicitly on Windows, the other plugins read them
+#ifdef _MSC_VER
+#ifdef gui_EXPORTS
+#define GUI_GLOBAL_API __declspec(dllexport)
+#else
+#define GUI_GLOBAL_API __declspec(dllimport)
+#endif
+#else
+#define GUI_GLOBAL_API
+#endif
+
 #include "hal_core/netlist/netlist.h"
 
 #include "gui/file_status_manager/file_status_manager.h"
@@ -50,63 +61,63 @@ namespace hal
     /**
      * Is used to persist the list of recent files and the previously opened file in the 'open file' dialog
      */
-    extern QSettings* gGuiState;
+    extern GUI_GLOBAL_API QSettings* gGuiState;
 
     /**
      * The global ContentManager (see doc)
      */
-    extern ContentManager* gContentManager;
+    extern GUI_GLOBAL_API ContentManager* gContentManager;
 
     /**
      * This shared_ptr contains and owns the netlist after a file was opened. To access the Netlist data structure with
      * its functions, it is intended to use the raw pointer gNetlist instead.
      */
-    extern std::shared_ptr<Netlist> gNetlistOwner;
+    extern GUI_GLOBAL_API std::shared_ptr<Netlist> gNetlistOwner;
 
     /**
      * The netlist that is currently loaded. It is a pointer to the netlist owned by gNetlistOwner.
      */
-    extern Netlist* gNetlist;
+    extern GUI_GLOBAL_API Netlist* gNetlist;
 
     /**
      * The global NetlistRelay (see doc)
      */
-    extern NetlistRelay* gNetlistRelay;
+    extern GUI_GLOBAL_API NetlistRelay* gNetlistRelay;
 
     /**
      * The global PluginRelay. Plugin management is not available in this version. Therefore it is currently unused.
      */
-    extern PluginRelay* gPluginRelay;
+    extern GUI_GLOBAL_API PluginRelay* gPluginRelay;
 
     /**
      * The global SelectionRelay (see doc)
      */
-    extern SelectionRelay* gSelectionRelay;
+    extern GUI_GLOBAL_API SelectionRelay* gSelectionRelay;
 
     /**
      * The global FileStatusManager (see doc)
      */
-    extern FileStatusManager* gFileStatusManager;
+    extern GUI_GLOBAL_API FileStatusManager* gFileStatusManager;
 
     /**
      * The global GraphContextManager (see doc)
      */
-    extern GraphContextManager* gGraphContextManager;
+    extern GUI_GLOBAL_API GraphContextManager* gGraphContextManager;
 
     /**
      * The global PythonContext (see doc)
      */
-    extern PythonContext* gPythonContext;
+    extern GUI_GLOBAL_API PythonContext* gPythonContext;
 
     /**
      * The global GuiApi (see doc)
      */
-    extern GuiApi* gGuiApi;
+    extern GUI_GLOBAL_API GuiApi* gGuiApi;
 
     /**
      * The global CommentManager
      */
-    extern CommentManager* gCommentManager;
+    extern GUI_GLOBAL_API CommentManager* gCommentManager;
 
     // Comment this out to not compile the debug code for the graph grid.
     // This will also hide the respective debug setting from the settings page.

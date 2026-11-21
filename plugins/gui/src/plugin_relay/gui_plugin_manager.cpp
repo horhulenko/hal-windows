@@ -373,7 +373,7 @@ namespace hal {
 
     void GuiPluginTable::populateTable(bool refresh)
     {
-        QDir userConfigDir(QString::fromStdString(utils::get_user_config_directory()));
+        QDir userConfigDir(QString::fromStdU16String((utils::get_user_config_directory()).u16string()));
         QMap<QString,GuiPluginEntry*> pluginEntries;
         mSettings = new QSettings(userConfigDir.absoluteFilePath("plugins.ini"),QSettings::IniFormat);
 

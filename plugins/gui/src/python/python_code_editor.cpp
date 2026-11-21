@@ -314,14 +314,14 @@ namespace hal
     {
         if (mRelFilename.isEmpty() || mRelFilename.startsWith('/'))
             return mRelFilename;
-        QDir projectPydir(QString::fromStdString(ProjectManager::instance()->get_project_directory().get_filename("py")));
+        QDir projectPydir(QString::fromStdU16String((ProjectManager::instance()->get_project_directory().get_filename("py")).u16string()));
         return projectPydir.absoluteFilePath(mRelFilename);
     }
 
     void PythonCodeEditor::setFilename(const QString &name)
     {
         mRelFilename = name;
-        QString projectLoc = QString::fromStdString(ProjectManager::instance()->get_project_directory().get_filename("py")) + '/';
+        QString projectLoc = QString::fromStdU16String((ProjectManager::instance()->get_project_directory().get_filename("py")).u16string()) + '/';
         if (name.startsWith(projectLoc))
             mRelFilename.remove(0,projectLoc.size());
     }

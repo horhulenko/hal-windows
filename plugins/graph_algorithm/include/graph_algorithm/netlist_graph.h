@@ -34,6 +34,10 @@
 #include <set>
 #include <unordered_map>
 
+// <windows.h> (pulled in through spdlog) defines IN and OUT as empty macros
+#undef IN
+#undef OUT
+
 /**
  * @file netlist_graph.h 
  * @brief This file contains the class that holds a netlist graph.
