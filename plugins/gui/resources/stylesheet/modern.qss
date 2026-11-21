@@ -306,7 +306,7 @@ QTabBar::tab
 {
     background-color : transparent;
     color            : @text-muted@;
-    padding          : 8px 16px;
+    padding          : 8px 8px 8px 14px;
     border           : none;
     border-bottom    : 2px solid transparent;
 }
@@ -323,13 +323,17 @@ QTabBar::tab:selected
     border-bottom : 2px solid @accent@;
 }
 
+/* The close button is a fixed 16 px square at the right edge, its glyph is drawn by the image */
 QTabBar::close-button
 {
-    image         : @image-tab-close@;
+    image               : @image-tab-close@;
+    subcontrol-origin   : padding;
     subcontrol-position : right;
-    border-radius : 4px;
-    margin        : 0px 0px 0px 6px;
-    padding       : 2px;
+    width               : 16px;
+    height              : 16px;
+    margin              : 0px 0px 0px 8px;
+    padding             : 0px;
+    border-radius       : 4px;
 }
 
 QTabBar::close-button:hover
@@ -471,240 +475,6 @@ QSplitter::handle:hover
 /* =====================================================================================================================
  * Component rules of the individual widgets
  * ===================================================================================================================== */
-
-hal--SettingsWidget
-{
-    background-color: @surface-raised@;
-    padding: 10px;
-    margin-bottom: 20px;
-    border-left: 5px solid @border@;
-}
-
-hal--SettingsWidget[conflicts=true]
-{
-    border-left: 5px solid @danger@;
-    background-color: @surface-raised@;
-}
-
-hal--SettingsWidget[dirty=true]
-{
-    border-left: 5px solid @success@;
-}
-
-hal--KeybindEdit QLineEdit
-{
-    border-left: 5px solid @border-subtle@;
-    background: @surface-canvas@;
-    selection-background-color: @selection@;
-}
-
-hal--KeybindEdit[hasGrab=true] QLineEdit
-{
-    border-left: 5px solid @border-subtle@;
-    background: @surface-canvas@;
-    selection-background-color: @selection@;
-}
-
-hal--KeybindEdit QLineEdit:focus
-{
-    border-left: 5px solid @border-subtle@;
-    background: @surface-canvas@;
-}
-
-hal--SettingsWidget QLabel
-{
-    color: @text@;
-    background-color: @state-hover@;
-    margin-right: 10px;
-}
-
-hal--SettingsWidget #name-label
-{
-    min-height: 42px;
-    max-height: 42px;
-}
-
-hal--SettingsWidget QToolButton
-{
-    color: @text@;
-}
-
-hal--SettingsWidget QToolButton:disabled
-{
-    color: @text-muted@;
-}
-
-hal--SettingsWidget hal--label_button
-{
-    border: 1px solid @border-strong@;
-    padding-top: 4px;
-    padding-bottom: 4px;
-    padding-left: 14px;
-    padding-right: 14px;
-    min-width: 50px;
-}
-
-hal--SettingsWidget hal--keybind_edit QLineEdit
-{
-    border-radius: 2px;
-    margin-top: 8px;
-    margin-left: 0px;
-    padding: 4px;
-}
-
-hal--SettingsWidget hal--keybind_edit[validated=false] QLineEdit
-{
-    border: 1px solid @danger@;
-    background-color: @danger-subtle@;
-}
-
-hal--SettingsWidgetDropdown QComboBox
-{
-    background-color: @surface-raised@;
-    border-radius: 2px;
-    border: 1px solid @border-subtle@;
-}
-
-hal--SettingsWidgetDropdown QComboBox:hover
-{
-    background-color: @surface-raised@;
-    border-radius: 2px;
-    border: 1px solid @border-subtle@;
-}
-
-hal--MainSettingsWidget
-{
-    border: 1px solid @border-subtle@;
-}
-
-hal--MainSettingsWidget #Searchbar-container
-{
-    min-height: 80px;
-    max-height: 80px;
-}
-
-hal--MainSettingsWidget hal--SettingsDisplay
-{
-    background-color: @danger-subtle@;
-    border: 1px solid @border-strong@;
-}
-
-hal--MainSettingsWidget hal--SettingsDisplay *
-{
-    background-color: @danger-subtle@;
-    border: 1px solid @border-strong@;
-}
-
-hal--MainSettingsWidget hal--PreviewWidget
-{
-    background-color: @surface-canvas@;
-    border: 2px solid @border@;
-    border-radius: 8px;
-    margin-top: 8px;
-    padding: 5px 0;
-}
-
-hal--MainSettingsWidget hal--PreviewWidget *
-{
-    background-color: @state-hover@;
-}
-
-hal--MainSettingsWidget hal--ExpandingListWidget
-{
-    border-right: 1px solid @border-subtle@;
-    min-width: 250px;
-    max-width: 250px;
-}
-
-hal--MainSettingsWidget hal--ExpandingListWidget #content
-{
-    background: @surface-canvas@;
-    border-right: 5px solid @border-subtle@;
-}
-
-hal--MainSettingsWidget hal--ExpandingListWidget #spacer
-{
-    min-height: 80px;
-    max-height: 80px;
-    background: @surface-canvas@;
-    border-right: 5px solid @border-subtle@;
-}
-
-hal--MainSettingsWidget hal--ExpandingListButton
-{
-    min-height: 42px;
-    max-height: 42px;
-    background-color: @surface-canvas@;
-    color: @text@;
-    border-right: 5px solid @border-subtle@;
-    qproperty-iconStyle: "all->@icon@";
-}
-
-hal--MainSettingsWidget hal--ExpandingListButton[hover=true]
-{
-    qproperty-iconStyle: "all->@icon@";
-}
-
-hal--MainSettingsWidget hal--ExpandingListButton[hover=true] *
-{
-    color: @text@;
-    background-color: @state-hover@;
-}
-
-hal--MainSettingsWidget hal--ExpandingListButton[selected=true]
-{
-    background-color: @surface-base@;
-    qproperty-iconStyle: "all->@icon@";
-}
-
-hal--MainSettingsWidget hal--ExpandingListButton[type="child"]
-{
-    background-color: @surface-base@;
-}
-
-hal--MainSettingsWidget hal--ExpandingListButton[type="child"][selected=true]
-{
-    background-color: @surface-base@;
-}
-
-hal--MainSettingsWidget hal--ExpandingListButton *
-{
-    background-color: transparent;
-}
-
-hal--MainSettingsWidget hal--ExpandingListButton[level="0"] #left-border
-{
-    min-width: 4px;
-    max-width: 4px;
-}
-
-hal--MainSettingsWidget hal--ExpandingListButton[level="1"] #left-border
-{
-    min-width: 22px;
-    max-width: 22px;
-}
-
-hal--MainSettingsWidget hal--ExpandingListButton #icon-label
-{
-    padding-left: 40px;
-    padding-right: 10px;
-}
-
-hal--MainSettingsWidget hal--ExpandingListButton #right-border
-{
-    min-width: 4px;
-    max-width: 4px;
-}
-
-hal--MainSettingsWidget hal--ExpandingListButton[selected=true] #text-label
-{
-    color: @success@;
-}
-
-hal--MainSettingsWidget hal--ExpandingListButton[selected=true] #right-border
-{
-    background-color: @success@;
-}
 
 hal--CodeEditor
 {
@@ -1871,4 +1641,220 @@ hal--AboutDialog #about-licenses
 {
     font-family : @font-mono@;
     font-size   : @font-size-caption@;
+}
+
+/* =====================================================================================================================
+ * Settings page: navigation on the left, rows with descriptions on the right, footer with the actions
+ * ===================================================================================================================== */
+
+hal--MainSettingsWidget
+{
+    background-color : @surface-base@;
+    border           : none;
+}
+
+hal--MainSettingsWidget #Searchbar-container
+{
+    background-color : transparent;
+    border           : none;
+    border-bottom    : 1px solid @border-subtle@;
+    min-height       : 64px;
+    max-height       : 64px;
+}
+
+hal--MainSettingsWidget #Searchbar-container hal--Searchbar
+{
+    min-width        : 320px;
+    max-width        : 320px;
+    min-height       : 36px;
+    max-height       : 36px;
+    background-color : @surface-canvas@;
+    border           : 1px solid @border@;
+    border-radius    : @radius-control@;
+}
+
+#settings-title
+{
+    font-size   : @font-size-title@;
+    font-weight : 600;
+    color       : @text@;
+}
+
+hal--MainSettingsWidget #settings-footer
+{
+    background-color : @surface-raised@;
+    border-top       : 1px solid @border-subtle@;
+}
+
+hal--MainSettingsWidget QScrollArea,
+hal--MainSettingsWidget QScrollArea > QWidget > QWidget
+{
+    background-color : transparent;
+}
+
+hal--SettingsWidget
+{
+    background-color : transparent;
+    border           : none;
+    border-bottom    : 1px solid @border-subtle@;
+    border-left      : 2px solid transparent;
+    padding          : 16px 12px 16px 14px;
+    margin           : 0px;
+}
+
+hal--SettingsWidget[dirty=true]
+{
+    border-left : 2px solid @accent@;
+}
+
+hal--SettingsWidget[conflicts=true]
+{
+    border-left : 2px solid @danger@;
+}
+
+hal--SettingsWidget QLabel
+{
+    background-color : transparent;
+    color            : @text@;
+    margin           : 0px;
+}
+
+hal--SettingsWidget #name-label
+{
+    font-weight : 600;
+    min-height  : 24px;
+    max-height  : 24px;
+}
+
+hal--SettingsWidget #description-label
+{
+    color     : @text-muted@;
+    font-size : @font-size-small@;
+    margin    : 2px 0px 10px 0px;
+}
+
+hal--SettingsWidget QToolButton
+{
+    color     : @accent@;
+    font-size : @font-size-small@;
+    padding   : 2px 8px;
+}
+
+hal--SettingsWidget QToolButton:disabled
+{
+    color : @text-disabled@;
+}
+
+hal--SettingsWidget hal--keybind_edit[validated=false] QLineEdit
+{
+    border           : 1px solid @danger@;
+    background-color : @danger-subtle@;
+}
+
+hal--MainSettingsWidget hal--SettingsDisplay
+{
+    background-color : @surface-canvas@;
+    border           : 1px solid @border@;
+}
+
+hal--MainSettingsWidget hal--PreviewWidget
+{
+    background-color : @surface-canvas@;
+    border           : 1px solid @border@;
+    border-radius    : @radius-control@;
+    padding          : 6px 0px;
+}
+
+hal--MainSettingsWidget hal--PreviewWidget *
+{
+    background-color : transparent;
+}
+
+hal--MainSettingsWidget hal--ExpandingListWidget
+{
+    background-color : @surface-base@;
+    border           : none;
+    border-right     : 1px solid @border-subtle@;
+    min-width        : 240px;
+    max-width        : 240px;
+}
+
+hal--MainSettingsWidget hal--ExpandingListWidget #content
+{
+    background-color : transparent;
+    border           : none;
+}
+
+hal--MainSettingsWidget hal--ExpandingListWidget #spacer
+{
+    background-color : transparent;
+    border           : none;
+    border-bottom    : 1px solid @border-subtle@;
+    min-height       : 64px;
+    max-height       : 64px;
+}
+
+hal--MainSettingsWidget hal--ExpandingListButton
+{
+    min-height          : 36px;
+    max-height          : 36px;
+    background-color    : transparent;
+    color               : @text-muted@;
+    border              : none;
+    qproperty-iconStyle : "all->@icon@";
+}
+
+hal--MainSettingsWidget hal--ExpandingListButton *
+{
+    background-color : transparent;
+    color            : @text-muted@;
+}
+
+hal--MainSettingsWidget hal--ExpandingListButton[hover=true]
+{
+    background-color : @state-hover@;
+}
+
+hal--MainSettingsWidget hal--ExpandingListButton[hover=true] *
+{
+    color : @text@;
+}
+
+hal--MainSettingsWidget hal--ExpandingListButton[selected=true]
+{
+    background-color : @state-selected@;
+}
+
+hal--MainSettingsWidget hal--ExpandingListButton[selected=true] #text-label
+{
+    color       : @text@;
+    font-weight : 600;
+}
+
+hal--MainSettingsWidget hal--ExpandingListButton[level="0"] #left-border
+{
+    min-width : 4px;
+    max-width : 4px;
+}
+
+hal--MainSettingsWidget hal--ExpandingListButton[level="1"] #left-border
+{
+    min-width : 24px;
+    max-width : 24px;
+}
+
+hal--MainSettingsWidget hal--ExpandingListButton #icon-label
+{
+    padding : 0px 10px 0px 6px;
+}
+
+hal--MainSettingsWidget hal--ExpandingListButton #right-border
+{
+    min-width : 3px;
+    max-width : 3px;
+}
+
+hal--MainSettingsWidget hal--ExpandingListButton[selected=true] #right-border
+{
+    background-color : @accent@;
 }

@@ -2,6 +2,7 @@
 #include "gui/docking_system/tab_widget.h"
 #include "gui/content_frame/content_frame.h"
 #include "gui/content_widget/content_widget.h"
+#include "gui/gui_utils/graphics.h"
 #include "gui/hal_qt_compat/hal_qt_compat.h"
 #include <QApplication>
 #include <QDebug>
@@ -44,12 +45,18 @@ namespace hal
         //    m_container_toolbar->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
 
         mActionDetach->setText("Detach");
+        mActionDetach->setToolTip("Detach into a separate window");
+        mActionDetach->setIcon(gui_utility::getStyledSvgIcon("", ":/icons/detach"));
         mRightToolbar->addAction(mActionDetach);
         mDockBar->setAnchor(this);
 
+        // The header row (tab chips, actions of the panel, detach) lives in its own widget so that it can be hidden
+        // when it has nothing worth showing, e.g., for a group with a single panel that has no actions.
+        mHeader = new QWidget(this);
+        mHeader->setLayout(mHorizontalLayout);
         setLayout(mVerticalLayout);
-        mVerticalLayout->addLayout(mHorizontalLayout);
-        mVerticalLayout->setAlignment(mHorizontalLayout, Qt::AlignTop);
+        mVerticalLayout->addWidget(mHeader);
+        mVerticalLayout->setAlignment(mHeader, Qt::AlignTop);
         mHorizontalLayout->addWidget(mDockBar);
         mHorizontalLayout->addWidget(mLeftToolbar);
         mHorizontalLayout->addWidget(mRightToolbar);
@@ -63,7 +70,15 @@ namespace hal
         mDockBar->addButton(widget, index);
         if (mCurrentWidget == nullptr)
             open(widget);
+        updateHeader();
         show();
+    }
+
+    void TabWidget::updateHeader()
+    {
+        // several panels need their chips to switch between them, a panel with actions needs the row for them
+        const bool useful = mDockBar->count() > 1 || !mLeftToolbar->actions().isEmpty();
+        mHeader->setVisible(useful);
     }
 
     void TabWidget::remove(ContentWidget* widget)
@@ -81,6 +96,7 @@ namespace hal
                 handleNoCurrentWidget(index);
             }
             widget->setAnchor(nullptr);
+            updateHeader();
         }
     }
 
@@ -137,6 +153,7 @@ namespace hal
         mDockBar->checkButton(widget);
         mCurrentWidget = widget;
         widget->ensureShortcuts();
+        updateHeader();
     }
 
     void TabWidget::close(ContentWidget* widget)

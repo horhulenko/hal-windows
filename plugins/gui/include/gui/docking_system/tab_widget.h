@@ -143,6 +143,9 @@ namespace hal
         void handleDragEnd();
 
     private:
+        void updateHeader();
+
+        QWidget* mHeader = nullptr;
         QVBoxLayout* mVerticalLayout;
         QHBoxLayout* mHorizontalLayout;
         Toolbar* mLeftToolbar;

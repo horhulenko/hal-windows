@@ -50,6 +50,13 @@ namespace hal
         m_top_bar->addWidget(mRevertButton);
         m_top_bar->addWidget(mDefaultButton);
         m_layout->addLayout(m_top_bar);
+        if (!item->description().isEmpty())
+        {
+            auto* description = new QLabel(item->description());
+            description->setObjectName("description-label");
+            description->setWordWrap(true);
+            m_layout->addWidget(description);
+        }
         m_layout->addLayout(mContainer);
 
         hide();

@@ -15,6 +15,7 @@
 #include "gui/searchbar/searchbar.h"
 
 #include <QFrame>
+#include <QLabel>
 #include <QHBoxLayout>
 #include <QHeaderView>
 #include <QMessageBox>
@@ -93,8 +94,6 @@ namespace hal
         mSearchbar = new Searchbar(mSearchbarContainer);
 
 
-        setWindowModality(Qt::ApplicationModal);
-
         setLayout(mLayout);
         mLayout->setContentsMargins(0, 0, 0, 0);
         mLayout->setSpacing(0);
@@ -108,8 +107,13 @@ namespace hal
 
         mSearchbarContainer->setObjectName("Searchbar-container");
         mSearchbarContainer->setLayout(mSearchbarLayout);
-        mSearchbarLayout->setContentsMargins(0, 0, 0, 0);
-        mSearchbarLayout->setSpacing(0);
+        // header: page title on the left, search on the right
+        auto* title = new QLabel("Settings");
+        title->setObjectName("settings-title");
+        mSearchbarLayout->setContentsMargins(32, 0, 32, 0);
+        mSearchbarLayout->setSpacing(16);
+        mSearchbarLayout->addWidget(title);
+        mSearchbarLayout->addStretch();
         mSearchbarLayout->addWidget(mSearchbar);
 
         mScrollArea->setFrameStyle(QFrame::NoFrame);
@@ -118,14 +122,16 @@ namespace hal
         mContent->setFrameStyle(QFrame::NoFrame);
 
         mContentLayout->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
-        mContentLayout->setContentsMargins(0, 0, 0, 0);
+        mContentLayout->setContentsMargins(32, 8, 32, 32);
         mContentLayout->setSpacing(0);
         mContent->setLayout(mContentLayout);
 
         mScrollArea->setWidget(mContent);
         mScrollArea->setWidgetResizable(true);
 
-        mSettingsContainer->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        // the settings use the width of the page up to a comfortable reading width
+        mSettingsContainer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        mSettingsContainer->setMaximumWidth(760);
         mSettingsContainer->setFrameStyle(QFrame::NoFrame);
 
         mContainerLayout->setAlignment(Qt::AlignLeft);
@@ -135,19 +141,22 @@ namespace hal
 
         mContentLayout->addWidget(mSettingsContainer);
 
-        mButtonLayout->setContentsMargins(10, 10, 10, 10);
-        mButtonLayout->setSpacing(20);
-        mButtonLayout->setAlignment(Qt::AlignRight);
+        mButtonLayout->setContentsMargins(32, 12, 32, 12);
+        mButtonLayout->setSpacing(8);
 
-        mDescriptionText->setMaximumHeight(120);
-        mVerticalLayout->addWidget(mDescriptionText);
+        // every setting shows its own description, the separate description box is not needed anymore
+        mDescriptionText->hide();
 
-        mVerticalLayout->addLayout(mButtonLayout);
+        auto* footer = new QFrame();
+        footer->setObjectName("settings-footer");
+        footer->setLayout(mButtonLayout);
+        mVerticalLayout->addWidget(footer);
 
-        mRestoreDefaults->setText("Restore default values for all settings");
-        mRestoreDefaults->setToolTip("Clear user preferences for this page");
+        mRestoreDefaults->setText("Restore defaults");
+        mRestoreDefaults->setToolTip("Reset all settings to their default values");
         mCancel->setText("Cancel");
-        mOk->setText("OK");
+        mOk->setText("Save");
+        mOk->setProperty("primary", true);
         mRestoreDefaults->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         mCancel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         mOk->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
