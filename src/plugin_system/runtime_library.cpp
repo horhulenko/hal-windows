@@ -30,7 +30,12 @@ namespace hal
     bool RuntimeLibrary::load_library(const std::string& file_name)
     {
 #ifdef _WIN32
-        m_handle = reinterpret_cast<handle_ptr_t>(LoadLibraryW(std::filesystem::path(file_name).c_str()));
+        // Plugins may depend on each other (netlist_preprocessing needs resynthesis), so the folder of the plugin joins
+        // the normal search order (application folder, this folder, system folders, PATH) while it is loaded.
+        const std::filesystem::path plugin_path = std::filesystem::absolute(std::filesystem::path(file_name));
+        SetDllDirectoryW(plugin_path.parent_path().c_str());
+        m_handle = reinterpret_cast<handle_ptr_t>(LoadLibraryW(plugin_path.c_str()));
+        SetDllDirectoryW(nullptr);
 #else
         m_handle      = dlopen((file_name).c_str(), RTLD_GLOBAL | RTLD_LAZY);
 #endif
