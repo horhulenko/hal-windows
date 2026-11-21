@@ -14,7 +14,8 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  DEPS: ${{ github.workspace }}\..\hal-deps
+  # outside the source tree, CMake does not allow dependencies inside it
+  DEPS: D:\hal-deps
 
 jobs:
   build:

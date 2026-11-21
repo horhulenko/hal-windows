@@ -51,12 +51,17 @@ function Get-VerifiedFile {
 }
 
 function Expand-Any {
-    param([string]$Archive, [string]$Destination)
+    param([string]$Archive, [string]$Destination, [string]$Python = 'python')
     New-Item -ItemType Directory -Force $Destination | Out-Null
     if ($Archive -like '*.zip') {
         Expand-Archive -Path $Archive -DestinationPath $Destination -Force
+    } elseif ($Archive -like '*.7z') {
+        # the tar of Windows cannot read every .7z archive, py7zr can
+        & $Python -m pip install --quiet --disable-pip-version-check py7zr
+        if ($LASTEXITCODE) { throw 'Cannot install py7zr' }
+        & $Python -c "import py7zr, sys; py7zr.SevenZipFile(sys.argv[1]).extractall(sys.argv[2])" $Archive $Destination
+        if ($LASTEXITCODE) { throw "Cannot extract $Archive" }
     } else {
-        # bsdtar of Windows reads .tar.gz and .7z
         tar -xf $Archive -C $Destination
         if ($LASTEXITCODE -ne 0) { throw "Cannot extract $Archive" }
     }

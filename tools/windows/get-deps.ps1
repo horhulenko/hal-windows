@@ -31,7 +31,7 @@ if (-not (Test-Path "$Deps\boost\boost\version.hpp")) {
     $archive = "$cache\boost-1.92.0-b2-nodocs.7z"
     Get-VerifiedFile -Url 'https://github.com/boostorg/boost/releases/download/boost-1.92.0/boost-1.92.0-b2-nodocs.7z' -Path $archive `
         -Sha256 '4d04137cc06b117701063f1e5e42875c52389158a8050f2845988f9871e04046'
-    Expand-Any $archive "$cache\boost-x"
+    Expand-Any $archive "$cache\boost-x" $Python
     Move-Item "$cache\boost-x\boost-1.92.0" "$Deps\boost"
     Remove-Item "$cache\boost-x" -Recurse -Force
 }
