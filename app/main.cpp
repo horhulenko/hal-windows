@@ -62,6 +62,38 @@ void initialize_cli_options(ProgramOptions& cli_options)
     cli_options.add(generic_options);
 }
 
+#ifdef _WIN32
+#include <windows.h>
+#include <dbghelp.h>
+
+// Prints the call stack of an unhandled exception. MSVC calls the terminate handler before unwinding, so the stack
+// still shows where the exception was thrown. Symbols come from the export tables of the HAL DLLs.
+static void print_backtrace()
+{
+    void* frames[40];
+    const USHORT count = CaptureStackBackTrace(1, 40, frames, nullptr);
+    HANDLE process     = GetCurrentProcess();
+    SymSetOptions(SYMOPT_UNDNAME | SYMOPT_DEFERRED_LOADS);
+    SymInitialize(process, nullptr, TRUE);
+    alignas(SYMBOL_INFO) char buffer[sizeof(SYMBOL_INFO) + 256];
+    auto* symbol         = reinterpret_cast<SYMBOL_INFO*>(buffer);
+    symbol->SizeOfStruct = sizeof(SYMBOL_INFO);
+    symbol->MaxNameLen   = 255;
+    for (USHORT i = 0; i < count; ++i)
+    {
+        DWORD64 displacement = 0;
+        if (SymFromAddr(process, reinterpret_cast<DWORD64>(frames[i]), &displacement, symbol))
+            std::cerr << "  at " << symbol->Name << " +0x" << std::hex << displacement << std::dec << std::endl;
+        else
+            std::cerr << "  at " << frames[i] << std::endl;
+    }
+}
+#else
+static void print_backtrace()
+{
+}
+#endif
+
 static void report_unhandled_exception()
 {
     if (auto ex = std::current_exception())
@@ -79,6 +111,7 @@ static void report_unhandled_exception()
             std::cerr << "hal: terminating due to unhandled exception of unknown type" << std::endl;
         }
     }
+    print_backtrace();
     std::abort();
 }
 

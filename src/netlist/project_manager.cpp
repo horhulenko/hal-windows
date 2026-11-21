@@ -75,10 +75,18 @@ namespace hal
             log_warning("project_manager", "cannot open project '{}', path doesn't exist.", path);
             return false;
         }
-        if (deserialize())
+        try
         {
-            m_project_status = ProjectStatus::OPENED;
-            return true;
+            if (deserialize())
+            {
+                m_project_status = ProjectStatus::OPENED;
+                return true;
+            }
+        }
+        catch (const std::exception& e)
+        {
+            // e.g., a project file with a path that is not valid UTF-8, report it instead of terminating the program
+            log_error("project_manager", "cannot open project '{}': {}", m_proj_dir.string(), e.what());
         }
         return false;
     }
