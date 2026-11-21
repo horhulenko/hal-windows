@@ -9,6 +9,14 @@
 #include <QRegularExpression>
 #include <QStyleFactory>
 #include <QStyleHints>
+#include <QWidget>
+
+#ifdef _WIN32
+#include <windows.h>
+
+// <dwmapi.h> needs GDI types that are excluded from the build, so only the one function is declared
+extern "C" HRESULT __stdcall DwmSetWindowAttribute(HWND hwnd, DWORD attribute, LPCVOID value, DWORD size);
+#endif
 
 namespace hal
 {
@@ -38,38 +46,38 @@ namespace hal
             {
                 QMap<QString, QString> t = commonTokens();
                 // Surfaces: a tinted dark gray, never pure black. Lighter means closer to the user.
-                t["surface-canvas"]  = "#0B0E12";    // wells: editors, inputs, graph canvas
-                t["surface-base"]    = "#12161B";    // window background
-                t["surface-raised"]  = "#1A2028";    // panels, docks, toolbars
-                t["surface-overlay"] = "#242B35";    // menus, popups, dialogs, tooltips
+                t["surface-canvas"]  = "#0C0C0D";    // wells: editors, inputs, graph canvas
+                t["surface-base"]    = "#131314";    // window background
+                t["surface-raised"]  = "#1B1B1D";    // panels, docks, toolbars
+                t["surface-overlay"] = "#262628";    // menus, popups, dialogs, tooltips
                 // States are translucent steps, so they work on every surface
                 t["state-hover"]    = "rgba(255, 255, 255, 0.06)";
                 t["state-pressed"]  = "rgba(255, 255, 255, 0.10)";
-                t["state-selected"] = "rgba(90, 163, 255, 0.26)";
-                t["border-subtle"]  = "#252D37";
-                t["border"]         = "#333C48";
-                t["border-strong"]  = "#4D5967";
+                t["state-selected"] = "rgba(240, 162, 74, 0.22)";
+                t["border-subtle"]  = "#262628";
+                t["border"]         = "#343437";
+                t["border-strong"]  = "#4E4E53";
                 // Text hierarchy: 14:1, 7.5:1 and a disabled level on the base surface
-                t["text"]          = "#EEF2F7";
-                t["text-muted"]    = "#B6BFCC";
-                t["text-disabled"] = "#7D8897";
-                t["icon"]          = "#AEB8C6";
+                t["text"]          = "#EEEEEF";
+                t["text-muted"]    = "#B5B5BA";
+                t["text-disabled"] = "#7F7F86";
+                t["icon"]          = "#B0B0B6";
                 t["image-tab-close"] = "url(:/icons/tab-close-dark)";
-                t["text-on-accent"] = "#07101C";
+                t["text-on-accent"] = "#1B1206";
                 // One accent, lighter and a bit less saturated than on light surfaces
-                t["accent"]         = "#5AA3FF";
-                t["accent-hover"]   = "#7BB6FF";
-                t["accent-pressed"] = "#3F8DF2";
-                t["selection"]      = "#21456F";
-                t["success"]        = "#4CC38A";
-                t["warning"]        = "#E5B454";
-                t["danger"]         = "#F2706B";
+                t["accent"]         = "#F0A24A";
+                t["accent-hover"]   = "#F7B666";
+                t["accent-pressed"] = "#DB8E36";
+                t["selection"]      = "#4A3A20";
+                t["success"]        = "#58C28B";
+                t["warning"]        = "#E9D158";
+                t["danger"]         = "#F0706A";
                 t["fill-control"]         = "rgba(255, 255, 255, 0.05)";    // resting fill of buttons
                 t["fill-control-hover"]   = "rgba(255, 255, 255, 0.09)";
                 t["fill-control-pressed"] = "rgba(255, 255, 255, 0.13)";
-                t["success-subtle"]       = "rgba(76, 195, 138, 0.16)";    // tinted backgrounds instead of saturated fills
-                t["warning-subtle"]       = "rgba(229, 180, 84, 0.16)";
-                t["danger-subtle"]        = "rgba(242, 112, 107, 0.16)";
+                t["success-subtle"]       = "rgba(88, 194, 139, 0.16)";    // tinted backgrounds instead of saturated fills
+                t["warning-subtle"]       = "rgba(233, 209, 88, 0.16)";
+                t["danger-subtle"]        = "rgba(240, 112, 106, 0.16)";
                 t["scroll-thumb"]       = "rgba(255, 255, 255, 0.20)";
                 t["scroll-thumb-hover"] = "rgba(255, 255, 255, 0.34)";
                 return t;
@@ -79,27 +87,27 @@ namespace hal
             {
                 QMap<QString, QString> t = commonTokens();
                 t["surface-canvas"]  = "#FFFFFF";
-                t["surface-base"]    = "#F3F5F8";
-                t["surface-raised"]  = "#FAFBFC";
+                t["surface-base"]    = "#F4F4F5";
+                t["surface-raised"]  = "#FAFAFA";
                 t["surface-overlay"] = "#FFFFFF";
                 t["state-hover"]    = "rgba(0, 0, 0, 0.05)";
                 t["state-pressed"]  = "rgba(0, 0, 0, 0.09)";
-                t["state-selected"] = "rgba(31, 111, 224, 0.16)";
-                t["border-subtle"]  = "#E3E7ED";
-                t["border"]         = "#D3D9E1";
-                t["border-strong"]  = "#AEB7C3";
-                t["text"]          = "#1B2330";
-                t["text-muted"]    = "#566172";
-                t["text-disabled"] = "#8A94A3";
-                t["icon"]          = "#4A5566";
+                t["state-selected"] = "rgba(201, 122, 14, 0.18)";
+                t["border-subtle"]  = "#E4E4E6";
+                t["border"]         = "#D4D4D8";
+                t["border-strong"]  = "#AFAFB6";
+                t["text"]          = "#1C1C1E";
+                t["text-muted"]    = "#5A5A61";
+                t["text-disabled"] = "#8E8E96";
+                t["icon"]          = "#55555C";
                 t["image-tab-close"] = "url(:/icons/tab-close-light)";
                 t["text-on-accent"] = "#FFFFFF";
-                t["accent"]         = "#1F6FE0";
-                t["accent-hover"]   = "#3A83EA";
-                t["accent-pressed"] = "#1A5BC0";
-                t["selection"]      = "#D6E6FF";
+                t["accent"]         = "#C97A0E";
+                t["accent-hover"]   = "#B86E0A";
+                t["accent-pressed"] = "#A56206";
+                t["selection"]      = "#FBE7C2";
                 t["success"]        = "#1E9E63";
-                t["warning"]        = "#B7791F";
+                t["warning"]        = "#9A7A0C";
                 t["danger"]         = "#D64545";
                 t["fill-control"]         = "rgba(0, 0, 0, 0.03)";
                 t["fill-control-hover"]   = "rgba(0, 0, 0, 0.06)";
@@ -125,6 +133,42 @@ namespace hal
                 }
                 return QString();
             }
+
+#ifdef _WIN32
+        // Windows draws title bars in the accent color of the system. Give every window the colors of the theme instead.
+        void decorateWindow(QWidget* window, const Theme& theme)
+        {
+            if (!window || !window->isWindow())
+                return;
+            const HWND hwnd = reinterpret_cast<HWND>(window->winId());
+            auto colorRef   = [](const QColor& c) { return static_cast<COLORREF>(c.red() | (c.green() << 8) | (c.blue() << 16)); };
+
+            const BOOL dark = theme.mode() == Theme::Mode::Dark ? TRUE : FALSE;
+            const COLORREF caption = colorRef(theme.color("surface-base"));
+            const COLORREF text    = colorRef(theme.color("text"));
+            const COLORREF border  = colorRef(theme.color("border"));
+            // attributes 20, 34, 35 and 36 are only known to Windows 11, older systems ignore them
+            DwmSetWindowAttribute(hwnd, 20, &dark, sizeof(dark));       // DWMWA_USE_IMMERSIVE_DARK_MODE
+            DwmSetWindowAttribute(hwnd, 34, &border, sizeof(border));   // DWMWA_BORDER_COLOR
+            DwmSetWindowAttribute(hwnd, 35, &caption, sizeof(caption)); // DWMWA_CAPTION_COLOR
+            DwmSetWindowAttribute(hwnd, 36, &text, sizeof(text));       // DWMWA_TEXT_COLOR
+        }
+
+        /// Decorates every window when it is shown.
+        class WindowDecorator : public QObject
+        {
+        public:
+            using QObject::QObject;
+
+        protected:
+            bool eventFilter(QObject* watched, QEvent* event) override
+            {
+                if (event->type() == QEvent::Show && watched->isWidgetType())
+                    decorateWindow(static_cast<QWidget*>(watched), Theme::current());
+                return false;
+            }
+        };
+#endif
         }    // namespace
 
         Theme::Theme(Mode mode, const QMap<QString, QString>& tokens) : mMode(mode), mTokens(tokens)
@@ -235,6 +279,18 @@ namespace hal
                 font.setPixelSize(theme.value("font-size").remove("px").toInt());
                 app.setFont(font);
             }
+
+#ifdef _WIN32
+            static WindowDecorator* decorator = nullptr;
+            if (!decorator)
+            {
+                decorator = new WindowDecorator(&app);
+                app.installEventFilter(decorator);
+            }
+            for (QWidget* window : QApplication::topLevelWidgets())
+                decorateWindow(window, theme);
+#endif
+            app.setWindowIcon(QIcon(":/icons/hal"));
 
             QFile templateFile(":/style/modern");
             if (!templateFile.open(QFile::ReadOnly))

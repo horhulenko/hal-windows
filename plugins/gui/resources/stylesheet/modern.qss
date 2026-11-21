@@ -1736,14 +1736,20 @@ hal--OpenFileWidget QLabel
 
 hal--OpenFileWidget #text-label
 {
+    color       : @text@;
+    font-size   : @font-size@;
+    font-weight : 600;
+}
+
+hal--OpenFileWidget #hint-label
+{
     color     : @text-muted@;
-    font-size : @font-size@;
-    margin    : 20px 24px;
+    font-size : @font-size-small@;
 }
 
 hal--OpenFileWidget #icon-label
 {
-    margin-top : 0px;
+    margin : 0px;
 }
 
 hal--GetInTouchItem#about_item
@@ -1759,4 +1765,110 @@ hal--GetInTouchItem#documentation_item
 hal--GetInTouchItem#ticket_item
 {
     qproperty-iconPath : ":/icons/github";
+}
+
+/* =====================================================================================================================
+ * Notifications (toasts)
+ * ===================================================================================================================== */
+
+hal--ToastWidget
+{
+    background-color : @surface-overlay@;
+    border           : 1px solid @border@;
+    border-radius    : @radius-overlay@;
+}
+
+hal--ToastWidget #toast-bar
+{
+    background-color            : @accent@;
+    border                      : none;
+    border-top-left-radius      : @radius-overlay@;
+    border-bottom-left-radius   : @radius-overlay@;
+}
+
+hal--ToastWidget[level="success"] #toast-bar { background-color : @success@; }
+hal--ToastWidget[level="warning"] #toast-bar { background-color : @warning@; }
+hal--ToastWidget[level="error"] #toast-bar   { background-color : @danger@; }
+
+hal--ToastWidget #toast-title
+{
+    font-size   : @font-size@;
+    font-weight : 600;
+    color       : @text@;
+}
+
+hal--ToastWidget #toast-message
+{
+    font-size : @font-size-small@;
+    color     : @text-muted@;
+}
+
+hal--ToastWidget #toast-count
+{
+    background-color : @state-pressed@;
+    color            : @text@;
+    border-radius    : 8px;
+    padding          : 0px 7px;
+    font-size        : @font-size-caption@;
+}
+
+hal--ToastWidget #toast-close
+{
+    padding : 4px;
+}
+
+hal--ToastWidget QPushButton#toast-link,
+hal--ToastSummary QPushButton#toast-link
+{
+    background-color : transparent;
+    border           : none;
+    color            : @accent@;
+    padding          : 0px;
+    min-height       : 0px;
+    font-size        : @font-size-small@;
+}
+
+hal--ToastWidget QPushButton#toast-link:hover,
+hal--ToastSummary QPushButton#toast-link:hover
+{
+    color : @accent-hover@;
+}
+
+hal--ToastSummary
+{
+    background-color : @surface-overlay@;
+    border           : 1px solid @border@;
+    border-radius    : 16px;
+}
+
+hal--ToastSummary #toast-summary-label
+{
+    color     : @text-muted@;
+    font-size : @font-size-small@;
+}
+
+/* =====================================================================================================================
+ * About dialog
+ * ===================================================================================================================== */
+
+hal--AboutDialog
+{
+    background-color : @surface-raised@;
+}
+
+hal--AboutDialog #about-key
+{
+    color     : @text-muted@;
+    font-size : @font-size-small@;
+}
+
+hal--AboutDialog #about-value
+{
+    color : @text@;
+}
+
+hal--AboutDialog #about-licenses
+{
+    font-family : @font-mono@;
+    font-size   : @font-size-caption@;
 }

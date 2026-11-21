@@ -142,7 +142,7 @@ if(PL_GUI OR BUILD_ALL_PLUGINS)
                            PRIVATE ${COMPILE_OPTIONS_PRIVATE}
                            INTERFACE ${COMPILE_OPTIONS_INTERFACE})
     target_compile_definitions(gui PUBLIC QT_NO_KEYWORDS)
-    target_link_libraries(gui PUBLIC hal::core hal::netlist PRIVATE ${Python3_LIBRARIES} pybind11::embed Qt6::Widgets Qt6::Concurrent Qt6::Svg QuaZip::QuaZip ${WEBVIEW2_LOADER_LIB} version advapi32 ole32 shlwapi)
+    target_link_libraries(gui PUBLIC hal::core hal::netlist PRIVATE ${Python3_LIBRARIES} pybind11::embed Qt6::Widgets Qt6::Concurrent Qt6::Svg QuaZip::QuaZip ${WEBVIEW2_LOADER_LIB} version advapi32 ole32 shlwapi dwmapi)
     target_include_directories(gui PRIVATE ${WEBVIEW2_INCLUDE_DIR})
     add_dependencies(gui update_internal_gate_library_definitions)
 

@@ -1,6 +1,8 @@
 #include "gui/content_widget/content_widget.h"
 
 #include "gui/gui_utils/graphics.h"
+
+#include <QMap>
 #include "gui/content_anchor/content_anchor.h"
 #include "gui/toolbar/toolbar.h"
 
@@ -21,10 +23,19 @@ namespace hal
         setWindowTitle(name);
 
         setLayout(mContentLayout);
-        //debug code, delete later
-        QIcon temp;
-        temp.addFile(QStringLiteral(":/icons/start"), QSize(), QIcon::Normal, QIcon::Off);
-        setIcon(temp);
+        // every panel gets its own icon, it is what the dock rail shows
+        static const QMap<QString, QString> icons = {
+            {"Modules", ":/icons/dock-modules"},
+            {"Views", ":/icons/view-ctx"},
+            {"Groupings", ":/icons/to_grouping"},
+            {"Graph-Views", ":/icons/graph"},
+            {"Graph", ":/icons/graph"},
+            {"Log", ":/icons/dock-log"},
+            {"Python Console", ":/icons/terminal"},
+            {"Python Editor", ":/icons/dock-python"},
+            {"Selection Details", ":/icons/dock-details"},
+        };
+        setIcon(gui_utility::getStyledSvgIcon("", icons.value(name, ":/icons/list")));
     }
 
     void ContentWidget::remove()

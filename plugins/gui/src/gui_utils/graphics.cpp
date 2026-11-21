@@ -76,17 +76,25 @@ namespace hal
 
             const style::Theme& theme = style::Theme::current();
 
-            // icons come black, without a style they get the neutral icon color of the theme
-            const QString enabledStyle = from_to_colors_enabled.isEmpty() ? "all->" + theme.color("icon").name() : from_to_colors_enabled;
-            const QString disabledStyle = from_to_colors_disabled.isEmpty() ? "all->" + theme.color("text-disabled").name() : from_to_colors_disabled;
+            // Monochrome icons come black, without a style they get the neutral icon color of the theme.
+            // Artwork with other colors (the HAL logo, brand icons) is left untouched.
+            bool monochrome = true;
+            auto colors = QRegularExpression("#[0-9a-fA-F]{6}").globalMatch(svgDataEnabled);
+            while (colors.hasNext())
+            {
+                if (colors.next().captured().compare("#000000", Qt::CaseInsensitive) != 0)
+                    monochrome = false;
+            }
+            const QString enabledStyle  = (from_to_colors_enabled.isEmpty() && monochrome) ? "all->" + theme.color("icon").name() : from_to_colors_enabled;
+            const QString disabledStyle = (from_to_colors_disabled.isEmpty() && monochrome) ? "all->" + theme.color("text-disabled").name() : from_to_colors_disabled;
 
             QString svgDataDisabled(svgDataEnabled);
-            if (!applyColorStyle(svgDataEnabled, enabledStyle))
+            if (!enabledStyle.isEmpty() && !applyColorStyle(svgDataEnabled, enabledStyle))
             {
                 //TODO: print error
                 return QIcon();
             }
-            if (!applyColorStyle(svgDataDisabled, disabledStyle))
+            if (disabledStyle.isEmpty() || !applyColorStyle(svgDataDisabled, disabledStyle))
                 svgDataDisabled = QString();
 
             // while hovered, neutral icons switch to the text color, colored (semantic) icons keep their color
