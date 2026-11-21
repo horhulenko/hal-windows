@@ -97,6 +97,13 @@
         <file alias="gate_cursor">icons/gate_cursor.png</file>
         <file alias="kill_cursor">icons/kill_cursor.png</file>
         <file alias="minus">icons/minus.svg</file>
+        <file alias="dock-modules">icons/dock-modules.svg</file>
+        <file alias="dock-log">icons/dock-log.svg</file>
+        <file alias="dock-python">icons/dock-python.svg</file>
+        <file alias="dock-details">icons/dock-details.svg</file>
+        <file alias="toast-success">icons/toast-success.svg</file>
+        <file alias="toast-warning">icons/toast-warning.svg</file>
+        <file alias="toast-error">icons/toast-error.svg</file>
         <file alias="tab-close-dark">icons/tab-close-dark.svg</file>
         <file alias="tab-close-light">icons/tab-close-light.svg</file>
         <file alias="spinner">icons/spinner.svg</file>

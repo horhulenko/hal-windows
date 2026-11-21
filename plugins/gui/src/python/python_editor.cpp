@@ -1,4 +1,5 @@
 #include "gui/python/python_editor.h"
+#include "gui/toast/toast.h"
 
 #include "gui/action/action.h"
 #include "gui/code_editor/syntax_highlighter/python_syntax_highlighter.h"
@@ -666,7 +667,7 @@ namespace hal
         if (!out.is_open())
         {
             log_error("gui", "could not open file path '{}' to serialize python script", selected_file_name.toStdString());
-            QMessageBox::warning(this, "Save Script Error", "Cannot save python script to\n<" + selected_file_name + ">");
+            toast::warning("Save Script Error", "Cannot save python script to\n<" + selected_file_name + ">");
             return false;
         }
 
@@ -842,7 +843,7 @@ namespace hal
     {
         if (!mFileModifiedBar->isHidden())
         {
-            QMessageBox::warning(this, "Script execution error", "Please respond to code editor message before executing the script");
+            toast::warning("Script execution error", "Please respond to code editor message before executing the script");
             return;
         }
 

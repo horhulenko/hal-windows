@@ -1,4 +1,5 @@
 #include "gui/export/import_project_dialog.h"
+#include "gui/toast/toast.h"
 #include "gui/file_manager/file_manager.h"
 #include "gui/gui_utils/graphics.h"
 #include "hal_core/utilities/log.h"
@@ -109,7 +110,7 @@ namespace hal {
             int inx = zipFlist.indexOf(reProj);
             if (inx < 0)
             {
-                QMessageBox::warning(this,"Invalid ZIP-file", "The zipped file " + mZippedFile->selection() + " does not seem to be a hal project.\n");
+                toast::warning("Invalid ZIP-file", "The zipped file " + mZippedFile->selection() + " does not seem to be a hal project.\n");
                 valid = false;
             }
             else
@@ -131,7 +132,7 @@ namespace hal {
         mExtractedProjectAbsolutePath = QDir(mTargetDirectory->selection()).absoluteFilePath(mExtractProjectEdit->text());
         if (QFileInfo(mExtractedProjectAbsolutePath).exists())
         {
-            QMessageBox::warning(this, "Cannot Create Project", "Direcotry " + mExtractedProjectAbsolutePath + " already exists");
+            toast::warning("Cannot Create Project", "Direcotry " + mExtractedProjectAbsolutePath + " already exists");
             return false;
         }
         QStringList extracted;

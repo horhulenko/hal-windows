@@ -1,4 +1,6 @@
 #include "gui/main_window/main_window.h"
+#include "gui/toast/toast.h"
+#include "gui/toast/toast_manager.h"
 #include "gui/style/theme.h"
 
 #include "gui/action/action.h"
@@ -8,7 +10,7 @@
 #include "gui/export/export_registered_format.h"
 #include "gui/export/import_project_dialog.h"
 #include "gui/file_manager/file_manager.h"
-#include "gui/file_manager/project_dir_dialog.h"
+#include "gui/file_manager/file_manager.h"
 #include "gui/graph_widget/graph_widget.h"
 #include "gui/gui_def.h"
 #include "gui/gui_globals.h"
@@ -131,6 +133,9 @@ namespace hal
         //welcome screen + other screens (?)
 
         mWelcomeScreen = new WelcomeScreen();
+        connect(mWelcomeScreen, &WelcomeScreen::newProjectRequested, this, &MainWindow::handleActionNew);
+        connect(mWelcomeScreen, &WelcomeScreen::openProjectRequested, this, &MainWindow::handleActionOpenProject);
+        connect(mWelcomeScreen, &WelcomeScreen::importNetlistRequested, this, &MainWindow::handleActionImportNetlist);
         mStackedWidget->addWidget(mWelcomeScreen);
         mGateLibraryManager = new GateLibraryManager(this);
         mStackedWidget->addWidget(mGateLibraryManager);
@@ -300,6 +305,7 @@ namespace hal
         gPythonContext = new PythonContext(this);
 
         gContentManager = new ContentManager(this);
+        ToastManager::instance().attach(this);
         gCommentManager = new CommentManager(this);
 
         mSettingUndoLast = new SettingsItemKeybind("Undo Last Action", "keybinds/action_undo", QKeySequence("Ctrl+Z"), "Keybindings:Global", "Keybind for having last user interaction undone.");
@@ -624,21 +630,24 @@ namespace hal
             return;
         }
 
-        ProjectDirDialog pdd("Open HAL project", QDir::currentPath(), this);
-        if (pdd.exec() != QDialog::Accepted) return;
-        QStringList projects = pdd.selectedFiles();
-        for (int inx = 0; inx < projects.size(); ++inx)
+        // the native folder picker of the operating system, a folder is checked after it was chosen
+        const QString project = QFileDialog::getExistingDirectory(this, "Open HAL project", QDir::currentPath());
+        if (project.isEmpty())
+            return;
+
+        const FileManager::DirectoryStatus status = FileManager::directoryStatus(project);
+        if (status != FileManager::ProjectDirectory)
         {
-            if (!QFileInfo(projects.at(inx)).suffix().isEmpty())
-            {
-                QMessageBox::warning(this,"Bad project directory", "HAL project directories must not have suffix (." +
-                                     QFileInfo(projects.at(inx)).suffix() + ") in name");
-                continue;
-            }
-            ActionOpenNetlistFile* act = new ActionOpenNetlistFile(ActionOpenNetlistFile::OpenProject, pdd.selectedFiles().at(inx));
-            act->exec();
-            break;
+            toast::warning("Not a HAL project", project + "\n" + FileManager::directoryStatusText(status));
+            return;
         }
+        if (!QFileInfo(project).suffix().isEmpty())
+        {
+            toast::warning("Bad project directory", "HAL project directories must not have a suffix (." + QFileInfo(project).suffix() + ") in their name");
+            return;
+        }
+        ActionOpenNetlistFile* act = new ActionOpenNetlistFile(ActionOpenNetlistFile::OpenProject, project);
+        act->exec();
     }
 
     void MainWindow::handleActionImportNetlist()
@@ -764,8 +773,7 @@ namespace hal
                 act->exec();
             }
             else
-                QMessageBox::warning(this,
-                                     "Import Project Failed",
+                toast::warning("Import Project Failed",
                                      "Failed to extract a HAL project from selected archive file.\n"
                                      "You might want to uncompress the archive manually and try to fetchGateLibrary the project.");
         }
@@ -834,18 +842,18 @@ namespace hal
 
             if (!finfo.suffix().isEmpty())
             {
-                QMessageBox::warning(this,"Save Error", "selected project directory name must not have suffix ." + finfo.suffix());
+                toast::warning("Save Error", "selected project directory name must not have suffix ." + finfo.suffix());
                 return QString();
             }
             if (finfo.exists())
             {
-                QMessageBox::warning(this,"Save Error", "folder " + saveProjectDir + " already exists");
+                toast::warning("Save Error", "folder " + saveProjectDir + " already exists");
                 return QString();
             }
 
             if (!pm->create_project_directory(saveProjectDir.toStdString()))
             {
-                QMessageBox::warning(this,"Save Error", "cannot create folder " + saveProjectDir);
+                toast::warning("Save Error", "cannot create folder " + saveProjectDir);
                 return QString();
             }
         }
@@ -913,8 +921,9 @@ namespace hal
 
     void MainWindow::handleActionAbout()
     {
-        AboutDialog ad;
-        ad.exec();
+        // not modal and deleted when closed: the main window stays usable
+        auto* dialog = new AboutDialog(this);
+        dialog->show();
     }
 
     void MainWindow::handleActionUndo()

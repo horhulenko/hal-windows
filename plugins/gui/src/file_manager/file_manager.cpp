@@ -1,4 +1,5 @@
 #include "gui/file_manager/file_manager.h"
+#include "gui/toast/toast.h"
 
 #include "gui/gui_globals.h"
 #include "hal_core/netlist/netlist.h"
@@ -792,12 +793,6 @@ namespace hal
 
     void FileManager::displayErrorMessage(QString error_message)
     {
-        QMessageBox msgBox;
-        msgBox.setText("Error");
-        msgBox.setInformativeText(error_message);
-        msgBox.setStyleSheet("QLabel{min-width: 600px;}");
-        msgBox.setStandardButtons(QMessageBox::Ok);
-        msgBox.setDefaultButton(QMessageBox::Ok);
-        msgBox.exec();
+        toast::error("Error", error_message);
     }
 }    // namespace hal

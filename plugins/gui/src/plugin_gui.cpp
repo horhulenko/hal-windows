@@ -186,7 +186,6 @@ namespace hal
 
 // Non native dialogs do not work on macOS. Therefore do net set AA_DontUseNativeDialogs!
 #ifdef __linux__
-        a.setAttribute(Qt::AA_DontUseNativeDialogs, true);
 #endif
         a.setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 
