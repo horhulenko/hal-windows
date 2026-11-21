@@ -7,17 +7,7 @@
 
 namespace hal
 {
-    template<>
-    std::map<Parameter::Type, std::string> EnumStrings<Parameter::Type>::data = {
-        {Parameter::Type::Boolean, "boolean"},
-        {Parameter::Type::BitVector, "bit_vector"},
-        {Parameter::Type::LogicVector, "logic_vector"},
-        {Parameter::Type::Integer, "integer"},
-        {Parameter::Type::String, "string"},
-        {Parameter::Type::Float, "float"},
-        {Parameter::Type::Time, "time"},
-        {Parameter::Type::Enum, "enum"},
-    };
+    
 
     namespace
     {

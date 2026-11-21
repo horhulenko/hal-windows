@@ -997,7 +997,10 @@ namespace hal
     };
 
     template<>
-    std::map<BooleanFunction::Value, std::string> EnumStrings<BooleanFunction::Value>::data;
+    inline std::map<BooleanFunction::Value, std::string> EnumStrings<BooleanFunction::Value>::data = {{BooleanFunction::Value::ZERO, "0"},
+                                                                                               {BooleanFunction::Value::ONE, "1"},
+                                                                                               {BooleanFunction::Value::X, "X"},
+                                                                                               {BooleanFunction::Value::Z, "Z"}};
 
     /**
      * Node refers to an abstract syntax tree node of a Boolean function. A node

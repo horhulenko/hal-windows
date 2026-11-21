@@ -64,7 +64,23 @@ namespace hal
     static_assert((u32)PinEvent::PinsReload <= 0xF, "PinEvent no longer fits into the 4 bit of associated data");
 
     template<>
-    std::map<PinEvent, std::string> EnumStrings<PinEvent>::data;
+    inline std::map<PinEvent, std::string> EnumStrings<PinEvent>::data = {
+        {PinEvent::unknown, "unknown"},
+        {PinEvent::GroupCreate, "GroupCreate"},
+        {PinEvent::GroupReorder, "GroupReorder"},
+        {PinEvent::GroupRename, "GroupRename"},
+        {PinEvent::GroupTypeChange, "GroupTypeChange"},
+        {PinEvent::GroupDirChange, "GroupDirChange"},
+        {PinEvent::GroupDelete, "GroupDelete"},
+        {PinEvent::PinCreate, "PinCreate"},
+        {PinEvent::PinReorder, "PinReorder"},
+        {PinEvent::PinAssignToGroup, "PinAssignToGroup"},
+        {PinEvent::PinRename, "PinRename"},
+        {PinEvent::PinTypeChange, "PinTypeChange"},
+        {PinEvent::PinDirChange, "PinDirChange"},
+        {PinEvent::PinDelete, "PinDelete"},
+        {PinEvent::PinsReload, "PinsReload"}
+    };
 
     class Module;
 

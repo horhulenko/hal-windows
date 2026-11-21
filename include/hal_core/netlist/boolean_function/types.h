@@ -405,8 +405,16 @@ namespace hal
     }    // namespace SMT
 
     template<>
-    std::map<SMT::SolverType, std::string> EnumStrings<SMT::SolverType>::data;
+    inline std::map<SMT::SolverType, std::string> EnumStrings<SMT::SolverType>::data = {{SMT::SolverType::Z3, "Z3"},
+                                                                                 {SMT::SolverType::Boolector, "Boolector"},
+                                                                                 {SMT::SolverType::Bitwuzla, "Bitwuzla"},
+                                                                                 {SMT::SolverType::Unknown, "Unknown"}};
 
     template<>
-    std::map<SMT::SolverResultType, std::string> EnumStrings<SMT::SolverResultType>::data;
+    inline std::map<SMT::SolverCall, std::string> EnumStrings<SMT::SolverCall>::data = {{SMT::SolverCall::Library, "Library"}, {SMT::SolverCall::Binary, "Binary"}};
+
+    template<>
+    inline std::map<SMT::SolverResultType, std::string> EnumStrings<SMT::SolverResultType>::data = {{SMT::SolverResultType::Sat, "sat"},
+                                                                                             {SMT::SolverResultType::UnSat, "unsat"},
+                                                                                             {SMT::SolverResultType::Unknown, "unknown"}};
 }    // namespace hal

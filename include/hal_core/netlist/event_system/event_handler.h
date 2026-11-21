@@ -63,7 +63,18 @@ namespace hal
     };
 
     template<>
-    std::map<NetlistEvent::event, std::string> EnumStrings<NetlistEvent::event>::data;
+    inline std::map<NetlistEvent::event, std::string> EnumStrings<NetlistEvent::event>::data = {{NetlistEvent::event::id_changed, "id_changed"},
+                                                                                         {NetlistEvent::event::input_filename_changed, "input_filename_changed"},
+                                                                                         {NetlistEvent::event::design_name_changed, "design_name_changed"},
+                                                                                         {NetlistEvent::event::device_name_changed, "device_name_changed"},
+                                                                                         {NetlistEvent::event::marked_global_vcc, "marked_global_vcc"},
+                                                                                         {NetlistEvent::event::marked_global_gnd, "marked_global_gnd"},
+                                                                                         {NetlistEvent::event::unmarked_global_vcc, "unmarked_global_vcc"},
+                                                                                         {NetlistEvent::event::unmarked_global_gnd, "unmarked_global_gnd"},
+                                                                                         {NetlistEvent::event::marked_global_input, "marked_global_input"},
+                                                                                         {NetlistEvent::event::marked_global_output, "marked_global_output"},
+                                                                                         {NetlistEvent::event::unmarked_global_input, "unmarked_global_input"},
+                                                                                         {NetlistEvent::event::unmarked_global_output, "unmarked_global_output"}};
 
     /**
      * Holds the enumeration of all events that a gate can emit.
@@ -82,7 +93,11 @@ namespace hal
     };
 
     template<>
-    std::map<GateEvent::event, std::string> EnumStrings<GateEvent::event>::data;
+    inline std::map<GateEvent::event, std::string> EnumStrings<GateEvent::event>::data = {{GateEvent::event::created, "created"},
+                                                                                   {GateEvent::event::removed, "removed"},
+                                                                                   {GateEvent::event::name_changed, "name_changed"},
+                                                                                   {GateEvent::event::location_changed, "location_changed"},
+                                                                                   {GateEvent::event::boolean_function_changed, "boolean_function_changed"}};
 
     /**
      * Holds the enumeration of all events that a net can emit.
@@ -103,7 +118,13 @@ namespace hal
     };
 
     template<>
-    std::map<NetEvent::event, std::string> EnumStrings<NetEvent::event>::data;
+    inline std::map<NetEvent::event, std::string> EnumStrings<NetEvent::event>::data = {{NetEvent::event::created, "created"},
+                                                                                 {NetEvent::event::removed, "removed"},
+                                                                                 {NetEvent::event::name_changed, "name_changed"},
+                                                                                 {NetEvent::event::src_added, "src_added"},
+                                                                                 {NetEvent::event::src_removed, "src_removed"},
+                                                                                 {NetEvent::event::dst_added, "dst_added"},
+                                                                                 {NetEvent::event::dst_removed, "dst_removed"}};
 
     /**
      * Holds the enumeration of all events that a module can emit.
@@ -131,7 +152,20 @@ namespace hal
     };
 
     template<>
-    std::map<ModuleEvent::event, std::string> EnumStrings<ModuleEvent::event>::data;
+    inline std::map<ModuleEvent::event, std::string> EnumStrings<ModuleEvent::event>::data = {{ModuleEvent::event::created, "created"},
+                                                                                       {ModuleEvent::event::removed, "removed"},
+                                                                                       {ModuleEvent::event::name_changed, "name_changed"},
+                                                                                       {ModuleEvent::event::type_changed, "type_changed"},
+                                                                                       {ModuleEvent::event::parent_changed, "parent_changed"},
+                                                                                       {ModuleEvent::event::submodule_added, "submodule_added"},
+                                                                                       {ModuleEvent::event::submodule_removed, "submodule_removed"},
+                                                                                       {ModuleEvent::event::gates_assign_begin, "gates_assign_begin"},
+                                                                                       {ModuleEvent::event::gates_assign_end, "gates_assign_end"},
+                                                                                       {ModuleEvent::event::gate_assigned, "gate_assigned"},
+                                                                                       {ModuleEvent::event::gates_remove_begin, "gates_remove_begin"},
+                                                                                       {ModuleEvent::event::gates_remove_end, "gates_remove_end"},
+                                                                                       {ModuleEvent::event::gate_removed, "gate_removed"},
+                                                                                       {ModuleEvent::event::pin_changed, "pin_changed"}};
 
     /**
      * Holds the enumeration of all events that a grouping can emit.
@@ -155,7 +189,15 @@ namespace hal
     };
 
     template<>
-    std::map<GroupingEvent::event, std::string> EnumStrings<GroupingEvent::event>::data;
+    inline std::map<GroupingEvent::event, std::string> EnumStrings<GroupingEvent::event>::data = {{GroupingEvent::event::created, "created"},
+                                                                                           {GroupingEvent::event::removed, "removed"},
+                                                                                           {GroupingEvent::event::name_changed, "name_changed"},
+                                                                                           {GroupingEvent::event::gate_assigned, "gate_assigned"},
+                                                                                           {GroupingEvent::event::gate_removed, "gate_removed"},
+                                                                                           {GroupingEvent::event::net_assigned, "net_assigned"},
+                                                                                           {GroupingEvent::event::net_removed, "net_removed"},
+                                                                                           {GroupingEvent::event::module_assigned, "module_assigned"},
+                                                                                           {GroupingEvent::event::module_removed, "module_removed"}};
 
     /**
      * The event handler distributes the events emitted by the netlist and its elements to all registered callbacks.
