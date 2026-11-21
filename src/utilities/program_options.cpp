@@ -4,7 +4,9 @@
 #include "hal_core/utilities/program_arguments.h"
 
 #include <algorithm>
+#ifndef _WIN32
 #include <unistd.h>
+#endif
 
 #if __linux__ || __APPLE__
 #include <sys/ioctl.h>

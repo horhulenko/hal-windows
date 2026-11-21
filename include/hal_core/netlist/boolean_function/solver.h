@@ -169,7 +169,7 @@ namespace hal
 			 * @param[in] config - SMT solver configuration.
 			 * @returns Ok() and SMT solver result on success, Err() otherwise.
 			 */
-            static Result<SolverResult> translate_from_smt2(bool was_killed, std::string stdout, const QueryConfig& config);
+            static Result<SolverResult> translate_from_smt2(bool was_killed, std::string std_out, const QueryConfig& config);
         };
     }    // namespace SMT
 }    // namespace hal

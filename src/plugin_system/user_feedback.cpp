@@ -7,8 +7,12 @@
 #include <iomanip>
 #include <iostream>
 #include <sstream>
+#ifdef _WIN32
+#include <windows.h>
+#else
 #include <sys/ioctl.h>
 #include <unistd.h>
+#endif
 
 namespace hal
 {
@@ -173,6 +177,19 @@ namespace hal
 
         int ProgressPrinter::get_terminal_width()
         {
+#ifdef _WIN32
+            CONSOLE_SCREEN_BUFFER_INFO info;
+            if (!GetConsoleScreenBufferInfo(GetStdHandle(STD_ERROR_HANDLE), &info))
+            {
+                return -1;
+            }
+            int width = info.srWindow.Right - info.srWindow.Left + 1;
+            if (width > MAX_PLAUSIBLE_TERMINAL_WIDTH)
+            {
+                return -1;
+            }
+            return width;
+#else
             struct winsize size;
             if (ioctl(STDERR_FILENO, TIOCGWINSZ, &size) < 0)
             {
@@ -183,6 +200,7 @@ namespace hal
                 return -1;
             }
             return size.ws_col;
+#endif
         }
     }    // namespace user_feedback
 }    // namespace hal

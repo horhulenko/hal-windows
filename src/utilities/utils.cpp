@@ -3,7 +3,6 @@
 #include "hal_core/utilities/log.h"
 
 #include <algorithm>
-#include <dirent.h>
 #include <fstream>
 #include <random>
 #include <sstream>
@@ -37,21 +36,13 @@ namespace hal
         bool folder_exists_and_is_accessible(const std::filesystem::path& folder)
         {
 #ifdef _WIN32
-            DWORD ftyp = GetFileAttributesA(folder.c_str());
+            DWORD ftyp = GetFileAttributesW(folder.c_str());
             if (ftyp == INVALID_FILE_ATTRIBUTES)
             {
                 return false;    //something is wrong with your path!
             }
 
-            if (ftyp & FILE_ATTRIBUTE_DIRECTORY)
-            {
-                if (0 == access(folder.c_str(), R_OK))
-                {
-                    return true;
-                }
-            }
-
-            return false;    // this is not a directory!
+            return (ftyp & FILE_ATTRIBUTE_DIRECTORY) != 0;
 #else
 
             struct stat sb;
@@ -71,12 +62,15 @@ namespace hal
         {
             char buf[1024] = {0};
 #ifdef _WIN32
-            DWORD ret = GetModuleFileNameA(NULL, buf, sizeof(buf));
-            if (ret == 0 || ret == sizeof(buf))
+            wchar_t wbuf[4096] = {0};
+            DWORD ret          = GetModuleFileNameW(NULL, wbuf, static_cast<DWORD>(sizeof(wbuf) / sizeof(wbuf[0])));
+            if (ret == 0 || ret == sizeof(wbuf) / sizeof(wbuf[0]))
             {
-                return std::string();
+                return std::filesystem::path();
             }
-            return std::filesystem::path(buf);
+            hal::error_code ec;
+            auto p = std::filesystem::canonical(std::filesystem::path(wbuf), ec);
+            return p.make_preferred().parent_path();
 #elif __APPLE__ && __MACH__
             uint32_t size = sizeof(buf);
             int ret       = _NSGetExecutablePath(buf, &size);
@@ -253,10 +247,37 @@ namespace hal
             }
 #ifdef _WIN32
             const char which_delimiter = ';';
-            return std::filesystem::path();    // Curerently no support for windows. Sorry ...
+            std::vector<std::string> extensions = {""};
+            if (const char* pathext = std::getenv("PATHEXT"))
+            {
+                for (const auto& ext : split(std::string(pathext), ';', false))
+                    if (!ext.empty())
+                        extensions.push_back(ext);
+            }
+            else
+            {
+                extensions.insert(extensions.end(), {".COM", ".EXE", ".BAT", ".CMD"});
+            }
+
+            for (const auto& folder : split(internal_path, which_delimiter, false))
+            {
+                if (folder.empty())
+                    continue;
+                for (const auto& ext : extensions)
+                {
+                    std::filesystem::path p = std::filesystem::path(folder) / (name + ext);
+                    std::error_code ec;
+                    if (std::filesystem::is_regular_file(p, ec))
+                    {
+                        return p;
+                    }
+                }
+            }
+            return std::filesystem::path();
 #else
             const char which_delimiter = ':';
 #endif
+#ifndef _WIN32
             auto folders = split(internal_path, which_delimiter, false);
             for (const auto& folder : folders)
             {
@@ -271,6 +292,7 @@ namespace hal
                 }
             }
             return std::filesystem::path();
+#endif
         }
 
         Result<std::filesystem::path> get_unique_temp_directory(const std::string& prefix, const u32 max_attmeps)
@@ -478,7 +500,7 @@ furnished to do so, subject to the following conditions:
 The above copyright notice and this permission notice shall be included in
 all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+)" R"(THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
@@ -671,7 +693,7 @@ choice, if you do both of the following:
 
 6. Revised Versions of the GNU Lesser General Public License.
 
- The Free Software Foundation may publish revised and/or new versions
+)" R"( The Free Software Foundation may publish revised and/or new versions
 of the GNU Lesser General Public License from time to time. Such new
 versions will be similar in spirit to the present version, but may
 differ in detail to address new problems or concerns.

@@ -2,6 +2,10 @@
 
 #include "hal_core/utilities/log.h"
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 namespace hal
 {
     RuntimeLibrary::RuntimeLibrary()
@@ -26,7 +30,7 @@ namespace hal
     bool RuntimeLibrary::load_library(const std::string& file_name)
     {
 #ifdef _WIN32
-        m_handle = LoadLibrary(file_name.c_str());
+        m_handle = reinterpret_cast<handle_ptr_t>(LoadLibraryW(std::filesystem::path(file_name).c_str()));
 #else
         m_handle      = dlopen((file_name).c_str(), RTLD_GLOBAL | RTLD_LAZY);
 #endif
@@ -40,7 +44,7 @@ namespace hal
 
         auto error_message = std::string("");
 #ifdef _WIN32
-        error_message = "to be implemented for windows based operating systems.";
+        error_message = "Windows error code " + std::to_string(GetLastError());
 #else
         error_message = dlerror();
 #endif
@@ -56,7 +60,7 @@ namespace hal
             return true;
         }
 #ifdef _WIN32
-        if (FreeLibrary(m_handle) == 0)
+        if (FreeLibrary(reinterpret_cast<HMODULE>(m_handle)) != 0)
         {
             log_debug("core", "unloaded library '{}'", m_file_name);
             m_handle = NULL;
@@ -79,7 +83,7 @@ namespace hal
     {
         lib_fn_ptr_t fptr = NULL;
 #ifdef _WIN32
-        fptr = GetProcAddress(m_handle, function_name.c_str());
+        fptr = reinterpret_cast<lib_fn_ptr_t>(GetProcAddress(reinterpret_cast<HMODULE>(m_handle), function_name.c_str()));
         if (!fptr)
         {
             log_error("core", "cannot load function '{}' from library '{}'", function_name, m_file_name);

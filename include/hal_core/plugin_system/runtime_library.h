@@ -29,18 +29,15 @@
 
 #include <string>
 
+#ifndef _WIN32
+#include <dlfcn.h>
+#endif
+
 namespace hal
 {
 // operating systems independent type definitions for function and handle access
-#ifdef _WIN32
-#include <windows.h>
-    using lib_fn_ptr_t = FARPROC;
-    using handle_ptr_t = HINSTANCE;
-#else
-#include <dlfcn.h>
     using lib_fn_ptr_t = void (*)();
     using handle_ptr_t = void*;
-#endif
 
     /**
      * A thin wrapper around a shared library that is loaded at runtime and provides access to its exported symbols.
