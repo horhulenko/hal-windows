@@ -56,6 +56,11 @@ function(hal_add_plugin target_name)
         set_target_properties(${target_name} PROPERTIES INSTALL_NAME_DIR ${PLUGIN_LIBRARY_INSTALL_DIRECTORY})
     endif(APPLE AND CMAKE_HOST_APPLE)
 
+    # Python only imports extension modules named *.pyd on Windows, and every HAL plugin doubles as a Python module
+    if(WIN32)
+        set_target_properties(${target_name} PROPERTIES SUFFIX ".pyd")
+    endif()
+
     target_link_libraries(${target_name}
                           PUBLIC hal::core hal::netlist ${Python3_LIBRARIES} pybind11::pybind11
                           ${ARG_LINK_LIBRARIES})

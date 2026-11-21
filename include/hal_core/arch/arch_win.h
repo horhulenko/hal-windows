@@ -46,6 +46,6 @@
 #define NETLIST_DATA_API __declspec(dllimport)
 #endif
 
-#define LIBRARY_FILE_EXTENSION "dll"
+#define LIBRARY_FILE_EXTENSION "pyd"
 
-#define ALTERNATE_LIBRARY_FILE_EXTENSION ""
+#define ALTERNATE_LIBRARY_FILE_EXTENSION "dll"

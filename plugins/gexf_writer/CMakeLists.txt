@@ -18,6 +18,9 @@ if(PL_GEXF_WRITER OR BUILD_ALL_PLUGINS)
     add_library(gexf_writer SHARED ${GEXF_WRITER_INC} ${GEXF_WRITER_SRC})
 
     set_target_properties(gexf_writer PROPERTIES PREFIX "")
+    if(WIN32)
+        set_target_properties(gexf_writer PROPERTIES SUFFIX ".pyd")
+    endif()
 
     target_include_directories(gexf_writer
                                PUBLIC

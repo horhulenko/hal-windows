@@ -18,6 +18,9 @@ target_compile_options(py
                        INTERFACE ${COMPILE_OPTIONS_INTERFACE})
 #Set shared library suffix for MacOS; Used for boost_python support
 set_target_properties(py PROPERTIES PREFIX "")
+if(WIN32)
+    set_target_properties(py PROPERTIES SUFFIX ".pyd")
+endif()
 if(APPLE AND CMAKE_HOST_APPLE)
     set_target_properties(py PROPERTIES SUFFIX ".so")
 endif(APPLE AND CMAKE_HOST_APPLE)
