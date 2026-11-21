@@ -276,6 +276,7 @@ endif()
 # ####   Berkeley ABC
 # ###############################
 
+if(HAL_ENABLE_ABC)
 # abc stuff
 # Download and unpack abc at configure time
 add_library(ABC INTERFACE IMPORTED)
@@ -293,6 +294,10 @@ else()
     add_library(${ABC_LIBRARY} INTERFACE IMPORTED)
     set_target_properties(${ABC_LIBRARY} PROPERTIES INTERFACE_LINK_LIBRARIES libabc-pic)
     install(TARGETS libabc-pic LIBRARY DESTINATION ${LIBRARY_INSTALL_DIRECTORY})
+endif()
+else()
+    message(STATUS "ABC disabled (HAL_ENABLE_ABC=OFF), Boolean function simplification uses local rules only")
+    set(ABC_LIBRARY "")
 endif()
 
 # ###############################

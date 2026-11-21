@@ -6,7 +6,12 @@ foreach(i IN ITEMS "" "_DEBUG" "_RELEASE" "_MINSIZEREL" "_RELWITHDEBINFO")
 endforeach()
 
 # Build netlist_preprocessing and dependend libraries
-option(PL_NETLIST_PREPROCESSING "PL_NETLIST_PREPROCESSING" ON)
+if(WIN32)
+    set(PL_NETLIST_PREPROCESSING_DEFAULT OFF)
+else()
+    set(PL_NETLIST_PREPROCESSING_DEFAULT ON)
+endif()
+option(PL_NETLIST_PREPROCESSING "PL_NETLIST_PREPROCESSING" ${PL_NETLIST_PREPROCESSING_DEFAULT})
 
 include_directories(${include_directories}
                     ${CMAKE_SOURCE_DIR}/include

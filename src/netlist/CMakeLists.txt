@@ -1,5 +1,10 @@
 file(GLOB_RECURSE NETLIST_LIB_INCLUDE ${CMAKE_SOURCE_DIR}/include/netlist/*.h)
 file(GLOB_RECURSE NETLIST_LIB_SOURCE ${CMAKE_SOURCE_DIR}/src/netlist/*.cpp)
+if(HAL_ENABLE_ABC)
+    list(REMOVE_ITEM NETLIST_LIB_SOURCE ${CMAKE_SOURCE_DIR}/src/netlist/boolean_function/simplification_no_abc.cpp)
+else()
+    list(REMOVE_ITEM NETLIST_LIB_SOURCE ${CMAKE_SOURCE_DIR}/src/netlist/boolean_function/simplification_abc.cpp)
+endif()
 
 add_library(netlist SHARED ${NETLIST_LIB_INCLUDE} ${NETLIST_LIB_SOURCE} ${CMAKE_BINARY_DIR}/hal_version.h)
 set_target_properties(netlist PROPERTIES OUTPUT_NAME "hal_netlist")
