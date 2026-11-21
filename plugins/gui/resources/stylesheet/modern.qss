@@ -1,0 +1,1831 @@
+/*
+ * HAL stylesheet template.
+ *
+ * Every color, font and metric is a design token written as a placeholder between two at-signs, the values live in gui/style/theme.cpp and are
+ * substituted once at startup. Surfaces get lighter the closer they are to the user: canvas < base < raised < overlay.
+ * Fusion paints from the palette, this sheet only adds shape, spacing and states. Keep it free of literal colors.
+ */
+
+/* ---------- Typography and base ---------- */
+
+QWidget
+{
+    font-family : @font-ui@;
+    font-size   : @font-size@;
+    color       : @text@;
+}
+
+QMainWindow,
+QDialog
+{
+    background-color : @surface-base@;
+}
+
+QLabel
+{
+    background-color : transparent;
+}
+
+QLabel:disabled
+{
+    color : @text-disabled@;
+}
+
+QToolTip
+{
+    background-color : @surface-overlay@;
+    color            : @text@;
+    border           : 1px solid @border@;
+    padding          : 4px 8px;
+}
+
+/* ---------- Menus ---------- */
+
+QMenuBar
+{
+    background-color : @surface-raised@;
+    border-bottom    : 1px solid @border-subtle@;
+    padding          : 2px 4px;
+}
+
+QMenuBar::item
+{
+    background-color : transparent;
+    padding          : 5px 10px;
+    border-radius    : @radius-control@;
+}
+
+QMenuBar::item:selected
+{
+    background-color : @state-hover@;
+}
+
+QMenuBar::item:pressed
+{
+    background-color : @state-pressed@;
+}
+
+QMenu
+{
+    background-color : @surface-overlay@;
+    border           : 1px solid @border@;
+    padding          : 4px;
+}
+
+QMenu::item
+{
+    padding       : 6px 28px 6px 12px;
+    border-radius : @radius-control@;
+    margin        : 1px 0px;
+}
+
+QMenu::item:selected
+{
+    background-color : @state-pressed@;
+}
+
+QMenu::item:disabled
+{
+    color : @text-disabled@;
+}
+
+QMenu::separator
+{
+    height           : 1px;
+    background-color : @border-subtle@;
+    margin           : 4px 8px;
+}
+
+/* ---------- Buttons ---------- */
+
+QPushButton
+{
+    background-color : @fill-control@;
+    border           : 1px solid @border@;
+    border-radius    : @radius-control@;
+    padding          : 3px 14px;
+    min-height       : 20px;
+}
+
+QPushButton:hover
+{
+    background-color : @fill-control-hover@;
+    border-color     : @border-strong@;
+}
+
+QPushButton:pressed
+{
+    background-color : @fill-control-pressed@;
+}
+
+QPushButton:focus
+{
+    border-color : @accent@;
+}
+
+QPushButton:checked
+{
+    background-color : @state-selected@;
+    border-color     : @accent@;
+}
+
+QPushButton:default,
+QPushButton[primary="true"]
+{
+    background-color : @accent@;
+    border-color     : @accent@;
+    color            : @text-on-accent@;
+}
+
+QPushButton:default:hover,
+QPushButton[primary="true"]:hover
+{
+    background-color : @accent-hover@;
+    border-color     : @accent-hover@;
+}
+
+QPushButton:default:pressed,
+QPushButton[primary="true"]:pressed
+{
+    background-color : @accent-pressed@;
+    border-color     : @accent-pressed@;
+}
+
+QPushButton:disabled
+{
+    background-color : transparent;
+    border-color     : @border-subtle@;
+    color            : @text-disabled@;
+}
+
+/* Icon buttons in toolbars and panel headers: no frame until hovered */
+QToolButton
+{
+    background-color : transparent;
+    border           : 1px solid transparent;
+    border-radius    : @radius-control@;
+    padding          : 4px;
+    margin           : 0px;
+}
+
+QToolButton:hover
+{
+    background-color : @state-hover@;
+}
+
+QToolButton:pressed
+{
+    background-color : @state-pressed@;
+}
+
+QToolButton:checked
+{
+    background-color : @state-selected@;
+}
+
+QToolButton:disabled
+{
+    color : @text-disabled@;
+}
+
+QToolBar
+{
+    background-color : @surface-raised@;
+    border           : none;
+    spacing          : 2px;
+    padding          : 2px 4px;
+}
+
+QToolBar QLabel
+{
+    padding : 0px 4px;
+}
+
+QToolBar::separator
+{
+    background-color : @border-subtle@;
+    width            : 1px;
+    margin           : 4px 6px;
+}
+
+/* ---------- Inputs ---------- */
+
+QLineEdit,
+QTextEdit,
+QPlainTextEdit,
+QSpinBox,
+QDoubleSpinBox,
+QComboBox
+{
+    background-color           : @surface-canvas@;
+    border                     : 1px solid @border@;
+    border-radius              : @radius-control@;
+    padding                    : 3px 8px;
+    min-height                 : 20px;
+    selection-background-color : @selection@;
+    selection-color            : @text@;
+}
+
+QLineEdit:hover,
+QSpinBox:hover,
+QDoubleSpinBox:hover,
+QComboBox:hover
+{
+    border-color : @border-strong@;
+}
+
+QLineEdit:focus,
+QTextEdit:focus,
+QPlainTextEdit:focus,
+QSpinBox:focus,
+QDoubleSpinBox:focus,
+QComboBox:focus
+{
+    border-color : @accent@;
+}
+
+QLineEdit:disabled,
+QSpinBox:disabled,
+QDoubleSpinBox:disabled,
+QComboBox:disabled
+{
+    color        : @text-disabled@;
+    border-color : @border-subtle@;
+}
+
+QComboBox QAbstractItemView
+{
+    background-color           : @surface-overlay@;
+    border                     : 1px solid @border@;
+    selection-background-color : @state-pressed@;
+    outline                    : none;
+}
+
+QGroupBox
+{
+    border        : 1px solid @border-subtle@;
+    border-radius : @radius-control@;
+    margin-top    : 12px;
+    padding-top   : 8px;
+}
+
+QGroupBox::title
+{
+    subcontrol-origin   : margin;
+    subcontrol-position : top left;
+    left                : 8px;
+    padding             : 0px 4px;
+    color               : @text-muted@;
+}
+
+QProgressBar
+{
+    background-color : @border-subtle@;
+    border           : none;
+    border-radius    : 3px;
+    max-height       : 6px;
+    text-align       : center;
+}
+
+QProgressBar::chunk
+{
+    background-color : @accent@;
+    border-radius    : 3px;
+}
+
+/* ---------- Tabs ---------- */
+
+QTabWidget::pane
+{
+    border     : none;
+    border-top : 1px solid @border-subtle@;
+}
+
+QTabBar::tab
+{
+    background-color : transparent;
+    color            : @text-muted@;
+    padding          : 6px 14px;
+    border           : none;
+    border-bottom    : 2px solid transparent;
+}
+
+QTabBar::tab:hover
+{
+    background-color : @state-hover@;
+    color            : @text@;
+}
+
+QTabBar::tab:selected
+{
+    color         : @text@;
+    border-bottom : 2px solid @accent@;
+}
+
+/* ---------- Item views ---------- */
+
+QAbstractItemView
+{
+    background-color           : @surface-canvas@;
+    alternate-background-color : @surface-raised@;
+    border                     : none;
+    outline                    : none;
+    selection-background-color : @selection@;
+    selection-color            : @text@;
+    show-decoration-selected   : 1;
+}
+
+QAbstractItemView::item
+{
+    padding : 3px 4px;
+}
+
+QAbstractItemView::item:hover
+{
+    background-color : @state-hover@;
+}
+
+QAbstractItemView::item:selected
+{
+    background-color : @selection@;
+    color            : @text@;
+}
+
+QAbstractItemView::item:disabled
+{
+    color : @text-disabled@;
+}
+
+QHeaderView::section
+{
+    background-color : @surface-raised@;
+    color            : @text-muted@;
+    border           : none;
+    border-bottom    : 1px solid @border-subtle@;
+    border-right     : 1px solid @border-subtle@;
+    padding          : 4px 8px;
+    font-weight      : 600;
+}
+
+QTableView
+{
+    gridline-color : @border-subtle@;
+}
+
+QListWidget
+{
+    min-width : 200px;
+    max-width : 200px;
+}
+
+/* ---------- Scroll bars: thin, translucent, no arrows ---------- */
+
+QScrollBar:vertical
+{
+    background-color : transparent;
+    width            : 12px;
+    margin           : 0px;
+}
+
+QScrollBar:horizontal
+{
+    background-color : transparent;
+    height           : 12px;
+    margin           : 0px;
+}
+
+QScrollBar::handle:vertical
+{
+    background-color : @scroll-thumb@;
+    border-radius    : 4px;
+    min-height       : 28px;
+    margin           : 2px;
+}
+
+QScrollBar::handle:horizontal
+{
+    background-color : @scroll-thumb@;
+    border-radius    : 4px;
+    min-width        : 28px;
+    margin           : 2px;
+}
+
+QScrollBar::handle:vertical:hover,
+QScrollBar::handle:horizontal:hover,
+QScrollBar::handle:vertical:pressed,
+QScrollBar::handle:horizontal:pressed
+{
+    background-color : @scroll-thumb-hover@;
+}
+
+QScrollBar::add-line:vertical,
+QScrollBar::sub-line:vertical
+{
+    height : 0px;
+}
+
+QScrollBar::add-line:horizontal,
+QScrollBar::sub-line:horizontal
+{
+    width : 0px;
+}
+
+QScrollBar::add-page,
+QScrollBar::sub-page
+{
+    background : none;
+}
+
+QAbstractScrollArea::corner
+{
+    background-color : transparent;
+}
+
+QSplitter::handle
+{
+    background-color : @border-subtle@;
+}
+
+QSplitter::handle:hover
+{
+    background-color : @accent@;
+}
+
+
+/* Component rules converted from the legacy dark stylesheet. Colors are tokens, see theme.cpp. */
+
+hal--Toolbar
+{
+    background: @surface-canvas@;
+    spacing: 1px;
+    min-height: 24px;
+    max-height: 24px;
+    border: 0px solid @border-subtle@;
+}
+
+hal--Searchbar
+{
+    background-color: @surface-raised@;
+    min-height: 30px;
+    max-height: 30px;
+    border-width: 6px;
+    border-style: solid;
+    border-color: @border-subtle@;
+    qproperty-searchIcon: ":/icons/search";
+    qproperty-searchIconStyle: "all -> @text@";
+    qproperty-clearIcon: ":/icons/cross";
+    qproperty-clearIconStyle: "all -> @text@";
+    qproperty-optionDialogIcon: ":/icons/settings";
+    qproperty-optionDialogIconStyle: "all -> @text@";
+}
+
+hal--Searchbar QLabel
+{
+    font: bold "Segoe UI";
+    color: @text-muted@;
+    background-color: @surface-base@;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+hal--Searchbar QLabel:hover
+{
+    color: @text@;
+    font-weight: bold;
+}
+
+hal--Searchbar QPushButton
+{
+    font-weight: normal;
+    background-color: @surface-base@;
+    border: none;
+    padding: none;
+    min-width: 25;
+    max-width: 25;
+}
+
+hal--Searchbar QLineEdit
+{
+    color: @text@;
+    font-style: normal;
+    background-color: @surface-base@;
+    border: none;
+}
+
+hal--Searchbar QLineEdit[text=""]
+{
+    font-style: italic;
+}
+
+hal--Searchbar QToolButton
+{
+    background-color: @surface-base@;
+    border: none;
+}
+
+hal--SettingsWidget
+{
+    background-color: @surface-raised@;
+    padding: 10px;
+    margin-bottom: 20px;
+    font: 14px bold "Segoe UI";
+    border-left: 5px solid @border@;
+}
+
+hal--SettingsWidget[conflicts=true]
+{
+    border-left: 5px solid @danger@;
+    background-color: @surface-raised@;
+}
+
+hal--SettingsWidget[dirty=true]
+{
+    border-left: 5px solid @success@;
+}
+
+hal--KeybindEdit QLineEdit
+{
+    border-left: 5px solid @border-subtle@;
+    background: @surface-canvas@;
+    selection-background-color: @selection@;
+}
+
+hal--KeybindEdit[hasGrab=true] QLineEdit
+{
+    border-left: 5px solid @border-subtle@;
+    background: @surface-canvas@;
+    selection-background-color: @selection@;
+}
+
+hal--KeybindEdit QLineEdit:focus
+{
+    border-left: 5px solid @border-subtle@;
+    background: @surface-canvas@;
+}
+
+hal--SettingsWidget QLabel
+{
+    color: @text@;
+    background-color: @state-hover@;
+    margin-right: 10px;
+}
+
+hal--SettingsWidget #name-label
+{
+    min-height: 42px;
+    max-height: 42px;
+    font: 14px bold "Segoe UI";
+}
+
+hal--SettingsWidget QToolButton
+{
+    color: @text@;
+}
+
+hal--SettingsWidget QToolButton:disabled
+{
+    color: @text-muted@;
+}
+
+hal--SettingsWidget hal--label_button
+{
+    font: bold "Segoe UI";
+    border: 1px solid @border-strong@;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 14px;
+    padding-right: 14px;
+    min-width: 50px;
+}
+
+hal--SettingsWidget hal--keybind_edit QLineEdit
+{
+    border-radius: 2px;
+    margin-top: 8px;
+    margin-left: 0px;
+    padding: 4px;
+}
+
+hal--SettingsWidget hal--keybind_edit[validated=false] QLineEdit
+{
+    border: 1px solid @danger@;
+    background-color: @danger-subtle@;
+}
+
+hal--SettingsWidgetDropdown QComboBox
+{
+    background-color: @surface-raised@;
+    border-radius: 2px;
+    border: 1px solid @border-subtle@;
+}
+
+hal--SettingsWidgetDropdown QComboBox:hover
+{
+    background-color: @surface-raised@;
+    border-radius: 2px;
+    border: 1px solid @border-subtle@;
+}
+
+hal--MainSettingsWidget
+{
+    border: 1px solid @border-subtle@;
+}
+
+hal--MainSettingsWidget #Searchbar-container
+{
+    min-height: 80px;
+    max-height: 80px;
+}
+
+hal--MainSettingsWidget #Searchbar-container hal--Searchbar
+{
+    min-width: 400px;
+    max-width: 400px;
+    border: 1px solid @border@;
+}
+
+hal--MainSettingsWidget hal--SettingsDisplay
+{
+    background-color: @danger-subtle@;
+    border: 1px solid @border-strong@;
+}
+
+hal--MainSettingsWidget hal--SettingsDisplay *
+{
+    background-color: @danger-subtle@;
+    border: 1px solid @border-strong@;
+}
+
+hal--MainSettingsWidget hal--PreviewWidget
+{
+    background-color: @surface-canvas@;
+    border: 2px solid @border@;
+    border-radius: 8px;
+    margin-top: 8px;
+    padding: 5px 0;
+}
+
+hal--MainSettingsWidget hal--PreviewWidget *
+{
+    background-color: @state-hover@;
+}
+
+hal--MainSettingsWidget hal--ExpandingListWidget
+{
+    border-right: 1px solid @border-subtle@;
+    min-width: 250px;
+    max-width: 250px;
+}
+
+hal--MainSettingsWidget hal--ExpandingListWidget #content
+{
+    background: @surface-canvas@;
+    border-right: 5px solid @border-subtle@;
+}
+
+hal--MainSettingsWidget hal--ExpandingListWidget #spacer
+{
+    min-height: 80px;
+    max-height: 80px;
+    background: @surface-canvas@;
+    border-right: 5px solid @border-subtle@;
+}
+
+hal--MainSettingsWidget hal--ExpandingListButton
+{
+    min-height: 42px;
+    max-height: 42px;
+    background-color: @surface-canvas@;
+    color: @text@;
+    border-right: 5px solid @border-subtle@;
+    qproperty-iconStyle: "all -> @text-muted@";
+}
+
+hal--MainSettingsWidget hal--ExpandingListButton[hover=true]
+{
+    qproperty-iconStyle: "all -> @text@";
+}
+
+hal--MainSettingsWidget hal--ExpandingListButton[hover=true] *
+{
+    color: @text@;
+    background-color: @state-hover@;
+}
+
+hal--MainSettingsWidget hal--ExpandingListButton[selected=true]
+{
+    background-color: @surface-base@;
+    qproperty-iconStyle: "all -> @text-muted@";
+}
+
+hal--MainSettingsWidget hal--ExpandingListButton[type="child"]
+{
+    background-color: @surface-base@;
+}
+
+hal--MainSettingsWidget hal--ExpandingListButton[type="child"][selected=true]
+{
+    background-color: @surface-base@;
+}
+
+hal--MainSettingsWidget hal--ExpandingListButton *
+{
+    font: 14px bold "Segoe UI";
+    background-color: transparent;
+}
+
+hal--MainSettingsWidget hal--ExpandingListButton[level="0"] #left-border
+{
+    min-width: 4px;
+    max-width: 4px;
+}
+
+hal--MainSettingsWidget hal--ExpandingListButton[level="1"] #left-border
+{
+    min-width: 22px;
+    max-width: 22px;
+}
+
+hal--MainSettingsWidget hal--ExpandingListButton #icon-label
+{
+    padding-left: 40px;
+    padding-right: 10px;
+}
+
+hal--MainSettingsWidget hal--ExpandingListButton #right-border
+{
+    min-width: 4px;
+    max-width: 4px;
+}
+
+hal--MainSettingsWidget hal--ExpandingListButton[selected=true] #text-label
+{
+    color: @success@;
+}
+
+hal--MainSettingsWidget hal--ExpandingListButton[selected=true] #right-border
+{
+    background-color: @success@;
+}
+
+hal--ContentLayoutArea #left-dock-bar
+{
+    min-width: 19px;
+    max-width: 19px;
+    border-right: 1px solid @border-subtle@;
+}
+
+hal--ContentLayoutArea #right-dock-bar
+{
+    min-width: 19px;
+    max-width: 19px;
+    border-left: 1px solid @border-subtle@;
+}
+
+hal--ContentLayoutArea #bottom-dock-bar
+{
+    min-height: 19px;
+    max-height: 19px;
+    border-top: 1px solid @border-subtle@;
+}
+
+hal--ContentLayoutArea #left-spacer
+{
+    min-width: 19px;
+    max-width: 19px;
+    min-height: 19px;
+    max-height: 19px;
+}
+
+hal--ContentLayoutArea #right-spacer
+{
+    min-width: 19px;
+    max-width: 19px;
+    min-height: 19px;
+    max-height: 19px;
+}
+
+hal--TabWidget hal--DockBar
+{
+    background: @surface-canvas@;
+    min-height: 24px;
+    max-height: 24px;
+}
+
+hal--CodeEditor
+{
+    font-style: normal;
+    font-size: @font-size@;
+    font-weight: normal;
+    qproperty-lineNumberFont: "Iosevka";
+    qproperty-lineNumberColor: @text-disabled@;
+    qproperty-currentLineBackground: @surface-raised@;
+    qproperty-lineNumberHighlightBackground: @selection@;
+}
+
+hal--CodeEditor hal--LineNumberArea
+{
+    background: @surface-raised@;
+    border-right: 1px solid @border@;
+    qproperty-leftOffset: 15;
+    qproperty-rightOffset: 15;
+}
+
+hal--LabeledFrame
+{
+    background: @surface-base@;
+    border: 1px solid @border-subtle@;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+hal--WelcomeScreen
+{
+    background: qlineargradient(spread:pad,
+    x1         : 0,
+    y1         : 0,
+    x2         : 1,
+    y2         : 1,
+    stop       : 0 @surface-base@,
+    stop       : 1 @surface-base@);
+}
+
+hal--WelcomeScreen hal--LabeledFrame
+{
+    min-width: 200px;
+    max-width: 400px;
+    min-height: 200px;
+    max-height: 800px;
+}
+
+hal--LabeledFrame #header
+{
+    background: @surface-canvas@;
+}
+
+hal--LabeledFrame #left-spacer
+{
+    background: @surface-base@;
+    min-width: 50px;
+    max-width: 50px;
+    min-height: 4px;
+    max-height: 4px;
+    margin-top: 3px;
+    margin-left: 6px;
+}
+
+hal--LabeledFrame #label
+{
+    background: @surface-canvas@;
+    padding-top: 21px;
+    padding-bottom: 21px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-weight: 700;
+    font-size: 20px;
+    color: @text-disabled@;
+}
+
+#recent-files-frame #label
+{
+    qproperty-text: "RECENT <font color='@text-muted@'>PROJECTS</font>";
+}
+
+#open-file-frame #label
+{
+    qproperty-text: "OPEN <font color='@text-muted@'>PROJECT</font>";
+}
+
+#get-in-touch-frame #label
+{
+    qproperty-text: "GET IN <font color='@text-muted@'>TOUCH</font>";
+}
+
+hal--LabeledFrame #right-spacer
+{
+    background: @surface-base@;
+    min-height: 4px;
+    max-height: 4px;
+    margin-top: 3px;
+    margin-right: 6px;
+}
+
+hal--GateDetailsWidget QPushButton, hal--NetDetailsWidget QPushButton, hal--ModuleDetailsWidget QPushButton
+{
+    font: bold "Segoe UI";
+    font-size: @font-size-small@;
+    background: @surface-base@;
+    border-color: @border-strong@;
+    border-width: 1px;
+    color: @text@;
+    height: 12px;
+}
+
+hal--GateDetailsWidget QPushButton:disabled, hal--NetDetailsWidget QPushButton:disabled, hal--ModuleDetailsWidget QPushButton:disabled
+{
+    font: bold "Segoe UI";
+    font-size: @font-size-small@;
+    background: @surface-base@;
+    border-color: @border-strong@;
+    border-width: 1px;
+    color: @text@;
+    height: 12px;
+}
+
+hal--GateDetailsWidget QTableWidget::item:!disabled:hover, hal--NetDetailsWidget QTableWidget::item:!disabled:hover, hal--ModuleDetailsWidget QTableWidget::item:!disabled:hover
+{
+    color: @text@;
+}
+
+hal--GateDetailsWidget QLabel
+{
+    color: @text-muted@;
+}
+
+hal--RecentFilesWidget
+{
+    background: @surface-base@;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+hal--RecentFileItem
+{
+    background: @surface-base@;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 10px;
+    padding-right: 10px;
+    qproperty-iconStyle: "all->@accent@";
+}
+
+hal--RecentFileItem[isProject=true]
+{
+    qproperty-iconPath: ":/icons/folder";
+}
+
+hal--RecentFileItem[isProject=false]
+{
+    qproperty-iconPath: ":/icons/detach";
+}
+
+hal--RecentFileItem *
+{
+    background: @surface-base@;
+    color: @text-muted@;
+    font-weight: 400;
+    font-size: @font-size@;
+}
+
+hal--RecentFileItem #icon-label
+{
+    margin-right: 10px;
+}
+
+hal--RecentFileItem #path-label
+{
+    color: @text-disabled@;
+}
+
+hal--RecentFileItem[hover=true]
+{
+    background: @surface-base@;
+}
+
+hal--RecentFileItem[hover=true] *
+{
+    background: @surface-base@;
+}
+
+hal--RecentFileItem[hover=true] #path-label
+{
+    color: @text-disabled@;
+}
+
+hal--RecentFileItem QToolButton:hover
+{
+    background: @surface-base@;
+    color: @text@;
+}
+
+hal--RecentFileItem[missing=true]
+{
+    qproperty-iconStyle: "all->@text-muted@";
+}
+
+hal--RecentFileItem[missing=true] #name-label
+{
+    color: @text-disabled@;
+}
+
+hal--RecentFileItem[missing=true] #path-label
+{
+    color: @danger@;
+}
+
+hal--OpenFileWidget
+{
+    background: @surface-base@;
+    qproperty-iconPath: ":/icons/drop";
+    qproperty-iconStyle: "all->@text-disabled@";
+}
+
+hal--OpenFileWidget[drag_active=true]
+{
+    qproperty-iconStyle: "all->@text-disabled@";
+}
+
+hal--OpenFileWidget QLabel
+{
+    background: @surface-base@;
+}
+
+hal--OpenFileWidget #text-label
+{
+    background: @surface-base@;
+    font-weight: 400;
+    font-size: @font-size@;
+    color: @text-muted@;
+    margin-top: 21px;
+    margin-bottom: 21px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+hal--OpenFileWidget #icon-label
+{
+    margin-top: 220px;
+}
+
+hal--GateLibraryLabel
+{
+    background: @surface-canvas@;
+}
+
+hal--GateLibraryLabel[isValue="false"]
+{
+    background: @surface-base@;
+    color: @text-muted@;
+}
+
+hal--GateLibraryLabel[isValue="true"]
+{
+    background: @surface-canvas@;
+    color: @text@;
+    font-size: @font-size@;
+    font-style: "Heavy";
+    font-weight: 700;
+}
+
+hal--GateLibrarySelection
+{
+    qproperty-saveIconStyle: "all->@accent@";
+    qproperty-saveIconPath: ":/icons/folder-down";
+}
+
+hal--GateLibrarySelection QLabel
+{
+    background: @surface-base@;
+}
+
+hal--GateLibrarySelection QLabel#warningMsg
+{
+    color: @warning@;
+}
+
+hal--GatelibraryContentWidget
+{
+    qproperty-disabledIconStyle: "all->@text-disabled@";
+    qproperty-enabledIconStyle: "all->@text@";
+    qproperty-addTypeIconPath: ":/icons/plus";
+    qproperty-editTypeIconPath: ":/icons/pen";
+    qproperty-searchIconPath: ":/icons/search";
+    qproperty-searchIconStyle: "all->@text@";
+    qproperty-searchActiveIconStyle: "all->@success@";
+    qproperty-deleteIconStyle: "all->@text@";
+    qproperty-deleteIconPath: ":/icons/trashcan";
+}
+
+hal--GeneralInfoWizardPage
+{
+    qproperty-disabledIconStyle: "all->@text-disabled@";
+    qproperty-enabledIconStyle: "all->@text@";
+    qproperty-leftArrowIconPath: ":/icons/arrow-left";
+    qproperty-rightArrowIconPath: ":/icons/arrow-right";
+}
+
+hal--GeneralInfoWizardPage #labProperties
+{
+    border-width: 2px 2px 0px 2px;
+    border-style: solid;
+    border-color: @border@;
+    margin-top: 40px;
+    margin-bottom: 0px;
+}
+
+hal--GeneralInfoWizardPage #arrowButton
+{
+    min-width: 12px;
+    max-width: 12px;
+}
+
+hal--PinTreeView::item:focus
+{
+    background: @state-pressed@;
+    selection-background-color: @selection@;
+}
+
+hal--ImportNetlistDialog
+{
+    qproperty-saveIconStyle: "all->@accent@";
+    qproperty-saveIconPath: ":/icons/folder-down";
+}
+
+hal--ImportNetlistDialog QWidget:disabled
+{
+    color: @text-disabled@;
+    background: @surface-raised@;
+}
+
+hal--NewProjectDialog
+{
+    qproperty-saveIconStyle: "all->@accent@";
+    qproperty-saveIconPath: ":/icons/folder-down";
+}
+
+hal--NewProjectDialog QWidget:disabled
+{
+    color: @text-disabled@;
+    background: @surface-raised@;
+}
+
+hal--GetInTouchWidget
+{
+    background: @surface-base@;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+hal--GetInTouchItem
+{
+    background: @surface-base@;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 10px;
+    padding-right: 10px;
+    qproperty-iconPath: ":/icons/folder";
+    qproperty-iconStyle: "all->@text@";
+}
+
+hal--GetInTouchItem *
+{
+    background: @surface-base@;
+    color: @text-muted@;
+    font-weight: 400;
+    font-size: @font-size@;
+}
+
+hal--GetInTouchItem #icon-label
+{
+    margin-right: 10px;
+}
+
+hal--GetInTouchItem #description-label
+{
+    color: @text-disabled@;
+}
+
+hal--GetInTouchItem[hover=true]
+{
+    background: @surface-base@;
+}
+
+hal--GetInTouchItem[hover=true] *
+{
+    background: @surface-base@;
+}
+
+hal--ContentWidget *
+{
+    background: @surface-raised@;
+}
+
+hal--DropMarker
+{
+    background: @surface-base@;
+}
+
+hal--PythonEditor
+{
+    background: qlineargradient(spread:pad,
+    x1         : 0,
+    y1         : 0,
+    x2         : 1,
+    y2         : 1,
+    stop       : 0 @surface-base@,
+    stop       : 1 @surface-base@);
+    qproperty-searchActiveIconStyle: "all->@success@";
+    qproperty-searchIconStyle: "all->@text@";
+    qproperty-searchIconPath: ":/icons/search";
+}
+
+hal--PythonEditor hal--CodeEditor
+{
+    font-family: @font-mono@;
+    font-size: @font-size@;
+    font-style: "Heavy";
+    color: @text-muted@;
+    background: @surface-raised@;
+    qproperty-lineNumberFont: "Iosevka";
+    qproperty-lineNumberColor: @text-disabled@;
+    qproperty-lineNumberBackground: @surface-raised@;
+    qproperty-currentLineBackground: @surface-raised@;
+}
+
+hal--PythonEditor hal--CodeEditor hal--LineNumberArea
+{
+    background: @surface-raised@;
+    border-right: 1px solid @border@;
+}
+
+hal--CodeEditorMinimap
+{
+    font-style: normal;
+    font-size: 3px;
+    font-weight: normal;
+    background: @surface-overlay@;
+    color: @text-muted@;
+}
+
+hal--CodeEditorMinimap QScrollBar:vertical
+{
+    border: 0px;
+    background: transparent;
+    margin: 0px 0px 0px 0px;
+}
+
+hal--CodeEditorMinimap QScrollBar::handle:vertical
+{
+    background: @state-hover@;
+    border-radius: 0px;
+}
+
+hal--GetInTouchItem#about_item
+{
+    qproperty-iconStyle: "all->@warning@";
+    qproperty-iconPath: ":/icons/info";
+}
+
+hal--GetInTouchItem#documentation_item
+{
+    qproperty-iconStyle: "all->@warning@";
+    qproperty-iconPath: ":/icons/info";
+}
+
+hal--GetInTouchItem#ticket_item
+{
+    qproperty-iconStyle: "all->@warning@";
+    qproperty-iconPath: ":/icons/github";
+}
+
+hal--PythonConsole
+{
+    font-family: @font-mono@;
+    font-size: @font-size@;
+    color: @text-muted@;
+}
+
+hal--MinimapScrollbar #slider
+{
+    background: @state-hover@;
+}
+
+hal--PythonEditor
+{
+    background: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 @surface-base@, stop:1 @surface-base@);
+    qproperty-disabledIconStyle: "all->@text-disabled@";
+    qproperty-openIconStyle: "all->@accent@";
+    qproperty-openIconPath: ":/icons/folder";
+    qproperty-saveIconStyle: "all->@accent@";
+    qproperty-saveIconPath: ":/icons/folder-down";
+    qproperty-saveAsIconStyle: "all->@accent@";
+    qproperty-saveAsIconPath: ":/icons/save-as";
+    qproperty-runIconStyle: "all->@success@";
+    qproperty-runIconPath: ":/icons/run";
+    qproperty-toggleMinimapIconStyle: "all->@warning@";
+    qproperty-toggleMinimapIconPath: ":/icons/placeholder";
+    qproperty-newFileIconStyle: "";
+    qproperty-newFileIconPath: ":/icons/new-file";
+}
+
+hal--GroupingManagerWidget
+{
+    qproperty-disabledIconStyle: "all->@text-disabled@";
+    qproperty-newGroupingIconStyle: "all->@text@";
+    qproperty-newGroupingIconPath: ":/icons/plus";
+    qproperty-renameGroupingIconStyle: "all->@text@";
+    qproperty-renameGroupingIconPath: ":/icons/pen";
+    qproperty-deleteIconStyle: "all->@text@";
+    qproperty-deleteIconPath: ":/icons/trashcan";
+    qproperty-colorSelectIconStyle: "all->@text@";
+    qproperty-colorSelectIconPath: ":/icons/color_select";
+    qproperty-toSelectionIconStyle: "all->@text@";
+    qproperty-toSelectionIconPath: ":/icons/to_selection";
+    qproperty-searchActiveIconStyle: "all->@success@";
+    qproperty-searchIconStyle: "all->@text@";
+    qproperty-searchIconPath: ":/icons/search";
+    qproperty-tableIconStyle: "all->@text@";
+    qproperty-tableIconPath: ":/icons/list";
+}
+
+hal--ContextManagerWidget
+{
+    qproperty-disabledIconStyle: "all->@text-disabled@";
+    qproperty-newViewIconStyle: "all->@text@";
+    qproperty-newViewIconPath: ":/icons/plus";
+    qproperty-newDirIconPath: ":/icons/plusdir";
+    qproperty-renameIconStyle: "all->@text@";
+    qproperty-renameIconPath: ":/icons/pen";
+    qproperty-duplicateIconStyle: "all->@text@";
+    qproperty-duplicateIconPath: ":/icons/content";
+    qproperty-deleteIconStyle: "all->@text@";
+    qproperty-deleteIconPath: ":/icons/trashcan";
+    qproperty-openIconStyle: "all->@text@";
+    qproperty-openIconPath: ":/icons/open-alt";
+    qproperty-searchIconStyle: "all->@text@";
+    qproperty-searchActiveIconStyle: "all->@success@";
+    qproperty-searchIconPath: ":/icons/search";
+}
+
+hal--SelectionDetailsWidget
+{
+    qproperty-disabledIconStyle: "all->@text-disabled@";
+    qproperty-searchActiveIconStyle: "all->@success@";
+    qproperty-searchIconStyle: "all->@text@";
+    qproperty-searchIconPath: ":/icons/search";
+    qproperty-toGroupingIconStyle: "all->@text@";
+    qproperty-toGroupingIconPath: ":/icons/to_grouping";
+    qproperty-toModuleIconStyle: "all->@text@";
+    qproperty-toModuleIconPath: ":/icons/to_module";
+}
+
+hal--LoggerWidget
+{
+    qproperty-searchIconStyle: "all->@text@";
+    qproperty-searchIconPath: ":/icons/search";
+}
+
+hal--Toolbar hal--ChannelSelector
+{
+    background-color: @surface-raised@;
+    border-radius: 2px;
+    min-width: 1em;
+    max-width: 1em;
+}
+
+hal--Toolbar hal--ChannelSelector QListView
+{
+    min-width: 12em;
+    max-width: 16em;
+}
+
+hal--Toolbar QPushButton
+{
+    border: none;
+    background-color: @surface-base@;
+}
+
+hal--Toolbar QPushButton:hover
+{
+    background-color: @surface-raised@;
+}
+
+hal--Toolbar QPushButton:checked
+{
+    background-color: @state-pressed@;
+    color: @text@;
+}
+
+hal--Toolbar QPushButton:checked:hover
+{
+    background-color: @surface-overlay@;
+}
+
+hal--ModuleWidget
+{
+    qproperty-disabledIconStyle: "all->@text-disabled@";
+    qproperty-activeIconStyle: "all->@text@";
+    qproperty-showNetsIconPath: ":/icons/ne_net";
+    qproperty-hideNetsIconPath: ":/icons/ne_no_net";
+    qproperty-showGatesIconPath: ":/icons/ne_gate";
+    qproperty-hideGatesIconPath: ":/icons/ne_no_gate";
+    qproperty-searchActiveIconStyle: "all->@success@";
+    qproperty-searchIconStyle: "all->@text@";
+    qproperty-searchIconPath: ":/icons/search";
+    qproperty-renameIconPath: ":/icons/pen";
+    qproperty-deleteIconPath: ":/icons/trashcan";
+    qproperty-expandedIconPath: ":/icons/tree-expanded";
+    qproperty-collapsedIconPath: ":/icons/tree-collapsed";
+}
+
+hal--MainWindow
+{
+    qproperty-halIconStyle: "";
+    qproperty-halIconPath: ":/icons/hal";
+    qproperty-openFileIconStyle: "all->@text-muted@";
+    qproperty-openFileIconPath: ":/icons/detach";
+    qproperty-quitIconStyle: "all->@text-muted@";
+    qproperty-quitIconPath: ":/icons/switch";
+    qproperty-settingsIconStyle: "all->@text-muted@";
+    qproperty-settingsIconPath: ":/icons/settings";
+    qproperty-pluginsIconStyle: "all->@text-muted@";
+    qproperty-pluginsIconPath: ":/icons/plugin";
+    qproperty-undoIconStyle: "all->@text@";
+    qproperty-undoIconPath: ":/icons/undo2";
+    qproperty-disabledIconStyle: "all->@text-disabled@";
+    qproperty-neGateIconStyle: "all->@text-muted@";
+    qproperty-neGateIconPath: ":/icons/ne_gate";
+}
+
+hal--FileActions
+{
+    qproperty-newFileIconStyle: "";
+    qproperty-newFileIconPath: ":/icons/new-file";
+    qproperty-openProjIconStyle: "all->@accent@";
+    qproperty-openProjIconPath: ":/icons/folder";
+    qproperty-closeIconStyle: "all->@text-muted@";
+    qproperty-closeIconPath: ":/icons/cross";
+    qproperty-saveIconPath: ":/icons/folder-down";
+    qproperty-saveAsIconPath: ":/icons/save-as";
+    qproperty-enabledIconStyle: "all->@accent@";
+    qproperty-disabledIconStyle: "all->@text-disabled@";
+}
+
+hal--PythonQssAdapter
+{
+    qproperty-keywordColor: @warning@;
+    qproperty-operator_color: @text-muted@;
+    qproperty-braceColor: @text-muted@;
+    qproperty-defclassColor: @text-muted@;
+    qproperty-selfColor: @text-muted@;
+    qproperty-numberColor: @accent@;
+    qproperty-singleQuotedStringColor: @success@;
+    qproperty-doubleQuotedStringColor: @success@;
+    qproperty-commentColor: @text-muted@;
+}
+
+hal--LoggerQssAdapter
+{
+    qproperty-traceColor: @success@;
+    qproperty-debugColor: @success@;
+    qproperty-infoColor: @text@;
+    qproperty-warningColor: @warning@;
+    qproperty-errorColor: @danger@;
+    qproperty-criticalColor: @danger@;
+    qproperty-defaultColor: @text-muted@;
+    qproperty-markerColor: @warning@;
+    qproperty-traceHighlight: @warning@;
+    qproperty-debugHighlight: @warning@;
+    qproperty-infoHighlight: @accent@;
+    qproperty-warningHighlight: @warning@;
+    qproperty-errorHighlight: @warning@;
+    qproperty-criticalHighlight: @warning@;
+    qproperty-defaultHighlight: @warning@;
+}
+
+hal--PythonConsoleQssAdapter
+{
+    qproperty-standardColor: @text-muted@;
+    qproperty-errorColor: @danger@;
+    qproperty-promtColor: @text-muted@;
+}
+
+hal--table_selector_widget
+{
+    background-color: @surface-canvas@;
+    color: @text@;
+    selection-background-color: grey;
+}
+
+hal--table_selector_widget::item
+{
+    border-right: 1px solid @border-strong@;
+}
+
+hal--gui_graph_gate_selection_widget
+{
+    background-color: @surface-canvas@;
+    color: @text@;
+    selection-background-color: grey;
+}
+
+hal--gui_graph_gate_selection_widget::item
+{
+    border-right: 1px solid @border-strong@;
+}
+
+hal--GraphicsQssAdapter
+{
+    qproperty-netBaseColor: @text-muted@;
+
+    qproperty-gridBaseLineColor: @border-subtle@;
+    qproperty-gridClusterLineColor: @border@;
+
+    qproperty-gridBaseDotColor: @border@;
+    qproperty-gridClusterDotColor: @border-strong@;
+
+    qproperty-nodeBackgroundColor: @surface-raised@;
+    qproperty-nodeTextColor: @text@;
+}
+
+hal--DockButton
+{
+    qproperty-textColor: @text@;
+    qproperty-checkedColor: @text-muted@;
+    qproperty-hoverColor: @text-disabled@;
+}
+
+hal--DetailsFrameWidget QPushButton
+{
+    font: bold "Segoe UI";
+    font-size: @font-size-small@;
+    background: @surface-base@;
+    border-color: @border-strong@;
+    border-width: 1px;
+    color: @text-muted@;
+    height: 12px;
+}
+
+hal--DetailsFrameWidget QPushButton:checked
+{
+    font: bold "Segoe UI";
+    font-size: @font-size-small@;
+    background: @surface-base@;
+    border-color: @border-strong@;
+    border-width: 1px;
+    color: @text@;
+    height: 12px;
+}
+
+hal--DetailsFrameWidget QPushButton:hover
+{
+    background-color: @state-pressed@;
+}
+
+hal--GatelibraryManagementDialog
+{
+    qproperty-loadIconPath: ":/icons/plus";
+    qproperty-loadIconStyle: "all->@success@";
+    qproperty-reloadIconPath: ":/icons/spinner";
+    qproperty-reloadIconStyle: "all->@text@";
+    qproperty-removeIconPath: ":/icons/minus";
+    qproperty-removeIconStyle: "all->@danger@";
+}
+
+hal--GatelibraryManagementDialog hal--Searchbar
+{
+    border: 1px solid @border@;
+}
+
+hal--GatelibraryManagementDialog QTableView
+{
+    background: @surface-base@;
+}
+
+hal--GatelibraryManagementDialog QHeaderView::section
+{
+    background: @surface-base@;
+}
+
+hal--BooleanFunctionEdit
+{
+    background: @surface-canvas@;
+    color: @text@;
+    font-family: @font-mono@;
+    font-size: @font-size@;
+    font-style: "Heavy";
+    font-weight: 700;
+}
+
+hal--BooleanFunctionEdit[state="Empty"]
+{
+    background: @surface-base@;
+    color: @text-muted@;
+}
+
+hal--BooleanFunctionEdit[state="Invalid"]
+{
+    background: @danger-subtle@;
+    color: @text@;
+}
+
+hal--GuiPluginManager
+{
+    qproperty-loadIconPath: ":/icons/insert-plugin";
+    qproperty-loadIconStyle: "all->@success@";
+    qproperty-unloadIconPath: ":/icons/cross";
+    qproperty-unloadIconStyle: "all->@danger@";
+    qproperty-cliIconPath: ":/icons/cli-options";
+    qproperty-cliIconStyle: "all->@text@";
+    qproperty-guiIconEnabledPath: ":/icons/enable-gui-contributions";
+    qproperty-guiIconDisabledPath: ":/icons/disable-gui-contributions";
+    qproperty-guiIconEnabledStyle: "all->@accent@";
+    qproperty-guiIconDisabledStyle: "all->@text@";
+    qproperty-defaultTextColor: @text@;
+    qproperty-hilightTextColor: @warning@;
+    qproperty-hilightBackgroundColor: @surface-canvas@;
+}
+
+hal--CommentWidget
+{
+    qproperty-newCommentIconPath: ":/icons/plus";
+    qproperty-newCommentIconStyle: "all->@text@";
+    qproperty-searchIconPath: ":/icons/search";
+    qproperty-searchIconStyle: "all->@text@";
+}
+
+hal--CommentItem
+{
+    qproperty-modifyCommentIconPath: ":/icons/pen";
+    qproperty-modifyCommentIconStyle: "all->@text@";
+    qproperty-deleteCommentIconPath: ":/icons/trashcan";
+    qproperty-deleteCommentIconStyle: "all->@text@";
+}
+
+hal--CommentDialog
+{
+    background-color: "@surface-base@";
+    qproperty-redColor: "@danger@";
+    qproperty-yellowColor: "@warning@";
+    qproperty-greenColor: "@success@";
+    qproperty-defaultColor: "@text-muted@";
+}
+
+hal--CommentDialog QTextEdit
+{
+    background-color: "@surface-raised@";
+    alternate-background-color: "@surface-base@";
+}
+
+hal--CommentDialog QLineEdit
+{
+    background-color: "@surface-raised@";
+    border: 1px solid @border@;
+    border-radius: 2px;
+}
+
+hal--CommentDialog QLabel
+{
+    background-color: "@surface-base@";
+}
+
+hal--Overlay
+{
+    background: @state-pressed@;
+}
+
+hal--PageInputData QTableWidget:disabled
+hal--PageInputData QTableWidgetItem:disabled,
+hal--PageInputData QHeaderView:disabled,
+hal--PageInputData QFrame:disabled,
+hal--PageInputData QLineEdit:disabled,
+hal--PageInputData QCheckBox:disabled,
+hal--PageInputData QPushButton:disabled
+{
+    background: @surface-overlay@;
+    color: @text-muted@;
+}
+
+hal--PageInputData QTableView::item:selected:active
+{
+    background-color: @surface-base@;
+    color: @text@;
+}
+
+hal--PageInputData QTableView::item:selected:!active
+{
+    background-color: @surface-overlay@;
+    color: @text-muted@;
+}
+
+hal--LogicEvaluatorDialog
+{
+    font-size: @font-size@;
+    color: @text-muted@;
+    background: @state-pressed@;
+}
+
+hal--LogicEvaluatorPingroup
+{
+    background: @state-pressed@;
+    border: 2px solid gray;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+hal--LogicEvaluatorPingroup[output="true"]
+{
+    border-color: @border-strong@ @border@ @border@ @border-subtle@;
+    border-width: 2 2 2 0;
+}
+
+hal--LogicEvaluatorPingroup[output="false"]
+{
+    border-color: @border-strong@ @border-subtle@ @border@ @border-strong@;
+    border-width: 2 0 2 2;
+}
+
+hal--LogicEvaluatorValue
+{
+    min-width: 48;
+    max-width: 48;
+    min-height: 28;
+    max-height: 28;
+}
+
+hal--LogicEvaluatorValue QSpinBox
+{
+    color: @text@;
+    font-style: normal;
+    background-color: @surface-base@;
+    border: none;
+}
+
+hal--LogicEvaluatorValue QSpinBox::up-button
+{
+    color: @text@;
+    background-color: @state-pressed@;
+    border-style: solid;
+    border-color: @border-strong@ @border-subtle@ @border-subtle@ @border-strong@;
+    border-width: 1;
+}
+
+hal--LogicEvaluatorValue QSpinBox::down-button
+{
+    color: @text@;
+    background-color: @state-pressed@;
+    border-style: solid;
+    border-color: @border-strong@ @border-subtle@ @border-subtle@ @border-strong@;
+    border-width: 1;
+}
+
+hal--LogicEvaluatorValue QLabel
+{
+    color: @text@;
+    font-style: normal;
+    background-color: @surface-base@;
+    border: none;
+}
+
+hal--LogicEvaluatorPingroup > QLabel
+{
+    color: @text@;
+    font-style: bold;
+    border: none;
+    background-color: none;
+    max-height: 28;
+}
+
+hal--LogicEvaluatorPingroup QCheckBox
+{
+    font: bold "Segoe UI";
+    color: @text@;
+    background: @surface-canvas@;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 8px;
+    padding-right: 8px;
+    min-width: 250px;
+}
+
+hal--LogicEvaluatorPingroup QCheckBox::indicator:checked
+{
+    background: @danger@;
+    border: 1px solid @border-subtle@;
+}
+
+hal--LogicEvaluatorPingroup QCheckBox::indicator:unchecked
+{
+    background: @accent@;
+    border: 1px solid @border-subtle@;
+}
+
+hal--LogicEvaluatorDialog > QTreeView
+{
+    border-style: solid;
+    border-color: @border-strong@ @border-subtle@ @border@ @border-subtle@;
+    border-width: 2 2 2 2;
+    background: @surface-canvas@;
+    min-width: 400px;
+}
+
+hal--LogicEvaluatorSelectGates
+{
+    qproperty-selForeground: @warning@;
+    qproperty-selBackground: @surface-base@;
+    min-width: 400px;
+}

@@ -15,6 +15,7 @@
 #include "gui/user_action/user_action_manager.h"
 #include "gui/settings/settings_items/settings_item_dropdown.h"
 #include "gui/style/style.h"
+#include "gui/style/theme.h"
 #include "gui/graph_widget/layout_locker.h"
 #include "gui/comment_system/comment_manager.h"
 
@@ -217,8 +218,6 @@ namespace hal
 
         //TEMPORARY CODE TO CHANGE BETWEEN THE 2 STYLESHEETS WITH SETTINGS (NOT FINAL)
         //this settingsobject is currently neccessary to read from the settings from here, because the mGSettings are not yet initialized(?)
-        QString styleSheetToOpen;
-
         MainWindow::sSettingStyle = new SettingsItemDropdown(
             "Theme",
             "main_style/theme",
@@ -229,18 +228,7 @@ namespace hal
         MainWindow::sSettingStyle->setValueNames<MainWindow::StyleSheetOption>();
         MainWindow::StyleSheetOption theme = static_cast<MainWindow::StyleSheetOption>(MainWindow::sSettingStyle->value().toInt());
 
-        switch(theme)
-        {
-            case MainWindow::StyleSheetOption::Dark : styleSheetToOpen = ":/style/dark"; break;
-            case MainWindow::StyleSheetOption::Light : styleSheetToOpen = ":/style/light"; break;
-
-            default: styleSheetToOpen = ":/style/dark";
-        }
-
-        QFile stylesheet(styleSheetToOpen);
-        stylesheet.open(QFile::ReadOnly);
-        a.setStyleSheet(QString(stylesheet.readAll()));
-        stylesheet.close();
+        style::Theme::apply(a, theme == MainWindow::StyleSheetOption::Light ? style::Theme::Mode::Light : style::Theme::Mode::Dark);
         //##############END OF TEMPORARY TESTING TO SWITCH BETWEEN STYLESHEETS
 
         style::debugUpdate();

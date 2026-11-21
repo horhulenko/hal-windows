@@ -1,4 +1,5 @@
 #include "gui/main_window/main_window.h"
+#include "gui/style/theme.h"
 
 #include "gui/action/action.h"
 #include "gui/content_manager/content_manager.h"
@@ -334,22 +335,17 @@ namespace hal
 
     void MainWindow::reloadStylsheet(int istyle)
     {
-        QString styleSheetToOpen;
-
         switch (istyle)
         {
         case StyleSheetOption::Dark:
-            styleSheetToOpen = ":/style/dark";
+            style::Theme::apply(*qobject_cast<QApplication*>(qApp), style::Theme::Mode::Dark);
             break;
         case StyleSheetOption::Light:
-            styleSheetToOpen = ":/style/light";
+            style::Theme::apply(*qobject_cast<QApplication*>(qApp), style::Theme::Mode::Light);
             break;
         default:
             return;
         }
-        QFile stylesheet(styleSheetToOpen);
-        stylesheet.open(QFile::ReadOnly);
-        qApp->setStyleSheet(QString(stylesheet.readAll()));
     }
 
     QString MainWindow::halIconPath() const

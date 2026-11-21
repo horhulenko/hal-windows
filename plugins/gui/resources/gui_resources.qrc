@@ -17,8 +17,7 @@
         <file alias="gate_library_definitions">path/gate_library_definitions.txt</file>
     </qresource>
     <qresource prefix="/style">
-        <file alias="dark">stylesheet/dark.qss</file>
-        <file alias="light">stylesheet/light.qss</file>
+        <file alias="modern">stylesheet/modern.qss</file>
     </qresource>
     <qresource prefix="/icons">
         <file alias="start-doc">icons/0042-file-play.svg</file>
