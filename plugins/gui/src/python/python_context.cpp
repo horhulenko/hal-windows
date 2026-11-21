@@ -523,7 +523,20 @@ namespace hal
         }
         catch (py::error_already_set& e)
         {
-            forwardError(QString::fromStdString(std::string(e.what()) + "\n"));
+            if (std::string(e.what()).find("No module named 'jedi'") != std::string::npos)
+            {
+                // completion runs on every keystroke, report the missing package only once instead of flooding the console
+                static bool reported = false;
+                if (!reported)
+                {
+                    reported = true;
+                    log_warning("python", "code completion is limited because the Python package 'jedi' is not installed (pip install jedi)");
+                }
+            }
+            else
+            {
+                forwardError(QString::fromStdString(std::string(e.what()) + "\n"));
+            }
             e.restore();
             PyErr_Clear();
         }
